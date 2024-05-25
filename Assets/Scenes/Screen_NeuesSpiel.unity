@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cf6117016a00d4da2bcee8544801c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: Navigation
+  type: Navigation
 --- !u!1 &336512241
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cf6117016a00d4da2bcee8544801c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: Back
+  type: Back
 --- !u!114 &371232429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -841,7 +841,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9ee729c0319b6b45b93b9852d752483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 519420031}
 --- !u!1 &583259919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,6 +1062,7 @@ GameObject:
   - component: {fileID: 1142401884}
   - component: {fileID: 1142401883}
   - component: {fileID: 1142401882}
+  - component: {fileID: 1142401885}
   m_Layer: 5
   m_Name: Dropdown
   m_TagString: Untagged
@@ -1190,6 +1190,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1142401880}
   m_CullTransparentMesh: 1
+--- !u!114 &1142401885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142401880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7954126cb2720048a369907891690c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: NeuesSpiel_Fragenkataloge
 --- !u!1 &1480537400
 GameObject:
   m_ObjectHideFlags: 0

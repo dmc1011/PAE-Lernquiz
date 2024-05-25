@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,15 +8,15 @@ using Button = UnityEngine.UI.Button;
 public class ButtonManager : MonoBehaviour
 {
 
-    public string buttonType; // will be set in Editor
-    private Button btn; // set this to "self"
+    [SerializeField] private string type; // will be set in Editor
+    private Button me; // set this to "self"
     private RectTransform rectTransform;
 
     void Start()
     {
         // Assign the same colors to every Button
-        btn = GetComponent<Button>();
-        rectTransform = btn.transform.GetComponent<RectTransform>();
+        me = GetComponent<Button>();
+        rectTransform = me.transform.GetComponent<RectTransform>();
         SetDesign();
     }
 
@@ -24,38 +25,123 @@ public class ButtonManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
+    public void ClickEvent()
+    {
+        print("Debug: Click Event fired");
+        switch (type)
+        {
+            case "DummyDataLoader":
+
+                Global.CatalogueStorage.Clear();
+                for (int i = 0; i < 5; i++)
+                {
+                    Global.Catalogue catalogue = new("");
+                    string z = Random.Range(100, 999).ToString();
+                    catalogue.id = "Dummy Katalog ID: " + z;
+                    catalogue.name = "Dummy Katalog: " + z;
+                    catalogue.ownerId = "Ich";
+                    for (int i_question = 0; i_question < 5; i_question++)
+                    {
+                        Global.Question q = new Global.Question("");
+                        q.id = "some question identifier: " + Random.Range(100, 999).ToString();
+                        z = Random.Range(100, 999).ToString();
+                        q.question = new("Frage mit Zufallszahl: " + z);
+                        List<Global.ImageOrText> answers = new() {
+                            new(z),
+                            new(Random.Range(100, 999).ToString()),
+                            new(Random.Range(100, 999).ToString()),
+                            new(Random.Range(100, 999).ToString())
+                        };
+                        q.answers = answers;
+                        q.correctAnswerIndex = 0; // erste ist immer richtig -> index 0
+                        catalogue.questions.Add(q);
+                    }
+                    Global.CatalogueStorage.catalogues.Add(catalogue);
+                }
+                //print(Global.CatalogueStorage);
+                break;
+        }
+    }
+
     // Hier wird das Design ALLER Buttons bestimmt.
-    // Buttons sind durch "BUTTON_TYPE" voneinander unterscheidbar.
     private void SetDesign()
     {
-        ColorBlock colors = btn.colors;
+        
 
         // Das würde man normalerweise (wenn es "nur" Farben wären) nicht so
         // aufspalten sondern ohne redundanz schreiben. Falls noch was dazukommt aber lieber so.
-        switch (buttonType) {
-            case "Back":
+        switch (type) {
+
+            case "Back": {
+                ColorBlock colors = me.colors;
                 colors.normalColor = Global.Colors.ButtonBack.Normal;
                 colors.pressedColor = Global.Colors.ButtonBack.Pressed;
                 colors.highlightedColor = Global.Colors.ButtonBack.Hover;
-                btn.colors = colors;
+                me.colors = colors;
                 SetPos(0.15f, 0.075f, 0.15f, 0.075f); // Der Zurück Button ist immer unten links.
+            } return;
 
-                return;
-            case "Navigation":
+            case "Navigation": {
+                ColorBlock colors = me.colors;
                 colors.normalColor = Global.Colors.ButtonNavigation.Normal;
                 colors.pressedColor = Global.Colors.ButtonNavigation.Pressed;
                 colors.highlightedColor = Global.Colors.ButtonNavigation.Hover;
-                btn.colors = colors;
+                me.colors = colors;
+            } return;
 
-
-                return;
-            case "Question":
+            case "Question": {
+                ColorBlock colors = me.colors;
                 colors.normalColor = Global.Colors.ButtonQuestion.Normal;
                 colors.pressedColor = Global.Colors.ButtonQuestion.Pressed;
                 colors.highlightedColor = Global.Colors.ButtonQuestion.Hover;
-                btn.colors = colors;
+                me.colors = colors;
+            } return;
 
-                return;
+            case "Fragenkataloge_Frage": {
+                ColorBlock colors = me.colors;
+                colors.normalColor = Global.Colors.ButtonQuestion.Normal;
+                colors.pressedColor = Global.Colors.ButtonQuestion.Pressed;
+                colors.highlightedColor = Global.Colors.ButtonQuestion.Hover;
+                me.colors = colors;
+                SetPos(0.5f, 0.65f, 0.8f, 0.15f);
+            } return;
+
+            case "Fragenkataloge_Antwort1": {
+                ColorBlock colors = me.colors;
+                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
+                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
+                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
+                me.colors = colors;
+                SetPos(0.5f - 0.2f, 0.425f - 0.075f, 0.4f, 0.15f);
+            } return;
+
+            case "Fragenkataloge_Antwort2": {
+                ColorBlock colors = me.colors;
+                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
+                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
+                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
+                me.colors = colors;
+                SetPos(0.5f - 0.2f, 0.425f + 0.075f, 0.4f, 0.15f);
+            } return;
+
+            case "Fragenkataloge_Antwort3": {
+                ColorBlock colors = me.colors;
+                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
+                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
+                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
+                me.colors = colors;
+                SetPos(0.5f + 0.2f, 0.425f - 0.075f, 0.4f, 0.15f);
+            } return;
+
+            case "Fragenkataloge_Antwort4": {
+                ColorBlock colors = me.colors;
+                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
+                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
+                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
+                me.colors = colors;
+                SetPos(0.5f + 0.2f, 0.425f + 0.075f, 0.4f, 0.15f);
+            } return;
+
         }
         print("ERROR in \"ButtonManager.cs\" -> SetDesign(): Button has no type.");
     }

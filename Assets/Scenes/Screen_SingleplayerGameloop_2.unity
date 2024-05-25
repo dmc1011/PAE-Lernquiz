@@ -1298,7 +1298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9ee729c0319b6b45b93b9852d752483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 519420031}
 --- !u!1 &543382289
 GameObject:
   m_ObjectHideFlags: 0
@@ -2581,7 +2580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cf6117016a00d4da2bcee8544801c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonType: Navigation
+  type: Navigation
 --- !u!114 &1055834267
 MonoBehaviour:
   m_ObjectHideFlags: 0
