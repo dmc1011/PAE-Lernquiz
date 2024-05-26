@@ -1,137 +1,167 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class DropdownManager : MonoBehaviour
 {
-
-    [SerializeField] private string type; // will be set in Editor
-    [SerializeField] private TMP_Dropdown other_dropdown;
-    [SerializeField] private UnityEngine.UI.Button QButton;
-    [SerializeField] private UnityEngine.UI.Button AButton1;
-    [SerializeField] private UnityEngine.UI.Button AButton2;
-    [SerializeField] private UnityEngine.UI.Button AButton3;
-    [SerializeField] private UnityEngine.UI.Button AButton4;
-
+    private string scene;
     private TMP_Dropdown me;
     private RectTransform rectTransform;
+    [SerializeField] private Button SomeButton; // TODO MS
 
     void Start()
     {
         me = GetComponent<TMP_Dropdown>();
         rectTransform = me.transform.GetComponent<RectTransform>();
-        SetContents();
+        scene = SceneManager.GetActiveScene().name;
         SetDesign();
+        SetContents();
     }
 
+    // Generic Change event. Use this if no other Scripts handle Dropdown changes.
     public void ChangeEvent()
     {
-        print(me.value);
-
-        switch (type)
+        switch (scene)
         {
-            // Der ausgewählte Fragenkatalog wurde geändert.
-            case "Fragenkataloge_Fragenkataloge": {
-                other_dropdown.ClearOptions();
-                List<TMP_Dropdown.OptionData> options = new();
-                for (int i = 0; i < Global.CatalogueStorage.catalogues[me.value].questions.Count; i++)
+            case "Screen_Catalogues": // Wird von CataloguesManager.cs behandelt.
+                { }
+                break;
+
+            case "Screen_NewGame": // Hier braucht man keinen eigenen Manager.
                 {
-                    options.Add(new(Global.CatalogueStorage.catalogues[me.value].questions[i].question.text));
+                    switch (name)
+                    {
+                        case "Katalogauswahl":
+                            {
+                                Global.AktuelleFragerunde.CatalogueIndex = me.value;
+                            }
+                            break;
+
+                        default:
+                            {
+                                GenericError("ChangeEvent");
+                            }
+                            break;
+                    }
+
+                } break;
+
+            default:
+                {
+                    GenericError("ChangeEvent");
                 }
-                other_dropdown.AddOptions(options);
-            } break;
-
-            case "Fragenkataloge_Fragen": {
-                SetContents_QuestionAnswerButtons();
-            } break;
+                break;
 
         }
 
     }
 
-    private void SetContents_QuestionAnswerButtons()
-    {
-        if (Global.CatalogueStorage.catalogues.Count == 0) return;
-        if (Global.CatalogueStorage.catalogues.Count < other_dropdown.value)
-        {
-            print("ERROR: Invalid Index for Fragenkatalognummer");
-            return;
-        }
-        if (Global.CatalogueStorage.catalogues[other_dropdown.value].questions.Count < me.value)
-        {
-            print("ERROR: Invalid Index for Fragennummer im Fragenkatalog " + other_dropdown.value);
-            return;
-        }
-        Global.Question currentQuestion = Global.CatalogueStorage.catalogues[other_dropdown.value].questions[me.value];
-        QButton.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.question.text;
-        AButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[0].text;
-        AButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[1].text;
-        AButton3.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[2].text;
-        AButton4.GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.answers[3].text;
-    }
-
+    // Generic SetContents. Use this if no other Scripts handle Dropdown Initialization.
     private void SetContents()
     {
-        switch (type) {
+        switch (scene)
+        {
 
-            case "Fragenkataloge_Fragenkataloge": {
-                    me.ClearOptions();
-                    List<TMP_Dropdown.OptionData> options = new();
-                    for (int i = 0; i < Global.CatalogueStorage.catalogues.Count; i++)
-                    {
-                        options.Add(new(Global.CatalogueStorage.catalogues[i].name));
-                    }
-                    me.AddOptions(options);
-            } break;
+            case "Screen_NewGame":
+            case "Screen_Catalogues": // Wird von CataloguesManager.cs behandelt.
+                { }
+                break;
 
-            case "Fragenkataloge_Fragen": {
-                    if (Global.CatalogueStorage.catalogues.Count == 0) break;
-                    me.ClearOptions();
-                    List<TMP_Dropdown.OptionData> options = new();
-                    for (int i = 0; i < Global.CatalogueStorage.catalogues[other_dropdown.value].questions.Count; i++)
+            default:
+                {
+                    GenericError("SetContents");
+                }
+                break;
+        }
+
+    }
+
+    // SetDesign
+    // Damit alle UI-Elemente Flächendeckend denselben Stil haben werden ALLE DROPDOWNS hier behandelt.
+    // Das funcktioniert nur, wenn die UI-Elemente im Unity-Editor den selben Namen verwenden wie hier.
+    private void SetDesign()
+    {
+        switch (name)
+        {
+
+            case "Katalogauswahl":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Dropdowns.Katalogauswahl.Normal;
+                    colors.pressedColor = UIDesign.Colors.Dropdowns.Katalogauswahl.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Dropdowns.Katalogauswahl.Hover;
+                    me.colors = colors;
+
+                    switch (scene)
                     {
-                        options.Add(new(Global.CatalogueStorage.catalogues[other_dropdown.value].questions[i].question.text));
+                        case "Screen_Catalogues":
+                            {
+                                SetPos(UIDesign.Positions.Dropdowns.Catalogues.Katalogauswahl);
+                            }
+                            break;
+
+                        case "Screen_NewGame":
+                            {
+                                SetPos(UIDesign.Positions.Dropdowns.NewGame.Katalogauswahl);
+                            }
+                            break;
+
+                        default:
+                            {
+                                GenericError("SetDesign");
+                            }
+                            break;
                     }
-                    me.AddOptions(options);
-                    SetContents_QuestionAnswerButtons();
-            } break;
+
+                }
+                break;
+
+            case "Fragenauswahl":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Dropdowns.Fragenauswahl.Normal;
+                    colors.pressedColor = UIDesign.Colors.Dropdowns.Fragenauswahl.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Dropdowns.Fragenauswahl.Hover;
+                    me.colors = colors;
+
+                    switch (scene)
+                    {
+                        case "Screen_Catalogues":
+                            {
+                                SetPos(UIDesign.Positions.Dropdowns.Catalogues.Fragenauswahl);
+                            }
+                            break;
+
+                        default:
+                            {
+                                GenericError("SetDesign");
+                            }
+                            break;
+                    }
+
+                }
+                break;
+
+            default:
+                {
+                    GenericError("SetDesign");
+                }
+                break;
 
         }
 
     }
 
-    // Hier wird das Design ALLER Dropdowns bestimmt.
-    private void SetDesign()
+    private void GenericError(string func)
     {
-        ColorBlock colors = me.colors;
+        print("ERROR [DropdownManager.cs." + func + "()]: Name of Dropdown is \"" + name + "\" & Scene is \"" + scene + "\" -> unknown combination.");
+    }
 
-        // Das würde man normalerweise (wenn es "nur" Farben wären) nicht so
-        // aufspalten sondern ohne redundanz schreiben. Falls noch was dazukommt aber lieber so.
-        switch (type) {
-
-            case "Fragenkataloge_Fragenkataloge": {
-                colors.normalColor = Global.Colors.ButtonBack.Normal;
-                colors.pressedColor = Global.Colors.ButtonBack.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonBack.Hover;
-                me.colors = colors;
-                SetPos(0.5f, 0.90f, 0.7f, 0.075f); // Der Zurück Button ist immer unten links.
-            } return;
-
-
-            case "Fragenkataloge_Fragen": {
-                colors.normalColor = Global.Colors.ButtonBack.Normal;
-                colors.pressedColor = Global.Colors.ButtonBack.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonBack.Hover;
-                me.colors = colors;
-                SetPos(0.5f, 0.82f, 0.7f, 0.075f); // Der Zurück Button ist immer unten links.
-            } return;
-        }
-
-        print("ERROR in \"DropdownManager.cs\" -> SetDesign(): DropDown has no type.");
+    private void SetPos(Rect rect)
+    {
+        SetPos(rect.x, rect.y, rect.width, rect.height);
     }
 
     private void SetPos(float x, float y, float w, float h)
@@ -149,9 +179,9 @@ public class DropdownManager : MonoBehaviour
         //  |           |
         //  |           |
         // 0/0 ------- 1/0
-        rectTransform.offsetMin = new Vector2(-w / 2.0f * Global.width, -h / 2.0f * Global.height);
-        rectTransform.offsetMax = new Vector2(w / 2.0f * Global.width, h / 2.0f * Global.height);
-        rectTransform.anchoredPosition = new Vector2((x - 0.5f) * Global.width, (y - 0.5f) * Global.height);
+        rectTransform.offsetMin = new Vector2(-w / 2.0f * UIDesign.Positions.Global.width, -h / 2.0f * UIDesign.Positions.Global.height);
+        rectTransform.offsetMax = new Vector2(w / 2.0f * UIDesign.Positions.Global.width, h / 2.0f * UIDesign.Positions.Global.height);
+        rectTransform.anchoredPosition = new Vector2((x - 0.5f) * UIDesign.Positions.Global.width, (y - 0.5f) * UIDesign.Positions.Global.height);
     }
 
 }

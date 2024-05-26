@@ -286,7 +286,7 @@ GameObject:
   - component: {fileID: 314796792}
   - component: {fileID: 314796795}
   m_Layer: 5
-  m_Name: NavBtn_1
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -356,16 +356,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 314796795}
-        m_TargetAssemblyTypeName: ButtonManager, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 1767197248}
+        m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
+        m_MethodName: StartButtonClickEvent
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Screen_SingleplayerGameloop_1
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &314796793
@@ -418,7 +418,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cf6117016a00d4da2bcee8544801c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: Navigation
 --- !u!1 &336512241
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,7 +468,7 @@ GameObject:
   - component: {fileID: 371232429}
   - component: {fileID: 371232428}
   m_Layer: 5
-  m_Name: NavBtn_Back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -507,7 +506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cf6117016a00d4da2bcee8544801c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: Back
 --- !u!114 &371232429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +559,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Screen_Game
+          m_StringArgument: Screen_Home
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &371232430
@@ -1064,7 +1062,7 @@ GameObject:
   - component: {fileID: 1142401882}
   - component: {fileID: 1142401885}
   m_Layer: 5
-  m_Name: Dropdown
+  m_Name: Katalogauswahl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1150,7 +1148,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1142401885}
+        m_TargetAssemblyTypeName: DropdownManager, Assembly-CSharp
+        m_MethodName: ChangeEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1142401883
 MonoBehaviour:
@@ -1202,7 +1212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7954126cb2720048a369907891690c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: NeuesSpiel_Fragenkataloge
+  SomeButton: {fileID: 314796792}
 --- !u!1 &1480537400
 GameObject:
   m_ObjectHideFlags: 0
@@ -1806,6 +1816,7 @@ GameObject:
   - component: {fileID: 1767197247}
   - component: {fileID: 1767197246}
   - component: {fileID: 1767197245}
+  - component: {fileID: 1767197248}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1863,6 +1874,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1767197248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767197244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7271292fb7748ad4e8b00e8216aecc94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Katalogauswahl: {fileID: 1142401882}
+  StartButton: {fileID: 314796792}
 --- !u!1 &1821381532
 GameObject:
   m_ObjectHideFlags: 0

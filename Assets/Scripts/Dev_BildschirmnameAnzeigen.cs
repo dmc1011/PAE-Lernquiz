@@ -6,7 +6,9 @@ public class Dev_BildschirmnameAnzeigen : MonoBehaviour
 {
     void Start()
     {
-        GetComponent<TextMeshProUGUI>().text = SceneManager.GetActiveScene().name;
-        GetComponent<TextMeshProUGUI>().color = Color.red;
+        TextMeshProUGUI label = GetComponent<TextMeshProUGUI>();
+        label.text = SceneManager.GetActiveScene().name;
+        label.color = Color.red;
+        label.fontSize = 14;
     }
 }

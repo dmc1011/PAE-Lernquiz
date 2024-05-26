@@ -2542,7 +2542,7 @@ GameObject:
   - component: {fileID: 1055834267}
   - component: {fileID: 1055834266}
   m_Layer: 5
-  m_Name: NavBtn_Weiter
+  m_Name: Weiter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2580,7 +2580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cf6117016a00d4da2bcee8544801c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: Navigation
 --- !u!114 &1055834267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2634,7 +2633,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Screen_NeuesSpiel
+          m_StringArgument: Screen_NewGame
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1055834268

@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 371232429}
   - component: {fileID: 371232428}
   m_Layer: 5
-  m_Name: NavBtn_Back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cf6117016a00d4da2bcee8544801c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: Back
 --- !u!114 &371232429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,7 +227,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Screen_Game
+          m_StringArgument: Screen_Home
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &371232430

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,143 +9,327 @@ using Button = UnityEngine.UI.Button;
 
 public class ButtonManager : MonoBehaviour
 {
-
-    [SerializeField] private string type; // will be set in Editor
+    private string scene; // this is the name of the current scene.
     private Button me; // set this to "self"
     private RectTransform rectTransform;
 
     void Start()
     {
-        // Assign the same colors to every Button
         me = GetComponent<Button>();
         rectTransform = me.transform.GetComponent<RectTransform>();
+        scene = SceneManager.GetActiveScene().name;
         SetDesign();
+        SetContents();
     }
 
+    // Für die Navigation. ClickEvent hier drauf legen -> Neue Szene laden.
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
 
+    // Generic Change event. Use this if no other Scripts handle Dropdown changes.
     public void ClickEvent()
     {
-        print("Debug: Click Event fired");
-        switch (type)
+
+        switch (scene)
+        {
+            case "Screen_Home":
+                {
+                    switch (name)
+                    {
+                        case "DummyDataLoader":
+                            {
+                                DataManager.LoadDummyData();
+                            }
+                            break;
+
+                        default:
+                            {
+                                GenericError("ClickEvent");
+                            }
+                            break;
+                    }
+
+                }
+                break;
+
+            default:
+                {
+                    GenericError("ClickEvent");
+                }
+                break;
+        }
+
+
+    }
+
+    // SetDesign
+    // Damit alle UI-Elemente Flächendeckend denselben Stil haben werden ALLE BUTTONS hier behandelt.
+    // (Einzige Ausnahme ist der SingleplayerGameloop, da hier das verschieben der Buttons zum Randomisieren verwendet wird)
+    // Das funcktioniert nur, wenn die UI-Elemente im Unity-Editor den selben Namen verwenden wie hier.
+    private void SetDesign()
+    {
+        switch (name)
         {
             case "DummyDataLoader":
-
-                Global.CatalogueStorage.Clear();
-                for (int i = 0; i < 5; i++)
                 {
-                    Global.Catalogue catalogue = new("");
-                    string z = Random.Range(100, 999).ToString();
-                    catalogue.id = "Dummy Katalog ID: " + z;
-                    catalogue.name = "Dummy Katalog: " + z;
-                    catalogue.ownerId = "Ich";
-                    for (int i_question = 0; i_question < 5; i_question++)
-                    {
-                        Global.Question q = new Global.Question("");
-                        q.id = "some question identifier: " + Random.Range(100, 999).ToString();
-                        z = Random.Range(100, 999).ToString();
-                        q.question = new("Frage mit Zufallszahl: " + z);
-                        List<Global.ImageOrText> answers = new() {
-                            new(z),
-                            new(Random.Range(100, 999).ToString()),
-                            new(Random.Range(100, 999).ToString()),
-                            new(Random.Range(100, 999).ToString())
-                        };
-                        q.answers = answers;
-                        q.correctAnswerIndex = 0; // erste ist immer richtig -> index 0
-                        catalogue.questions.Add(q);
-                    }
-                    Global.CatalogueStorage.catalogues.Add(catalogue);
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Back.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Back.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Back.Hover;
+                    me.colors = colors;
                 }
-                //print(Global.CatalogueStorage);
+                break;
+
+            case "Back":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Back.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Back.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Back.Hover;
+                    me.colors = colors;
+                    SetPos(UIDesign.Positions.Buttons.Back);
+                }
+                break;
+
+            case "Weiter":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Navigation.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Navigation.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Navigation.Hover;
+                    me.colors = colors;
+                    print("TODO: the \"" + name + "\" button is not fine yet.");
+                }
+                break;
+
+            case "Start": case "Settings": case "DailyTask": case "Questions":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Navigation.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Navigation.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Navigation.Hover;
+                    me.colors = colors;
+
+                    switch (name)
+                    {
+                        case "Start":
+                            {
+                                switch(scene)
+                                {
+                                    case "Screen_Home":
+                                        {
+                                            SetPos(UIDesign.Positions.Buttons.Home.Start);
+                                        }
+                                        break;
+                                    case "Screen_NewGame":
+                                        {
+                                            SetPos(UIDesign.Positions.Buttons.NewGame.Start);
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case "Settings":
+                            {
+                                SetPos(UIDesign.Positions.Buttons.Home.Settings);
+                            }
+                            break;
+                        case "DailyTask":
+                            {
+                                SetPos(UIDesign.Positions.Buttons.Home.DailyTask);
+                            }
+                            break;
+                        case "Questions":
+                            {
+                                SetPos(UIDesign.Positions.Buttons.Home.Questions);
+                            }
+                            break;
+                    }
+
+                }
+                break;
+
+            case "Frage":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Question.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Question.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Question.Hover;
+                    me.colors = colors;
+                    switch (scene)
+                    {
+                        case "Screen_Catalogues":
+                            {
+                                SetPos(UIDesign.Positions.Buttons.Catalogues.Frage);
+                            }
+                            break;
+
+                        case "Screen_SingleplayerGameloop_1": // Wird von SingleplayerGameloop1Manager.cs verwaltet
+                            { }
+                            break;
+
+                        default:
+                            {
+                                GenericError("SetDesign");
+                            }
+                            break;
+                    }
+                }
+                break;
+
+            case "Antwort1": case "Antwort2": case "Antwort3": case "Antwort4":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Answer.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Answer.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Answer.Hover;
+                    me.colors = colors;
+
+
+                    switch (name)
+                    {
+                        case "Antwort1":
+                            {
+                                switch (scene)
+                                {
+                                    case "Screen_Catalogues":
+                                        {
+                                            SetPos(UIDesign.Positions.Buttons.Catalogues.Antwort1);
+                                        }
+                                        break;
+
+                                    case "Screen_SingleplayerGameloop_1": // Wird von SingleplayerGameloop1Manager.cs verwaltet
+                                        { }
+                                        break;
+
+                                    default:
+                                        {
+                                            GenericError("SetDesign");
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case "Antwort2":
+                            {
+                                switch (scene)
+                                {
+                                    case "Screen_Catalogues":
+                                        {
+                                            SetPos(UIDesign.Positions.Buttons.Catalogues.Antwort2);
+                                        }
+                                        break;
+
+                                    case "Screen_SingleplayerGameloop_1": // Wird von SingleplayerGameloop1Manager.cs verwaltet
+                                        { }
+                                        break;
+
+                                    default:
+                                        {
+                                            GenericError("SetDesign");
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case "Antwort3":
+                            {
+                                switch (scene)
+                                {
+                                    case "Screen_Catalogues":
+                                        {
+                                            SetPos(UIDesign.Positions.Buttons.Catalogues.Antwort3);
+                                        }
+                                        break;
+
+                                    case "Screen_SingleplayerGameloop_1": // Wird von SingleplayerGameloop1Manager.cs verwaltet
+                                        { }
+                                        break;
+
+                                    default:
+                                        {
+                                            GenericError("SetDesign");
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case "Antwort4":
+                            {
+                                switch (scene)
+                                {
+                                    case "Screen_Catalogues":
+                                        {
+                                            SetPos(UIDesign.Positions.Buttons.Catalogues.Antwort4);
+                                        }
+                                        break;
+
+                                    case "Screen_SingleplayerGameloop_1": // Wird von SingleplayerGameloop1Manager.cs verwaltet
+                                        { }
+                                        break;
+
+                                    default:
+                                        {
+                                            GenericError("SetDesign");
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                    }
+
+                }
+                break;
+
+            default:
+                {
+                    GenericError("SetDesign");
+                }
+                break;
+        }
+
+    }
+
+    // Generic SetContents. Use this if no other Scripts handle Button Initialization.
+    private void SetContents()
+    {
+        // Der Button hat keinen Inhalt... noch nicht :)
+        if(name == "Back")
+        {
+            return;
+        }
+
+        switch (scene)
+        {
+
+            case "Screen_Home": // Hat aktuell keinen dynamischen Inhalt
+            case "Screen_NewGame": // Wird von NewGameManager.cs verwaltet
+            case "Screen_Catalogues": // Wird von CatalogueManager.cs verwaltet
+            case "Screen_SingleplayerGameloop_1": // Wird von SingleplayerGameloop1Manager.cs verwaltet
+                { }
+                break;
+
+            default:
+                {
+                    GenericError("SetContents");
+                }
                 break;
         }
     }
 
-    // Hier wird das Design ALLER Buttons bestimmt.
-    private void SetDesign()
+    private void GenericError(string func)
     {
-        
+        print("ERROR [ButtonManager.cs." + func + "()]: Name of Button is \"" + name + "\" & Scene is \"" + scene + "\" -> unknown combination.");
+    }
 
-        // Das würde man normalerweise (wenn es "nur" Farben wären) nicht so
-        // aufspalten sondern ohne redundanz schreiben. Falls noch was dazukommt aber lieber so.
-        switch (type) {
-
-            case "Back": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonBack.Normal;
-                colors.pressedColor = Global.Colors.ButtonBack.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonBack.Hover;
-                me.colors = colors;
-                SetPos(0.15f, 0.075f, 0.15f, 0.075f); // Der Zurück Button ist immer unten links.
-            } return;
-
-            case "Navigation": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonNavigation.Normal;
-                colors.pressedColor = Global.Colors.ButtonNavigation.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonNavigation.Hover;
-                me.colors = colors;
-            } return;
-
-            case "Question": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonQuestion.Normal;
-                colors.pressedColor = Global.Colors.ButtonQuestion.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonQuestion.Hover;
-                me.colors = colors;
-            } return;
-
-            case "Fragenkataloge_Frage": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonQuestion.Normal;
-                colors.pressedColor = Global.Colors.ButtonQuestion.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonQuestion.Hover;
-                me.colors = colors;
-                SetPos(0.5f, 0.65f, 0.8f, 0.15f);
-            } return;
-
-            case "Fragenkataloge_Antwort1": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
-                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
-                me.colors = colors;
-                SetPos(0.5f - 0.2f, 0.425f - 0.075f, 0.4f, 0.15f);
-            } return;
-
-            case "Fragenkataloge_Antwort2": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
-                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
-                me.colors = colors;
-                SetPos(0.5f - 0.2f, 0.425f + 0.075f, 0.4f, 0.15f);
-            } return;
-
-            case "Fragenkataloge_Antwort3": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
-                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
-                me.colors = colors;
-                SetPos(0.5f + 0.2f, 0.425f - 0.075f, 0.4f, 0.15f);
-            } return;
-
-            case "Fragenkataloge_Antwort4": {
-                ColorBlock colors = me.colors;
-                colors.normalColor = Global.Colors.ButtonAnswer.Normal;
-                colors.pressedColor = Global.Colors.ButtonAnswer.Pressed;
-                colors.highlightedColor = Global.Colors.ButtonAnswer.Hover;
-                me.colors = colors;
-                SetPos(0.5f + 0.2f, 0.425f + 0.075f, 0.4f, 0.15f);
-            } return;
-
-        }
-        print("ERROR in \"ButtonManager.cs\" -> SetDesign(): Button has no type.");
+    private void SetPos(Rect rect)
+    {
+        SetPos(rect.x, rect.y, rect.width, rect.height);
     }
 
     private void SetPos(float x, float y, float w, float h)
@@ -161,8 +347,8 @@ public class ButtonManager : MonoBehaviour
         //  |           |
         //  |           |
         // 0/0 ------- 1/0
-        rectTransform.offsetMin = new Vector2(-w / 2.0f * Global.width, -h / 2.0f * Global.height);
-        rectTransform.offsetMax = new Vector2(w / 2.0f * Global.width, h / 2.0f * Global.height);
-        rectTransform.anchoredPosition = new Vector2((x - 0.5f) * Global.width, (y - 0.5f) * Global.height);
+        rectTransform.offsetMin = new Vector2(-w / 2.0f * UIDesign.Positions.Global.width, -h / 2.0f * UIDesign.Positions.Global.height);
+        rectTransform.offsetMax = new Vector2(w / 2.0f * UIDesign.Positions.Global.width, h / 2.0f * UIDesign.Positions.Global.height);
+        rectTransform.anchoredPosition = new Vector2((x - 0.5f) * UIDesign.Positions.Global.width, (y - 0.5f) * UIDesign.Positions.Global.height);
     }
 }

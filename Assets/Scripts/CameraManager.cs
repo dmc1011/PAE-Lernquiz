@@ -7,7 +7,7 @@ public class CameraManager : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
-        cam.backgroundColor = Global.Colors.Background;
+        cam.backgroundColor = UIDesign.Colors.Global.Background;
     }
 
 }
