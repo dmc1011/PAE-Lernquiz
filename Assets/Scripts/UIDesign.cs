@@ -108,7 +108,8 @@ public static class UIDesign
 
             public struct NewGame
             {
-                public static Rect Start = new(0.5f, 0.5f, 0.6f, 0.1f);
+                public static Rect StartLineareRunde = new(0.5f, 0.5f, 0.6f, 0.1f);
+                public static Rect StartZufallsrunde = new(0.5f, 0.4f, 0.6f, 0.1f);
             }
 
             public struct Catalogues

@@ -9,8 +9,8 @@ public class NewGameManager : MonoBehaviour
 {
 
     [SerializeField] private TMP_Dropdown Katalogauswahl;
-    [SerializeField] private UnityEngine.UI.Button StartButton;
-    private TextMeshProUGUI StartButton_Label;
+    [SerializeField] private UnityEngine.UI.Button StartLineareRunde;
+    [SerializeField] private UnityEngine.UI.Button StartZufallsRunde;
 
     void Start()
     {
@@ -18,7 +18,6 @@ public class NewGameManager : MonoBehaviour
         {
             print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
         }
-        StartButton_Label = StartButton.GetComponentInChildren<TextMeshProUGUI>();
         SetContents();
     }
 
@@ -43,23 +42,28 @@ public class NewGameManager : MonoBehaviour
         if (DataManager.Storage.Catalogues.Count == 0)
         {
             Global.AktuelleFragerunde.CatalogueIndex = 0;
-            StartButton.interactable = false;
-            StartButton_Label.text = "Nicht verfügbar";
+            StartLineareRunde.interactable = false;
+            StartZufallsRunde.interactable = false;
         }
         else
         {
             Global.AktuelleFragerunde.CatalogueIndex = Katalogauswahl.value;
-            StartButton.interactable = true;
-            StartButton_Label.text = "Start";
+            StartLineareRunde.interactable = true;
+            StartZufallsRunde.interactable = true;
         }
     }
 
-    public void StartButtonClickEvent()
+    public void StartLineareRundeClickedEvent()
+    {
+        print("TODO: Runde in der der Fragenkatalog linear durchlaufen wird");
+    }
+
+    public void StartZufallsRundeClickedEvent()
     {
         // Hier werden die Fragen aus dem Fragenkatalog ausgewählt und zusammengestellt.
         if (Global.AktuelleFragerunde.CatalogueIndex >= DataManager.Storage.Catalogues.Count)
         {
-            print("ERROR [NewGameManager.cs.StartButtonClickEvent()]: Fragerunde mit Katalognummer " + Global.AktuelleFragerunde.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataManager.Storage.Catalogues.Count + " Fragenkataloge.");
+            print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " + Global.AktuelleFragerunde.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataManager.Storage.Catalogues.Count + " Fragenkataloge.");
             return;
         }
 

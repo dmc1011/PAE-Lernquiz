@@ -19,7 +19,6 @@ public class ButtonManager : MonoBehaviour
         rectTransform = me.transform.GetComponent<RectTransform>();
         scene = SceneManager.GetActiveScene().name;
         SetDesign();
-        SetContents();
     }
 
     // Für die Navigation. ClickEvent hier drauf legen -> Neue Szene laden.
@@ -104,6 +103,27 @@ public class ButtonManager : MonoBehaviour
                 }
                 break;
 
+            case "StartLineareRunde":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Navigation.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Navigation.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Navigation.Hover;
+                    me.colors = colors;
+                    SetPos(UIDesign.Positions.Buttons.NewGame.StartLineareRunde);
+                } break;
+
+            case "StartZufallsrunde":
+                {
+                    ColorBlock colors = me.colors;
+                    colors.normalColor = UIDesign.Colors.Buttons.Navigation.Normal;
+                    colors.pressedColor = UIDesign.Colors.Buttons.Navigation.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Buttons.Navigation.Hover;
+                    me.colors = colors;
+                    SetPos(UIDesign.Positions.Buttons.NewGame.StartZufallsrunde);
+                }
+                break;
+
             case "Start": case "Settings": case "DailyTask": case "Questions":
                 {
                     ColorBlock colors = me.colors;
@@ -121,11 +141,6 @@ public class ButtonManager : MonoBehaviour
                                     case "Screen_Home":
                                         {
                                             SetPos(UIDesign.Positions.Buttons.Home.Start);
-                                        }
-                                        break;
-                                    case "Screen_NewGame":
-                                        {
-                                            SetPos(UIDesign.Positions.Buttons.NewGame.Start);
                                         }
                                         break;
                                 }
@@ -293,33 +308,6 @@ public class ButtonManager : MonoBehaviour
                 break;
         }
 
-    }
-
-    // Generic SetContents. Use this if no other Scripts handle Button Initialization.
-    private void SetContents()
-    {
-        // Der Button hat keinen Inhalt... noch nicht :)
-        if(name == "Back")
-        {
-            return;
-        }
-
-        switch (scene)
-        {
-
-            case "Screen_Home": // Hat aktuell keinen dynamischen Inhalt
-            case "Screen_NewGame": // Wird von NewGameManager.cs verwaltet
-            case "Screen_Catalogues": // Wird von CatalogueManager.cs verwaltet
-            case "Screen_SingleplayerGameloop_1": // Wird von SingleplayerGameloop1Manager.cs verwaltet
-                { }
-                break;
-
-            default:
-                {
-                    GenericError("SetContents");
-                }
-                break;
-        }
     }
 
     private void GenericError(string func)
