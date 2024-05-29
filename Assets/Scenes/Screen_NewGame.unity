@@ -492,7 +492,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1767197248}
         m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
-        m_MethodName: StartLineareRundeClickedEvent
+        m_MethodName: StartLinearRoundClickedEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1445,7 +1445,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1767197248}
         m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
-        m_MethodName: StartZufallsRundeClickedEvent
+        m_MethodName: StartRandomRoundClickedEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2167,9 +2167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7271292fb7748ad4e8b00e8216aecc94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Katalogauswahl: {fileID: 1142401882}
-  StartLineareRunde: {fileID: 314796792}
-  StartZufallsRunde: {fileID: 1275400137}
+  CatalogueSelection: {fileID: 1142401882}
+  StartLinearRound: {fileID: 314796792}
+  StartRandomRound: {fileID: 1275400137}
 --- !u!1 &1821381532
 GameObject:
   m_ObjectHideFlags: 0

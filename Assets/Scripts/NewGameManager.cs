@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 public class NewGameManager : MonoBehaviour
 {
 
-    [SerializeField] private TMP_Dropdown Katalogauswahl;
-    [SerializeField] private UnityEngine.UI.Button StartLineareRunde;
-    [SerializeField] private UnityEngine.UI.Button StartZufallsRunde;
+    [SerializeField] private TMP_Dropdown CatalogueSelection;
+    [SerializeField] private UnityEngine.UI.Button StartLinearRound;
+    [SerializeField] private UnityEngine.UI.Button StartRandomRound;
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class NewGameManager : MonoBehaviour
 
     private void SetContents()
     {
-        Katalogauswahl.ClearOptions();
+        CatalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
         for (int i = 0; i < DataManager.Storage.Catalogues.Count; i++)
         {
@@ -33,55 +33,55 @@ public class NewGameManager : MonoBehaviour
         {
             options.Add(new("Nicht verfügbar"));
         }
-        Katalogauswahl.AddOptions(options);
-        KatalogauswahlChangedEvent();
+        CatalogueSelection.AddOptions(options);
+        CatalogueSelectionChangedEvent();
     }
 
-    public void KatalogauswahlChangedEvent()
+    public void CatalogueSelectionChangedEvent()
     {
         if (DataManager.Storage.Catalogues.Count == 0)
         {
-            Global.AktuelleFragerunde.CatalogueIndex = 0;
-            StartLineareRunde.interactable = false;
-            StartZufallsRunde.interactable = false;
+            Global.CurrentQuestionRound.CatalogueIndex = 0;
+            StartLinearRound.interactable = false;
+            StartRandomRound.interactable = false;
         }
         else
         {
-            Global.AktuelleFragerunde.CatalogueIndex = Katalogauswahl.value;
-            StartLineareRunde.interactable = true;
-            StartZufallsRunde.interactable = true;
+            Global.CurrentQuestionRound.CatalogueIndex = CatalogueSelection.value;
+            StartLinearRound.interactable = true;
+            StartRandomRound.interactable = true;
         }
     }
 
-    public void StartLineareRundeClickedEvent()
+    public void StartLinearRoundClickedEvent()
     {
         print("TODO: Runde in der der Fragenkatalog linear durchlaufen wird");
     }
 
-    public void StartZufallsRundeClickedEvent()
+    public void StartRandomRoundClickedEvent()
     {
         // Hier werden die Fragen aus dem Fragenkatalog ausgewählt und zusammengestellt.
-        if (Global.AktuelleFragerunde.CatalogueIndex >= DataManager.Storage.Catalogues.Count)
+        if (Global.CurrentQuestionRound.CatalogueIndex >= DataManager.Storage.Catalogues.Count)
         {
-            print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " + Global.AktuelleFragerunde.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataManager.Storage.Catalogues.Count + " Fragenkataloge.");
+            print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " + Global.CurrentQuestionRound.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataManager.Storage.Catalogues.Count + " Fragenkataloge.");
             return;
         }
 
         // Das hier ist der ausgewählte Katalog
-        DataManager.Catalogue catalogue = DataManager.Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex];
+        DataManager.Catalogue catalogue = DataManager.Storage.Catalogues[Global.CurrentQuestionRound.CatalogueIndex];
 
         // Die Parameter der Fragerunde festlegen -> Welche Fragen kommen und wie viele. Listen für Fragen & Antworten etc. initialisieren.
-        Global.AktuelleFragerunde.Questions = new();
-        Global.AktuelleFragerunde.ChosenAnswers = new();
+        Global.CurrentQuestionRound.Questions = new();
+        Global.CurrentQuestionRound.ChosenAnswers = new();
         int[] iota = Enumerable.Range(0, catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1]
         Functions.Shuffle(iota); // Zufallszahlen ohne Dopplungen. Easy.
         for (int i = 0; i < Global.NumQuestionsPerRound; i++) // Fügt die ersten N hinzu.
         {
-            Global.AktuelleFragerunde.Questions.Add(iota[i]);
-            Global.AktuelleFragerunde.ChosenAnswers.Add(-1); // keine Antwort ausgewählt
+            Global.CurrentQuestionRound.Questions.Add(iota[i]);
+            Global.CurrentQuestionRound.ChosenAnswers.Add(-1); // keine Antwort ausgewählt
         }
-        Global.AktuelleFragerunde.QuestionCounter = 0; // Wir starten von 0 und gehen bis Global.NumQuestionsPerRound - 1
-        Global.InsideFragerunde = true; // Schalter umlegen
+        Global.CurrentQuestionRound.QuestionCounter = 0; // Wir starten von 0 und gehen bis Global.NumQuestionsPerRound - 1
+        Global.InsideQuestionRound = true; // Schalter umlegen
         SceneManager.LoadScene("Screen_SingleplayerGameloop_1"); // Lets go.
     }
 

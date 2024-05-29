@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 public class CataloguesManager : MonoBehaviour
 {
 
-    [SerializeField] private TMP_Dropdown Katalogauswahl;
-    [SerializeField] private TMP_Dropdown Fragenauswahl;
+    [SerializeField] private TMP_Dropdown CatalogueSelection;
+    [SerializeField] private TMP_Dropdown QuestionSelection;
     [SerializeField] private UnityEngine.UI.Button QButton;
     [SerializeField] private UnityEngine.UI.Button AButton1;
     [SerializeField] private UnityEngine.UI.Button AButton2;
@@ -37,7 +37,7 @@ public class CataloguesManager : MonoBehaviour
 
     private void SetContents()
     {
-        Katalogauswahl.ClearOptions();
+        CatalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
         for (int i = 0; i < DataManager.Storage.Catalogues.Count; i++)
         {
@@ -47,47 +47,47 @@ public class CataloguesManager : MonoBehaviour
         {
             options.Add(new("Nicht verfügbar"));
         }
-        Katalogauswahl.AddOptions(options);
-        KatalogauswahlChangedEvent(); // This will update Fragenauswahl
+        CatalogueSelection.AddOptions(options);
+        CatalogueSelectionChangedEvent(); // This will update QuestionSelection
     }
 
-    public void KatalogauswahlChangedEvent()
+    public void CatalogueSelectionChangedEvent()
     {
-        Fragenauswahl.ClearOptions();
+        QuestionSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
         if (DataManager.Storage.Catalogues.Count != 0)
         {
-            for (int i = 0; i < DataManager.Storage.Catalogues[Katalogauswahl.value].questions.Count; i++)
+            for (int i = 0; i < DataManager.Storage.Catalogues[CatalogueSelection.value].questions.Count; i++)
             {
-                options.Add(new(DataManager.Storage.Catalogues[Katalogauswahl.value].questions[i].question.text));
+                options.Add(new(DataManager.Storage.Catalogues[CatalogueSelection.value].questions[i].question.text));
             }
         }
         if (options.Count == 0)
         {
             options.Add(new("Nicht verfügbar"));
         }
-        Fragenauswahl.AddOptions(options);
-        FragenauswahlChangedEvent();
+        QuestionSelection.AddOptions(options);
+        QuestionSelectionChangedEvent();
     }
 
-    public void FragenauswahlChangedEvent()
+    public void QuestionSelectionChangedEvent()
     {
         if (DataManager.Storage.Catalogues.Count == 0)
         {
-            print("ERROR [CataloguesManager.cs:FragenauswahlChangedEvent()]: Wir benötigen mehr Fragenkataloge, Milord.");
+            print("ERROR [CataloguesManager.cs:QuestionSelectionChangedEvent()]: Wir benötigen mehr Fragenkataloge, Milord.");
             return;
         }
-        if (DataManager.Storage.Catalogues.Count < Katalogauswahl.value)
+        if (DataManager.Storage.Catalogues.Count < CatalogueSelection.value)
         {
-            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + Katalogauswahl.value);
+            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + CatalogueSelection.value);
             return;
         }
-        if (DataManager.Storage.Catalogues[Katalogauswahl.value].questions.Count < Fragenauswahl.value)
+        if (DataManager.Storage.Catalogues[CatalogueSelection.value].questions.Count < QuestionSelection.value)
         {
-            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragennummer: " + Katalogauswahl.value + " in Fragenkatalognummer: " + Fragenauswahl.value);
+            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragennummer: " + CatalogueSelection.value + " in Fragenkatalognummer: " + QuestionSelection.value);
             return;
         }
-        DataManager.Question currentQuestion = DataManager.Storage.Catalogues[Katalogauswahl.value].questions[Fragenauswahl.value];
+        DataManager.Question currentQuestion = DataManager.Storage.Catalogues[CatalogueSelection.value].questions[QuestionSelection.value];
         QButton_Label.text = currentQuestion.question.text;
         AButton1_Label.text = currentQuestion.answers[0].text;
         AButton2_Label.text = currentQuestion.answers[1].text;

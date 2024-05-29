@@ -35,7 +35,7 @@ public class DropdownManager : MonoBehaviour
                     {
                         case "Katalogauswahl":
                             {
-                                Global.AktuelleFragerunde.CatalogueIndex = me.value;
+                                Global.CurrentQuestionRound.CatalogueIndex = me.value;
                             }
                             break;
 
@@ -89,9 +89,9 @@ public class DropdownManager : MonoBehaviour
             case "Katalogauswahl":
                 {
                     ColorBlock colors = me.colors;
-                    colors.normalColor = UIDesign.Colors.Dropdowns.Katalogauswahl.Normal;
-                    colors.pressedColor = UIDesign.Colors.Dropdowns.Katalogauswahl.Pressed;
-                    colors.highlightedColor = UIDesign.Colors.Dropdowns.Katalogauswahl.Hover;
+                    colors.normalColor = UIDesign.Colors.Dropdowns.CatalogueSelection.Normal;
+                    colors.pressedColor = UIDesign.Colors.Dropdowns.CatalogueSelection.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Dropdowns.CatalogueSelection.Hover;
                     me.colors = colors;
 
                     switch (scene)
@@ -121,9 +121,9 @@ public class DropdownManager : MonoBehaviour
             case "Fragenauswahl":
                 {
                     ColorBlock colors = me.colors;
-                    colors.normalColor = UIDesign.Colors.Dropdowns.Fragenauswahl.Normal;
-                    colors.pressedColor = UIDesign.Colors.Dropdowns.Fragenauswahl.Pressed;
-                    colors.highlightedColor = UIDesign.Colors.Dropdowns.Fragenauswahl.Hover;
+                    colors.normalColor = UIDesign.Colors.Dropdowns.QuestionSelection.Normal;
+                    colors.pressedColor = UIDesign.Colors.Dropdowns.QuestionSelection.Pressed;
+                    colors.highlightedColor = UIDesign.Colors.Dropdowns.QuestionSelection.Hover;
                     me.colors = colors;
 
                     switch (scene)

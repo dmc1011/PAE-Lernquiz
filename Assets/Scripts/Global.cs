@@ -10,8 +10,8 @@ public static class Global
 
     // Falls True -> Wir sind im Gameloop und "AktuelleFragerunde" ist valide.
     // Falls False -> Wir sind "irgendwo" und "AktuelleFragerunde" ist default initialisiert (nutzlos).
-    public static bool InsideFragerunde = false;
-    public static DataManager.Fragerunde AktuelleFragerunde;
+    public static bool InsideQuestionRound = false;
+    public static DataManager.QuestionRound CurrentQuestionRound;
 
 }
 

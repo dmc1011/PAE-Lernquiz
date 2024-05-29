@@ -49,14 +49,14 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
 
     private void Advance(int chosenAnswer)
     {
-        Global.AktuelleFragerunde.ChosenAnswers[Global.AktuelleFragerunde.QuestionCounter] = chosenAnswer;
-        if (Global.AktuelleFragerunde.QuestionCounter == Global.NumQuestionsPerRound - 1)
+        Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = chosenAnswer;
+        if (Global.CurrentQuestionRound.QuestionCounter == Global.NumQuestionsPerRound - 1)
         {
             // Alle Fragen beantwortet
             SceneManager.LoadScene("Screen_SingleplayerGameloop_2");
         } else
         {
-            Global.AktuelleFragerunde.QuestionCounter += 1;
+            Global.CurrentQuestionRound.QuestionCounter += 1;
             SetContents();
             SetRandomizedPositions();
         }
@@ -120,37 +120,37 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         {
             return;
         }
-        Question currentQuestion = Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex].questions[Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter]];
+        Question currentQuestion = Storage.Catalogues[Global.CurrentQuestionRound.CatalogueIndex].questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
         QButton_Label.text = currentQuestion.question.text;
         AButton1_Label.text = currentQuestion.answers[0].text;
         AButton2_Label.text = currentQuestion.answers[1].text;
         AButton3_Label.text = currentQuestion.answers[2].text;
         AButton4_Label.text = currentQuestion.answers[3].text;
         Fragenummer.text = 
-            "Frage " + Global.AktuelleFragerunde.QuestionCounter + "\n" + 
-            "(Katalog: " + Global.AktuelleFragerunde.CatalogueIndex + 
-            ", Frage: " + Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter] + 
+            "Frage " + Global.CurrentQuestionRound.QuestionCounter + "\n" + 
+            "(Katalog: " + Global.CurrentQuestionRound.CatalogueIndex + 
+            ", Frage: " + Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] + 
             ")";
     }
 
     private bool CurrentQuestionIsOutOfBounds()
     {
-        if(!Global.InsideFragerunde)
+        if(!Global.InsideQuestionRound)
         {
             print("ERROR [NewGameManager.cs:Start()]: Global.InsideFragerunde == false, wie bist du überhaupt hier gelandet?!");
             return true;
         }
-        if (Global.AktuelleFragerunde.CatalogueIndex >= Storage.Catalogues.Count)
+        if (Global.CurrentQuestionRound.CatalogueIndex >= Storage.Catalogues.Count)
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.CatalogueIndex >= DataManager.Storage.Catalogues.Count");
             return true;
         }
-        if (Global.AktuelleFragerunde.QuestionCounter >= Global.AktuelleFragerunde.Questions.Count)
+        if (Global.CurrentQuestionRound.QuestionCounter >= Global.CurrentQuestionRound.Questions.Count)
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.QuestionCounter >= Global.AktuelleFragerunde.Questions.Count");
             return true;
         }
-        if (Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter] >= Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex].questions.Count)
+        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= Storage.Catalogues[Global.CurrentQuestionRound.CatalogueIndex].questions.Count)
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter] >= DataManager.Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex].questions.Count");
             return true;

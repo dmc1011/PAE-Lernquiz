@@ -4130,7 +4130,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1767197248}
         m_TargetAssemblyTypeName: CataloguesManager, Assembly-CSharp
-        m_MethodName: KatalogauswahlChangedEvent
+        m_MethodName: CatalogueSelectionChangedEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4582,8 +4582,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a9265bf9bca89547a6f68075e67caf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Katalogauswahl: {fileID: 1494448259}
-  Fragenauswahl: {fileID: 1881662567}
+  CatalogueSelection: {fileID: 0}
+  QuestionSelection: {fileID: 0}
   QButton: {fileID: 1193907725}
   AButton1: {fileID: 2002375042}
   AButton2: {fileID: 16223151}
@@ -4779,7 +4779,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1767197248}
         m_TargetAssemblyTypeName: CataloguesManager, Assembly-CSharp
-        m_MethodName: FragenauswahlChangedEvent
+        m_MethodName: QuestionSelectionChangedEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

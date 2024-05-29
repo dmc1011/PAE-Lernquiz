@@ -43,7 +43,7 @@ public static class DataManager
         }
     }
 
-    public struct Fragerunde
+    public struct QuestionRound
     {
         public int CatalogueIndex; // Index in der Liste aller Kataloge
         public List<int> Questions; // Indices der Fragen im Katalog

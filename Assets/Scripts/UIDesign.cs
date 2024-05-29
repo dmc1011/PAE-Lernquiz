@@ -54,14 +54,14 @@ public static class UIDesign
 
         public struct Dropdowns {
 
-            public struct Katalogauswahl
+            public struct CatalogueSelection
             {
                 public static Color Normal = new(0.82f, 0.95f, 0.46f);
                 public static Color Hover = new(0.82f, 1.00f, 0.57f);
                 public static Color Pressed = new(0.82f, 1.00f, 0.70f);
             }
 
-            public struct Fragenauswahl
+            public struct QuestionSelection
             {
                 public static Color Normal = new(0.82f, 0.95f, 0.46f);
                 public static Color Hover = new(0.82f, 1.00f, 0.57f);
