@@ -23,9 +23,9 @@ public class CataloguesManager : MonoBehaviour
 
     void Start()
     {
-        if(SceneManager.GetActiveScene().name != "Screen_Catalogues")
+        if(SceneManager.GetActiveScene().name != "Catalogues")
         {
-            print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
+            print("ERROR [CataloguesManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
         }
         QButton_Label = QButton.GetComponentInChildren<TextMeshProUGUI>();
         AButton1_Label = AButton1.GetComponentInChildren<TextMeshProUGUI>();
@@ -59,12 +59,12 @@ public class CataloguesManager : MonoBehaviour
         {
             for (int i = 0; i < DataManager.Storage.Catalogues[CatalogueSelection.value].questions.Count; i++)
             {
-                options.Add(new(DataManager.Storage.Catalogues[CatalogueSelection.value].questions[i].question.text));
+                options.Add(new((1+i).ToString()));
             }
         }
         if (options.Count == 0)
         {
-            options.Add(new("Nicht verfügbar"));
+            options.Add(new("-"));
         }
         QuestionSelection.AddOptions(options);
         QuestionSelectionChangedEvent();

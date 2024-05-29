@@ -14,7 +14,8 @@ public class NewGameManager : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name != "Screen_NewGame")
+        // Failsave
+        if (SceneManager.GetActiveScene().name != "NewGame")
         {
             print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
         }
@@ -82,7 +83,7 @@ public class NewGameManager : MonoBehaviour
         }
         Global.CurrentQuestionRound.QuestionCounter = 0; // Wir starten von 0 und gehen bis Global.NumQuestionsPerRound - 1
         Global.InsideQuestionRound = true; // Schalter umlegen
-        SceneManager.LoadScene("Screen_SingleplayerGameloop_1"); // Lets go.
+        SceneManager.LoadScene("Gameloop"); // Lets go.
     }
 
 }

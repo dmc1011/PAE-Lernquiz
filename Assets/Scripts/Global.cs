@@ -13,5 +13,11 @@ public static class Global
     public static bool InsideQuestionRound = false;
     public static DataManager.QuestionRound CurrentQuestionRound;
 
+    // Das hier ist die "Referenzgröße" für 16:9 (Größe in Pixeln des Canvas)
+    // Ausgehend davon wird alles auf die tatsächlich vorhandene Auflösung skaliert.
+    // Das gilt aber nur für 16:9 -> TODO UI-Design-Team. damit es auch z.B. bei 21:9 geht.
+    public static float width = 304;
+    public static float height = 544;
+
 }
 

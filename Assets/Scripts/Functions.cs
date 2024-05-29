@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public static class Functions
 {
     // Fisher Yates Shuffle Inplace: Taken from the unity forums.
