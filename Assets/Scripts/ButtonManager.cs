@@ -39,7 +39,7 @@ public class ButtonManager : MonoBehaviour
                     {
                         case "DummyDataLoader":
                             {
-                                DataManager.LoadDummyData();
+                                //DataManager.LoadDummyData();
                             }
                             break;
 

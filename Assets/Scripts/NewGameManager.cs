@@ -12,6 +12,8 @@ public class NewGameManager : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Button StartLinearRound;
     [SerializeField] private UnityEngine.UI.Button StartRandomRound;
 
+    JSONDataService DataService = new JSONDataService();
+
     void Start()
     {
         if (SceneManager.GetActiveScene().name != "Screen_NewGame")
@@ -25,9 +27,9 @@ public class NewGameManager : MonoBehaviour
     {
         CatalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        for (int i = 0; i < DataManager.Storage.Catalogues.Count; i++)
+        for (int i = 0; i < DataService.CountJsonFilesForDirectory("/Catalogue"); i++)
         {
-            options.Add(new(DataManager.Storage.Catalogues[i].name));
+            options.Add(new(DataService.LoadData<Catalogue>($"/Catalogue/{i}.json").name));
         }
         if (options.Count == 0)
         {
@@ -39,7 +41,7 @@ public class NewGameManager : MonoBehaviour
 
     public void CatalogueSelectionChangedEvent()
     {
-        if (DataManager.Storage.Catalogues.Count == 0)
+        if (DataService.CountJsonFilesForDirectory("/Catalogue") == 0)
         {
             Global.CurrentQuestionRound.CatalogueIndex = 0;
             StartLinearRound.interactable = false;
@@ -61,14 +63,14 @@ public class NewGameManager : MonoBehaviour
     public void StartRandomRoundClickedEvent()
     {
         // Hier werden die Fragen aus dem Fragenkatalog ausgewählt und zusammengestellt.
-        if (Global.CurrentQuestionRound.CatalogueIndex >= DataManager.Storage.Catalogues.Count)
+        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory("/Catalogue"))
         {
-            print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " + Global.CurrentQuestionRound.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataManager.Storage.Catalogues.Count + " Fragenkataloge.");
+            print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " + Global.CurrentQuestionRound.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataService.CountJsonFilesForDirectory("/Catalogues") + " Fragenkataloge.");
             return;
         }
 
         // Das hier ist der ausgewählte Katalog
-        DataManager.Catalogue catalogue = DataManager.Storage.Catalogues[Global.CurrentQuestionRound.CatalogueIndex];
+        Catalogue catalogue = DataService.LoadData<Catalogue>($"/Catalogue/{Global.CurrentQuestionRound.CatalogueIndex}.json");
 
         // Die Parameter der Fragerunde festlegen -> Welche Fragen kommen und wie viele. Listen für Fragen & Antworten etc. initialisieren.
         Global.CurrentQuestionRound.Questions = new();
