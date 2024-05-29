@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using static DataManager;
 
-public class SingleplayerGameloop1Manager : MonoBehaviour
+public class GameloopManager : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI Fragenummer;
@@ -27,9 +27,11 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
     private RectTransform AButton3_Transform;
     private RectTransform AButton4_Transform;
 
+    private int selected_answer = 0;
+
     void Start()
     {
-        if (SceneManager.GetActiveScene().name != "Screen_SingleplayerGameloop_1")
+        if (SceneManager.GetActiveScene().name != "Gameloop")
         {
             print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
         }
@@ -47,13 +49,17 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         SetContents();
     }
 
-    private void Advance(int chosenAnswer)
+    public void Advance()
     {
-        Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = chosenAnswer;
+        if (!Global.InsideQuestionRound) {
+            print("This will not work, you are not inside a question round.");
+            return;
+        }
+        Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = selected_answer;
         if (Global.CurrentQuestionRound.QuestionCounter == Global.NumQuestionsPerRound - 1)
         {
             // Alle Fragen beantwortet
-            SceneManager.LoadScene("Screen_SingleplayerGameloop_2");
+            SceneManager.LoadScene("Evaluation");
         } else
         {
             Global.CurrentQuestionRound.QuestionCounter += 1;
@@ -68,7 +74,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         {
             return;
         }
-        Advance(0);
+        selected_answer = 0;
     }
 
     public void AButton2ClickEvent()
@@ -77,7 +83,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         {
             return;
         }
-        Advance(1);
+        selected_answer = 1;
     }
 
     public void AButton3ClickEvent()
@@ -86,7 +92,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         {
             return;
         }
-        Advance(2);
+        selected_answer = 2;
     }
 
     public void AButton4ClickEvent()
@@ -95,23 +101,22 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         {
             return;
         }
-        Advance(3);
+        selected_answer = 3;
     }
 
     private void SetRandomizedPositions()
     {
-        Rect[] positions = { 
-            UIDesign.Positions.Buttons.SingleplayerGameloop1.Antwort1,
-            UIDesign.Positions.Buttons.SingleplayerGameloop1.Antwort2,
-            UIDesign.Positions.Buttons.SingleplayerGameloop1.Antwort3,
-            UIDesign.Positions.Buttons.SingleplayerGameloop1.Antwort4
+        Vector3[] positions = {
+            AButton1_Transform.position,
+            AButton2_Transform.position,
+            AButton3_Transform.position,
+            AButton4_Transform.position
         };
         Functions.Shuffle(positions);
-        SetPos(ref QButton_Transform, UIDesign.Positions.Buttons.SingleplayerGameloop1.Frage);
-        SetPos(ref AButton1_Transform, positions[0]);
-        SetPos(ref AButton2_Transform, positions[1]);
-        SetPos(ref AButton3_Transform, positions[2]);
-        SetPos(ref AButton4_Transform, positions[3]);
+        AButton1_Transform.Translate(positions[0] - AButton1_Transform.position);
+        AButton2_Transform.Translate(positions[1] - AButton2_Transform.position);
+        AButton3_Transform.Translate(positions[2] - AButton3_Transform.position);
+        AButton4_Transform.Translate(positions[3] - AButton4_Transform.position);
     }
 
     private void SetContents()
@@ -157,28 +162,5 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         }
         return false;
     }
-    private void SetPos(ref RectTransform t, Rect rect)
-    {
-        SetPos(ref t, rect.x, rect.y, rect.width, rect.height);
-    }
 
-    private void SetPos(ref RectTransform t, float x, float y, float w, float h)
-    {
-        // MS:
-        // x, y - Relative Bildschirmposition für das CENTER des Objekts
-        // w, h - Prozentsatz der Bildschirmbreite & Höhe
-        // Koordinaten:
-        // 0/1 ------- 1/1
-        //  |           |
-        //  |           |
-        //  |           |
-        //  |  0.5/0.5  |
-        //  |           |
-        //  |           |
-        //  |           |
-        // 0/0 ------- 1/0
-        t.offsetMin = new Vector2(-w / 2.0f * UIDesign.Positions.Global.width, -h / 2.0f * UIDesign.Positions.Global.height);
-        t.offsetMax = new Vector2(w / 2.0f * UIDesign.Positions.Global.width, h / 2.0f * UIDesign.Positions.Global.height);
-        t.anchoredPosition = new Vector2((x - 0.5f) * UIDesign.Positions.Global.width, (y - 0.5f) * UIDesign.Positions.Global.height);
-    }
 }

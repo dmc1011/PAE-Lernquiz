@@ -21,14 +21,14 @@ public static class DataManager
             Catalogue catalogue = new("");
             string z = Random.Range(100, 999).ToString();
             catalogue.id = "Dummy Katalog ID: " + z;
-            catalogue.name = "Dummy Katalog: " + z;
+            catalogue.name = "Katalog: " + z;
             catalogue.ownerId = "Ich";
             for (int i_question = 0; i_question < 10; i_question++)
             {
                 Question q = new("");
                 q.id = "some question identifier: " + Random.Range(100, 999).ToString();
                 z = Random.Range(100, 999).ToString();
-                q.question = new("Finde diese Zahl: " + z);
+                q.question = new("Fragenindex[" + i_question + "]: Finde diese Zahl: " + z);
                 List<ImageOrText> answers = new() {
                             new(z),
                             new(Random.Range(100, 999).ToString()),
