@@ -143,7 +143,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
             print("ERROR [NewGameManager.cs:Start()]: Global.InsideFragerunde == false, wie bist du überhaupt hier gelandet?!");
             return true;
         }
-        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory("/Catalogue"))
+        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory))
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.CatalogueIndex >= DataManager.Storage.Catalogues.Count");
             return true;

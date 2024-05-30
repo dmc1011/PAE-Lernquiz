@@ -27,7 +27,7 @@ public class NewGameManager : MonoBehaviour
     {
         CatalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        for (int i = 0; i < DataService.CountJsonFilesForDirectory("/Catalogue"); i++)
+        for (int i = 0; i < DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory); i++)
         {
             options.Add(new(DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{i}.json").name));
         }
@@ -41,7 +41,7 @@ public class NewGameManager : MonoBehaviour
 
     public void CatalogueSelectionChangedEvent()
     {
-        if (DataService.CountJsonFilesForDirectory("/Catalogue") == 0)
+        if (DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory) == 0)
         {
             Global.CurrentQuestionRound.CatalogueIndex = 0;
             StartLinearRound.interactable = false;
@@ -63,9 +63,9 @@ public class NewGameManager : MonoBehaviour
     public void StartRandomRoundClickedEvent()
     {
         // Hier werden die Fragen aus dem Fragenkatalog ausgewählt und zusammengestellt.
-        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory("/Catalogue"))
+        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory))
         {
-            print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " + Global.CurrentQuestionRound.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataService.CountJsonFilesForDirectory("/Catalogues") + " Fragenkataloge.");
+            print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " + Global.CurrentQuestionRound.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory) + " Fragenkataloge.");
             return;
         }
 

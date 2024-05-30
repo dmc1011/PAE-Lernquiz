@@ -39,7 +39,7 @@ public class CataloguesManager : MonoBehaviour
     {
         CatalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        for (int i = 0; i < DataService.CountJsonFilesForDirectory("/Catalogue"); i++)
+        for (int i = 0; i < DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory); i++)
         {
             options.Add(new(DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{i}.json").name));
         }
@@ -55,7 +55,7 @@ public class CataloguesManager : MonoBehaviour
     {
         QuestionSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        if (DataService.CountJsonFilesForDirectory("/Catalogue") != 0)
+        if (DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory) != 0)
         {
             for (int i = 0; i < DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions.Count; i++)
             {
@@ -72,12 +72,12 @@ public class CataloguesManager : MonoBehaviour
 
     public void QuestionSelectionChangedEvent()
     {
-        if (DataService.CountJsonFilesForDirectory("/Catalogue") == 0)
+        if (DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory) == 0)
         {
             print("ERROR [CataloguesManager.cs:QuestionSelectionChangedEvent()]: Wir benötigen mehr Fragenkataloge, Milord.");
             return;
         }
-        if (DataService.CountJsonFilesForDirectory("/Catalogue") < CatalogueSelection.value)
+        if (DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory) < CatalogueSelection.value)
         {
             print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + CatalogueSelection.value);
             return;
