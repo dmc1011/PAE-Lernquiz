@@ -26,7 +26,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
     private RectTransform AButton3_Transform;
     private RectTransform AButton4_Transform;
 
-    private JSONDataService DataService = new JSONDataService();
+    private JsonDataService DataService = new JsonDataService();
 
     void Start()
     {
@@ -121,7 +121,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         {
             return;
         }
-        Catalogue currentCatalogue = DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+        Catalogue currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
         Question currentQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
         Debug.Log(currentCatalogue);
         QButton_Label.text = currentQuestion.questionText;
@@ -143,7 +143,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
             print("ERROR [NewGameManager.cs:Start()]: Global.InsideFragerunde == false, wie bist du überhaupt hier gelandet?!");
             return true;
         }
-        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JSONDataService.CatalogueDirectory))
+        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory))
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.CatalogueIndex >= DataManager.Storage.Catalogues.Count");
             return true;
@@ -153,7 +153,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.QuestionCounter >= Global.AktuelleFragerunde.Questions.Count");
             return true;
         }
-        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count)
+        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count)
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter] >= DataManager.Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex].questions.Count");
             return true;

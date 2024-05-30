@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System;
 
-public class JSONDataService
+public class JsonDataService
 {
     public static string CatalogueDirectory = "/Catalogue";
 
