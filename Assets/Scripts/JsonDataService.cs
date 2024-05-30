@@ -5,6 +5,8 @@ using System;
 
 public class JSONDataService
 {
+    public static string CatalogueDirectory = "/Catalogue";
+
     public T LoadData<T> (string RelativePath)
     {
         string path = Application.persistentDataPath + RelativePath;

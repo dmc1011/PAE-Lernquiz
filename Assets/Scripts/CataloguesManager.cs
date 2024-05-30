@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,7 +41,7 @@ public class CataloguesManager : MonoBehaviour
         List<TMP_Dropdown.OptionData> options = new();
         for (int i = 0; i < DataService.CountJsonFilesForDirectory("/Catalogue"); i++)
         {
-            options.Add(new(DataService.LoadData<Catalogue>($"/Catalogue/{i}.json").name));
+            options.Add(new(DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{i}.json").name));
         }
         if (options.Count == 0)
         {
@@ -59,9 +57,9 @@ public class CataloguesManager : MonoBehaviour
         List<TMP_Dropdown.OptionData> options = new();
         if (DataService.CountJsonFilesForDirectory("/Catalogue") != 0)
         {
-            for (int i = 0; i < DataService.LoadData<Catalogue>($"/Catalogue/{CatalogueSelection.value}.json").questions.Count; i++)
+            for (int i = 0; i < DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions.Count; i++)
             {
-                options.Add(new(DataService.LoadData<Catalogue>($"/Catalogue/{CatalogueSelection.value}.json").questions[i].questionInfo));
+                options.Add(new(DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions[i].questionText));
             }
         }
         if (options.Count == 0)
@@ -84,18 +82,18 @@ public class CataloguesManager : MonoBehaviour
             print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + CatalogueSelection.value);
             return;
         }
-        if (DataService.LoadData<Catalogue>($"/Catalogue/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count < QuestionSelection.value)
+        if (DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count < QuestionSelection.value)
         {
             print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragennummer: " + CatalogueSelection.value + " in Fragenkatalognummer: " + QuestionSelection.value);
             return;
         }
-        Question currentQuestion = DataService.LoadData<Catalogue>($"/Catalogue/{CatalogueSelection.value}.json").questions[QuestionSelection.value];
-        QButton_Label.text = currentQuestion.questionInfo;
-        AButton1_Label.text = currentQuestion.answers[0];
-        AButton1_Label.text = currentQuestion.answers[0];
-        AButton2_Label.text = currentQuestion.answers[1];
-        AButton3_Label.text = currentQuestion.answers[2];
-        AButton4_Label.text = currentQuestion.answers[3];
+        Question currentQuestion = DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions[QuestionSelection.value];
+        QButton_Label.text = currentQuestion.questionText;
+        AButton1_Label.text = currentQuestion.answers[0].answerText;
+        AButton1_Label.text = currentQuestion.answers[0].answerText;
+        AButton2_Label.text = currentQuestion.answers[1].answerText;
+        AButton3_Label.text = currentQuestion.answers[2].answerText;
+        AButton4_Label.text = currentQuestion.answers[3].answerText;
     }
 
 }

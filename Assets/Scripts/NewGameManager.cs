@@ -29,7 +29,7 @@ public class NewGameManager : MonoBehaviour
         List<TMP_Dropdown.OptionData> options = new();
         for (int i = 0; i < DataService.CountJsonFilesForDirectory("/Catalogue"); i++)
         {
-            options.Add(new(DataService.LoadData<Catalogue>($"/Catalogue/{i}.json").name));
+            options.Add(new(DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{i}.json").name));
         }
         if (options.Count == 0)
         {
@@ -70,7 +70,7 @@ public class NewGameManager : MonoBehaviour
         }
 
         // Das hier ist der ausgewählte Katalog
-        Catalogue catalogue = DataService.LoadData<Catalogue>($"/Catalogue/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+        Catalogue catalogue = DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
 
         // Die Parameter der Fragerunde festlegen -> Welche Fragen kommen und wie viele. Listen für Fragen & Antworten etc. initialisieren.
         Global.CurrentQuestionRound.Questions = new();

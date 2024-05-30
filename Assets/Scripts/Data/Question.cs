@@ -6,7 +6,7 @@ using UnityEngine;
 public class Question
 {
     public string id;
-    public string questionInfo;
-    public int correctAnswerIndex;
-    public List<string> answers;
+    public string questionText;
+    // TODO: questionImage
+    public List<Answer> answers;
 }

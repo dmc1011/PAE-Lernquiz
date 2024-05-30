@@ -121,14 +121,14 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
         {
             return;
         }
-        Catalogue currentCatalogue = DataService.LoadData<Catalogue>($"/Catalogue/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+        Catalogue currentCatalogue = DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
         Question currentQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
         Debug.Log(currentCatalogue);
-        QButton_Label.text = currentQuestion.questionInfo;
-        AButton1_Label.text = currentQuestion.answers[0];
-        AButton2_Label.text = currentQuestion.answers[1];
-        AButton3_Label.text = currentQuestion.answers[2];
-        AButton4_Label.text = currentQuestion.answers[3];
+        QButton_Label.text = currentQuestion.questionText;
+        AButton1_Label.text = currentQuestion.answers[0].answerText;
+        AButton2_Label.text = currentQuestion.answers[1].answerText;
+        AButton3_Label.text = currentQuestion.answers[2].answerText;
+        AButton4_Label.text = currentQuestion.answers[3].answerText;
         Fragenummer.text = 
             "Frage " + Global.CurrentQuestionRound.QuestionCounter + "\n" + 
             "(Katalog: " + Global.CurrentQuestionRound.CatalogueIndex + 
@@ -153,7 +153,7 @@ public class SingleplayerGameloop1Manager : MonoBehaviour
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.QuestionCounter >= Global.AktuelleFragerunde.Questions.Count");
             return true;
         }
-        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= DataService.LoadData<Catalogue>($"/Catalogue/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count)
+        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= DataService.LoadData<Catalogue>(JSONDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count)
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter] >= DataManager.Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex].questions.Count");
             return true;
