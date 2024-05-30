@@ -21,6 +21,9 @@ public class CataloguesManager : MonoBehaviour
     private TextMeshProUGUI AButton3_Label;
     private TextMeshProUGUI AButton4_Label;
 
+
+    private JsonDataService DataService = new JsonDataService();
+
     void Start()
     {
         if(SceneManager.GetActiveScene().name != "Catalogues")
@@ -39,9 +42,9 @@ public class CataloguesManager : MonoBehaviour
     {
         CatalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        for (int i = 0; i < DataManager.Storage.Catalogues.Count; i++)
+        for (int i = 0; i < DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory); i++)
         {
-            options.Add(new(DataManager.Storage.Catalogues[i].name));
+            options.Add(new(DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{i}.json").name));
         }
         if (options.Count == 0)
         {
@@ -55,11 +58,11 @@ public class CataloguesManager : MonoBehaviour
     {
         QuestionSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        if (DataManager.Storage.Catalogues.Count != 0)
+        if (DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) != 0)
         {
-            for (int i = 0; i < DataManager.Storage.Catalogues[CatalogueSelection.value].questions.Count; i++)
+            for (int i = 0; i < DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions.Count; i++)
             {
-                options.Add(new((1+i).ToString()));
+                options.Add(new(DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions[i].text));
             }
         }
         if (options.Count == 0)
@@ -72,23 +75,24 @@ public class CataloguesManager : MonoBehaviour
 
     public void QuestionSelectionChangedEvent()
     {
-        if (DataManager.Storage.Catalogues.Count == 0)
+        if (DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) == 0)
         {
             print("ERROR [CataloguesManager.cs:QuestionSelectionChangedEvent()]: Wir benötigen mehr Fragenkataloge, Milord.");
             return;
         }
-        if (DataManager.Storage.Catalogues.Count < CatalogueSelection.value)
+        if (DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) < CatalogueSelection.value)
         {
             print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + CatalogueSelection.value);
             return;
         }
-        if (DataManager.Storage.Catalogues[CatalogueSelection.value].questions.Count < QuestionSelection.value)
+        if (DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count < QuestionSelection.value)
         {
             print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragennummer: " + CatalogueSelection.value + " in Fragenkatalognummer: " + QuestionSelection.value);
             return;
         }
-        DataManager.Question currentQuestion = DataManager.Storage.Catalogues[CatalogueSelection.value].questions[QuestionSelection.value];
-        QButton_Label.text = currentQuestion.question.text;
+        Question currentQuestion = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions[QuestionSelection.value];
+        QButton_Label.text = currentQuestion.text;
+        AButton1_Label.text = currentQuestion.answers[0].text;
         AButton1_Label.text = currentQuestion.answers[0].text;
         AButton2_Label.text = currentQuestion.answers[1].text;
         AButton3_Label.text = currentQuestion.answers[2].text;

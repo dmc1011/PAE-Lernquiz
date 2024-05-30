@@ -7,7 +7,7 @@ public class HomeManager : MonoBehaviour
 
     public void LoadDummyDataClickEvent()
     {
-        DataManager.LoadDummyData();
+        //DataManager.LoadDummyData();
     }
 
 }
