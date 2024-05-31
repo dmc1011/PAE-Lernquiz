@@ -5,7 +5,7 @@ using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static DataManager;
+
 
 public class GameloopManager : MonoBehaviour
 {
@@ -27,6 +27,7 @@ public class GameloopManager : MonoBehaviour
     private RectTransform AButton3_Transform;
     private RectTransform AButton4_Transform;
 
+    private JsonDataService DataService = new JsonDataService();
     private int selected_answer = 0;
 
     void Start()
@@ -125,8 +126,10 @@ public class GameloopManager : MonoBehaviour
         {
             return;
         }
-        Question currentQuestion = Storage.Catalogues[Global.CurrentQuestionRound.CatalogueIndex].questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
-        QButton_Label.text = currentQuestion.question.text;
+        Catalogue currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+        Question currentQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
+        Debug.Log(currentCatalogue);
+        QButton_Label.text = currentQuestion.text;
         AButton1_Label.text = currentQuestion.answers[0].text;
         AButton2_Label.text = currentQuestion.answers[1].text;
         AButton3_Label.text = currentQuestion.answers[2].text;
@@ -145,7 +148,7 @@ public class GameloopManager : MonoBehaviour
             print("ERROR [NewGameManager.cs:Start()]: Global.InsideFragerunde == false, wie bist du überhaupt hier gelandet?!");
             return true;
         }
-        if (Global.CurrentQuestionRound.CatalogueIndex >= Storage.Catalogues.Count)
+        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory))
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.CatalogueIndex >= DataManager.Storage.Catalogues.Count");
             return true;
@@ -155,7 +158,7 @@ public class GameloopManager : MonoBehaviour
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.QuestionCounter >= Global.AktuelleFragerunde.Questions.Count");
             return true;
         }
-        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= Storage.Catalogues[Global.CurrentQuestionRound.CatalogueIndex].questions.Count)
+        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count)
         {
             print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter] >= DataManager.Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex].questions.Count");
             return true;
