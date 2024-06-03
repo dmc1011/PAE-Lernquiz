@@ -128,7 +128,8 @@ public class GameloopManager : MonoBehaviour
         }
         Catalogue currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
         Question currentQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
-        Debug.Log(currentCatalogue);
+        Debug.Log("The current Catalogue: " + currentCatalogue.name);
+        Debug.Log("The current Question: " + currentQuestion.id);
         QButton_Label.text = currentQuestion.text;
         AButton1_Label.text = currentQuestion.answers[0].text;
         AButton2_Label.text = currentQuestion.answers[1].text;

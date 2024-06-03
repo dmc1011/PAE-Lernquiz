@@ -4,13 +4,14 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class NewGameManager : MonoBehaviour
 {
 
     [SerializeField] private TMP_Dropdown CatalogueSelection;
-    [SerializeField] private UnityEngine.UI.Button StartLinearRound;
-    [SerializeField] private UnityEngine.UI.Button StartRandomRound;
+    [SerializeField] private Button StartLinearRound;
+    [SerializeField] private Button StartRandomRound;
 
     JsonDataService DataService = new JsonDataService();
 
@@ -58,7 +59,19 @@ public class NewGameManager : MonoBehaviour
 
     public void StartLinearRoundClickedEvent()
     {
-        print("TODO: Runde in der der Fragenkatalog linear durchlaufen wird");
+        // invalid catalogue index
+        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory))
+        {
+            print("ERROR: Fragerunde mit Katalognummer " + Global.CurrentQuestionRound.CatalogueIndex + " ist OutOfBounds. Es gibt " + DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) + " Fragenkataloge.");
+            return;
+        }
+
+        // chosen catalogue
+        Catalogue catalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+
+        // start quiz round
+        Global.InsideQuestionRound = true;
+        SceneManager.LoadScene("LinearQuiz");
     }
 
     public void StartRandomRoundClickedEvent()

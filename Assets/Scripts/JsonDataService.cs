@@ -2,6 +2,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
 using System;
+using Unity.VisualScripting.FullSerializer;
 
 public class JsonDataService
 {
@@ -20,6 +21,7 @@ public class JsonDataService
         try
         {
             T data = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+            Debug.Log("Loaded Catalogue succesfully.");
             return data;
         }
         catch (Exception e)
@@ -89,7 +91,6 @@ public class JsonDataService
         }
         catch (Exception)
         {
-
             return 0;
         }
     }
