@@ -1178,12 +1178,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fragenummer: {fileID: 455452274}
-  QButton: {fileID: 3094280389961794086}
-  AButton1: {fileID: 8324467705567136259}
-  AButton2: {fileID: 6663210407275540333}
-  AButton3: {fileID: 2709462702273224999}
-  AButton4: {fileID: 8792247116203688284}
-  NextButton: {fileID: 6352228236930832554}
+  questionButton: {fileID: 3094280389961794086}
+  answerButtons:
+  - {fileID: 8324467705567136259}
+  - {fileID: 6663210407275540333}
+  - {fileID: 2709462702273224999}
+  - {fileID: 8792247116203688284}
+  nextButton: {fileID: 6352228236930832554}
 --- !u!1001 &8324467705567136257
 PrefabInstance:
   m_ObjectHideFlags: 0
