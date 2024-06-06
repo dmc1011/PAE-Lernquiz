@@ -5,27 +5,22 @@ using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class GameloopManager : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI Fragenummer;
-    [SerializeField] private UnityEngine.UI.Button QButton;
-    [SerializeField] private UnityEngine.UI.Button AButton1;
-    [SerializeField] private UnityEngine.UI.Button AButton2;
-    [SerializeField] private UnityEngine.UI.Button AButton3;
-    [SerializeField] private UnityEngine.UI.Button AButton4;
-    private TextMeshProUGUI QButton_Label;
-    private TextMeshProUGUI AButton1_Label;
-    private TextMeshProUGUI AButton2_Label;
-    private TextMeshProUGUI AButton3_Label;
-    private TextMeshProUGUI AButton4_Label;
-    private RectTransform QButton_Transform;
-    private RectTransform AButton1_Transform;
-    private RectTransform AButton2_Transform;
-    private RectTransform AButton3_Transform;
-    private RectTransform AButton4_Transform;
+    [SerializeField] private Button questionButton;
+    [SerializeField] private Button[] answerButtons = new Button[4];
+
+    private TextMeshProUGUI questionButtonLabel;
+    // Jinsi: questionButtonTransform needed?
+    private RectTransform questionButtonTransform;
+    private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
+    private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
+
 
     private JsonDataService DataService = new JsonDataService();
     private int selected_answer = 0;
@@ -36,16 +31,18 @@ public class GameloopManager : MonoBehaviour
         {
             print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
         }
-        QButton_Label = QButton.GetComponentInChildren<TextMeshProUGUI>();
-        AButton1_Label = AButton1.GetComponentInChildren<TextMeshProUGUI>();
-        AButton2_Label = AButton2.GetComponentInChildren<TextMeshProUGUI>();
-        AButton3_Label = AButton3.GetComponentInChildren<TextMeshProUGUI>();
-        AButton4_Label = AButton4.GetComponentInChildren<TextMeshProUGUI>();
-        QButton_Transform = QButton.transform.GetComponent<RectTransform>();
-        AButton1_Transform = AButton1.transform.GetComponent<RectTransform>();
-        AButton2_Transform = AButton2.transform.GetComponent<RectTransform>();
-        AButton3_Transform = AButton3.transform.GetComponent<RectTransform>();
-        AButton4_Transform = AButton4.transform.GetComponent<RectTransform>();
+        questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
+        // Jinsi: questionButtonTransform needed?
+        questionButtonTransform = questionButton.transform.GetComponent<RectTransform>();
+
+        foreach (Button button in answerButtons)
+        {
+            answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
+            answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
+        }
+    
+        
+
         SetRandomizedPositions();
         SetContents();
     }
@@ -105,19 +102,24 @@ public class GameloopManager : MonoBehaviour
         selected_answer = 3;
     }
 
+    // Jinsi: Exactly same method as in LinearQuizManager.
     private void SetRandomizedPositions()
     {
-        Vector3[] positions = {
-            AButton1_Transform.position,
-            AButton2_Transform.position,
-            AButton3_Transform.position,
-            AButton4_Transform.position
-        };
+        // Get the current positions
+        Vector3[] positions = new Vector3[4];
+        for (int i = 0; i < 4; i++)
+        {
+            positions[i] = answerButtonTransforms[i].position;
+        }
+
+        // Shuffle the positions
         Functions.Shuffle(positions);
-        AButton1_Transform.Translate(positions[0] - AButton1_Transform.position);
-        AButton2_Transform.Translate(positions[1] - AButton2_Transform.position);
-        AButton3_Transform.Translate(positions[2] - AButton3_Transform.position);
-        AButton4_Transform.Translate(positions[3] - AButton4_Transform.position);
+
+        // Apply the new positions
+        for (int i = 0; i < 4; i++)
+        {
+            answerButtonTransforms[i].Translate(positions[i] - answerButtonTransforms[i].position);
+        }
     }
 
     private void SetContents()
@@ -130,11 +132,13 @@ public class GameloopManager : MonoBehaviour
         Question currentQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
         Debug.Log("The current Catalogue: " + currentCatalogue.name);
         Debug.Log("The current Question: " + currentQuestion.id);
-        QButton_Label.text = currentQuestion.text;
-        AButton1_Label.text = currentQuestion.answers[0].text;
-        AButton2_Label.text = currentQuestion.answers[1].text;
-        AButton3_Label.text = currentQuestion.answers[2].text;
-        AButton4_Label.text = currentQuestion.answers[3].text;
+        questionButtonLabel.text = currentQuestion.text;
+
+        for (int i = 0; i < 4; i++)
+        {
+            answerButtonLabels[i].text = currentQuestion.answers[i].text;
+        }
+
         Fragenummer.text = 
             "Frage " + Global.CurrentQuestionRound.QuestionCounter + "\n" + 
             "(Katalog: " + Global.CurrentQuestionRound.CatalogueIndex + 
@@ -146,7 +150,7 @@ public class GameloopManager : MonoBehaviour
     {
         if(!Global.InsideQuestionRound)
         {
-            print("ERROR [NewGameManager.cs:Start()]: Global.InsideFragerunde == false, wie bist du überhaupt hier gelandet?!");
+            print("ERROR [NewGameManager.cs:Start()]: Global.InsideFragerunde == false, wie bist du ï¿½berhaupt hier gelandet?!");
             return true;
         }
         if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory))
