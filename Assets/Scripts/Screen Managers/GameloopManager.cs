@@ -1,13 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
+// TO DO: Script umbenennen in RandomQuizManager
 public class GameloopManager : MonoBehaviour
 {
 
@@ -16,25 +13,20 @@ public class GameloopManager : MonoBehaviour
     [SerializeField] private Button[] answerButtons = new Button[4];
 
     private TextMeshProUGUI questionButtonLabel;
-    // Jinsi: questionButtonTransform needed?
-    private RectTransform questionButtonTransform;
     private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
     private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
-
 
     private JsonDataService DataService = new JsonDataService();
     private int selected_answer = 0;
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name != "Gameloop")
+        if (SceneManager.GetActiveScene().name != "RandomQuiz") // TO DO: Gameloop-Szene umbenennen in RandomQuiz
         {
-            print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
+            print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than RandomQUiz");
         }
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
-        // Jinsi: questionButtonTransform needed?
-        questionButtonTransform = questionButton.transform.GetComponent<RectTransform>();
-
+        
         foreach (Button button in answerButtons)
         {
             answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
