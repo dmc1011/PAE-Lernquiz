@@ -121,3 +121,4 @@ public class LinearQuizManager : MonoBehaviour
         nextButton.interactable = false;
     }
 }
+
