@@ -14,6 +14,7 @@ public static class DataManager
         public List<int> Questions; // Indices der Fragen im Katalog
         public List<int> ChosenAnswers; // Werte aus [0, 3] -> Kann man bei der Auswertung verwerten.
         public int QuestionCounter; // Zählt hoch bis AnzahlFragenProFragerunde, danach endet die Fragerunde.
+        public int QuestionLimit; // ´Number of questions in a random quiz
     }
 
 

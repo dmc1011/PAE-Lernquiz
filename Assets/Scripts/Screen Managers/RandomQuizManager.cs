@@ -11,111 +11,80 @@ public class RandomQuizManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI Fragenummer;
     [SerializeField] private Button questionButton;
     [SerializeField] private Button[] answerButtons = new Button[4];
-    [SerializeField] private TextMeshProUGUI nextButtonLabel;
+    [SerializeField] private Button nextButton;
 
     private TextMeshProUGUI questionButtonLabel;
     private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
     private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
+    private TextMeshProUGUI nextButtonLabel;
 
     private JsonDataService DataService = new JsonDataService();
     private int selected_answer = 0;
     private bool isQuizOver = false;
+    private int questionCount = 0;
+    private int questionLimit;
+    private ColorBlock defaultColorBlock;
+    private Catalogue currentCatalogue;
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name != "RandomQuiz") // TO DO: Gameloop-Szene umbenennen in RandomQuiz
+        if (SceneManager.GetActiveScene().name != "Gameloop") // TO DO: Gameloop-Szene umbenennen in RandomQuiz
         {
-            print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than RandomQUiz");
+            print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than Gameloop");
+            return;
         }
+
+        // Get components and set default values
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
-        
+        nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
+
         foreach (Button button in answerButtons)
         {
             answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
             answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
         }
 
+        currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+        defaultColorBlock = answerButtons[0].colors;
+        nextButton.interactable = false;
+        questionLimit = Global.CurrentQuestionRound.QuestionLimit;
 
+        // Display first question
         DisplayNextQuestion();
-        SetContents();
     }
 
 
     public void DisplayNextQuestion()
     {
-        if (!Global.InsideQuestionRound)
-        {
-            print("This will not work, you are not inside a question round.");
-            return;
-        }
-
-        SetRandomizedPositions();
-        //Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = selected_answer;     // erst für Ergebnisse relevant
-        if (Global.CurrentQuestionRound.QuestionCounter == Global.NumQuestionsPerRound - 1)
-        {
-            LoadNextScene();
-        }
-        else
-        {
-            if (Global.CurrentQuestionRound.QuestionCounter == Global.NumQuestionsPerRound - 2)
-            {
-                nextButtonLabel.text = "Beenden";
-            }
-            Global.CurrentQuestionRound.QuestionCounter += 1;
-            SetContents();
-            SetRandomizedPositions();
-        }
-    }
-
-
-    public void LoadNextScene()
-    {
         if (isQuizOver)
         {
-            SceneManager.LoadScene("Evaluation");
-        }
-    }
-
-
-    public void AButton1ClickEvent()
-    {
-        if (CurrentQuestionIsOutOfBounds())
-        {
+            LoadNextScene();
             return;
         }
-        selected_answer = 0;
-    }
-
-    public void AButton2ClickEvent()
-    {
-        if (CurrentQuestionIsOutOfBounds())
+        
+        if (questionCount == questionLimit - 1)
         {
-            return;
+            nextButtonLabel.text = "Beenden";
         }
-        selected_answer = 1;
-    }
 
+        Question nextQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
+        
+        ResetButtons();
+        SetRandomizedPositions();
+        SetContents(nextQuestion);
 
-    public void AButton3ClickEvent()
-    {
-        if (CurrentQuestionIsOutOfBounds())
+        // questionCount will be 0 when first Question is displayed
+        questionCount += 1;
+        Global.CurrentQuestionRound.QuestionCounter += 1;
+
+        // Quiz will be considered over as soon as last question is displayed
+        if (questionCount >= questionLimit)
         {
-            return;
+            isQuizOver = true;
         }
-        selected_answer = 2;
-    }
-
-    public void AButton4ClickEvent()
-    {
-        if (CurrentQuestionIsOutOfBounds())
-        {
-            return;
-        }
-        selected_answer = 3;
     }
 
 
-    // Jinsi: Exactly same method as in LinearQuizManager.
     private void SetRandomizedPositions()
     {
         // Get the current positions
@@ -135,55 +104,58 @@ public class RandomQuizManager : MonoBehaviour
         }
     }
 
-
-    private void SetContents()
+    private void SetContents(Question q)
     {
-        if (CurrentQuestionIsOutOfBounds())
-        {
-            return;
-        }
-        Catalogue currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
-        Question currentQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
         Debug.Log("The current Catalogue: " + currentCatalogue.name);
-        Debug.Log("The current Question: " + currentQuestion.id);
-        questionButtonLabel.text = currentQuestion.text;
+        Debug.Log("The current Question: " + q.id);
+        questionButtonLabel.text = q.text;
 
         for (int i = 0; i < 4; i++)
         {
-            answerButtonLabels[i].text = currentQuestion.answers[i].text;
+            answerButtonLabels[i].text = q.answers[i].text;
         }
 
-        Fragenummer.text = 
-            "Frage " + Global.CurrentQuestionRound.QuestionCounter + "\n" + 
-            "(Katalog: " + Global.CurrentQuestionRound.CatalogueIndex + 
-            ", Frage: " + Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] + 
-            ")";
+        Fragenummer.text = "Random Quiz, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + q.id; 
     }
 
 
-    private bool CurrentQuestionIsOutOfBounds()
+    public void LoadNextScene()
     {
-        if(!Global.InsideQuestionRound)
+        if (isQuizOver)
         {
-            print("ERROR [NewGameManager.cs:Start()]: Global.InsideFragerunde == false, wie bist du �berhaupt hier gelandet?!");
-            return true;
+            SceneManager.LoadScene("Evaluation");
         }
-        if (Global.CurrentQuestionRound.CatalogueIndex >= DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory))
-        {
-            print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.CatalogueIndex >= DataManager.Storage.Catalogues.Count");
-            return true;
-        }
-        if (Global.CurrentQuestionRound.QuestionCounter >= Global.CurrentQuestionRound.Questions.Count)
-        {
-            print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.QuestionCounter >= Global.AktuelleFragerunde.Questions.Count");
-            return true;
-        }
-        if (Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] >= DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count)
-        {
-            print("ERROR [ButtonManager.cs.SetContents()]: Global.AktuelleFragerunde.Questions[Global.AktuelleFragerunde.QuestionCounter] >= DataManager.Storage.Catalogues[Global.AktuelleFragerunde.CatalogueIndex].questions.Count");
-            return true;
-        }
-        return false;
     }
 
+
+    public void HighlightAnswer(Button button)
+    {
+        ColorBlock cb = button.colors;
+        cb.disabledColor = Color.green;
+        answerButtons[0].colors = cb;
+
+        if (button != answerButtons[0])
+        {
+            cb.disabledColor = Color.red;
+            button.colors = cb;
+        }
+
+        foreach (Button b in answerButtons)
+        {
+            b.interactable = false;
+        }
+        nextButton.interactable = true;
+    }
+
+
+    private void ResetButtons()
+    {
+        Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = selected_answer;
+        foreach (Button button in answerButtons)
+        {
+            button.colors = defaultColorBlock;
+            button.interactable = true;
+        }
+        nextButton.interactable = false;
+    }
 }
