@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LinearQuizManager : MonoBehaviour
@@ -52,7 +50,7 @@ public class LinearQuizManager : MonoBehaviour
         {
             nextQuestionIndex = 0;
         }
-        
+
         Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
 
         ResetButtons();
@@ -85,12 +83,12 @@ public class LinearQuizManager : MonoBehaviour
     private void SetContents(Question q)
     {
         questionButtonLabel.text = q.text;
-        
+
         for (int i = 0; i < 4; i++)
         {
             answerButtonLabels[i].text = q.answers[i].text;
         }
-        
+
         Fragenummer.text = $"{currentCatalogue.name}\nFrage {q.id}";
     }
 
@@ -123,3 +121,4 @@ public class LinearQuizManager : MonoBehaviour
         nextButton.interactable = false;
     }
 }
+
