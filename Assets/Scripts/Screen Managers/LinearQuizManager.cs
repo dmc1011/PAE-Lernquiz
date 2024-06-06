@@ -12,8 +12,8 @@ public class LinearQuizManager : MonoBehaviour
     [SerializeField] private Button[] answerButtons = new Button[4];
     [SerializeField] private Button nextButton;
 
-    private TextMeshProUGUI questionButtonText;
-    private List<TextMeshProUGUI> answerButtonTexts = new List<TextMeshProUGUI>();
+    private TextMeshProUGUI questionButtonLabel;
+    private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
     private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
 
     private JsonDataService DataService = new JsonDataService();
@@ -26,12 +26,12 @@ public class LinearQuizManager : MonoBehaviour
     void Start()
     {
         // Get components for questionButton
-        questionButtonText = questionButton.GetComponentInChildren<TextMeshProUGUI>();
+        questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
 
         // Get components for answer buttons and add them to the lists
         foreach (Button button in answerButtons)
         {
-            answerButtonTexts.Add(button.GetComponentInChildren<TextMeshProUGUI>());
+            answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
             answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
         }
 
@@ -84,15 +84,14 @@ public class LinearQuizManager : MonoBehaviour
 
     private void SetContents(Question q)
     {
-        questionButtonText.text = q.text;
+        questionButtonLabel.text = q.text;
         
         for (int i = 0; i < 4; i++)
         {
-            answerButtonTexts[i].text = q.answers[i].text;
+            answerButtonLabels[i].text = q.answers[i].text;
         }
         
         Fragenummer.text = $"{currentCatalogue.name}\nFrage {q.id}";
-       
     }
 
     public void HighlightAnswer(Button button)
@@ -123,11 +122,4 @@ public class LinearQuizManager : MonoBehaviour
         }
         nextButton.interactable = false;
     }
-
-    public void QuitQuizRound()
-    {
-        SceneManager.LoadScene("Evaluation");
-    }
-
-
 }
