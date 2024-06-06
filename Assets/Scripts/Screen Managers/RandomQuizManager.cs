@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// TO DO: Script umbenennen in RandomQuizManager
-public class GameloopManager : MonoBehaviour
+
+public class RandomQuizManager : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI Fragenummer;
     [SerializeField] private Button questionButton;
     [SerializeField] private Button[] answerButtons = new Button[4];
+    [SerializeField] private TextMeshProUGUI nextButtonLabel;
 
     private TextMeshProUGUI questionButtonLabel;
     private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
@@ -18,6 +19,7 @@ public class GameloopManager : MonoBehaviour
 
     private JsonDataService DataService = new JsonDataService();
     private int selected_answer = 0;
+    private bool isQuizOver = false;
 
     void Start()
     {
@@ -32,31 +34,48 @@ public class GameloopManager : MonoBehaviour
             answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
             answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
         }
-    
-        
 
-        SetRandomizedPositions();
+
+        DisplayNextQuestion();
         SetContents();
     }
 
-    public void Advance()
+
+    public void DisplayNextQuestion()
     {
-        if (!Global.InsideQuestionRound) {
+        if (!Global.InsideQuestionRound)
+        {
             print("This will not work, you are not inside a question round.");
             return;
         }
-        Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = selected_answer;
+
+        SetRandomizedPositions();
+        //Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = selected_answer;     // erst für Ergebnisse relevant
         if (Global.CurrentQuestionRound.QuestionCounter == Global.NumQuestionsPerRound - 1)
         {
-            // Alle Fragen beantwortet
-            SceneManager.LoadScene("Evaluation");
-        } else
+            LoadNextScene();
+        }
+        else
         {
+            if (Global.CurrentQuestionRound.QuestionCounter == Global.NumQuestionsPerRound - 2)
+            {
+                nextButtonLabel.text = "Beenden";
+            }
             Global.CurrentQuestionRound.QuestionCounter += 1;
             SetContents();
             SetRandomizedPositions();
         }
     }
+
+
+    public void LoadNextScene()
+    {
+        if (isQuizOver)
+        {
+            SceneManager.LoadScene("Evaluation");
+        }
+    }
+
 
     public void AButton1ClickEvent()
     {
@@ -76,6 +95,7 @@ public class GameloopManager : MonoBehaviour
         selected_answer = 1;
     }
 
+
     public void AButton3ClickEvent()
     {
         if (CurrentQuestionIsOutOfBounds())
@@ -93,6 +113,7 @@ public class GameloopManager : MonoBehaviour
         }
         selected_answer = 3;
     }
+
 
     // Jinsi: Exactly same method as in LinearQuizManager.
     private void SetRandomizedPositions()
@@ -113,6 +134,7 @@ public class GameloopManager : MonoBehaviour
             answerButtonTransforms[i].Translate(positions[i] - answerButtonTransforms[i].position);
         }
     }
+
 
     private void SetContents()
     {
@@ -137,6 +159,7 @@ public class GameloopManager : MonoBehaviour
             ", Frage: " + Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter] + 
             ")";
     }
+
 
     private bool CurrentQuestionIsOutOfBounds()
     {
