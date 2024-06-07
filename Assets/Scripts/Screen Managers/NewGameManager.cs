@@ -88,13 +88,11 @@ public class NewGameManager : MonoBehaviour
 
         // Die Parameter der Fragerunde festlegen -> Welche Fragen kommen und wie viele. Listen für Fragen & Antworten etc. initialisieren.
         Global.CurrentQuestionRound.Questions = new();
-        Global.CurrentQuestionRound.ChosenAnswers = new();
         int[] iota = Enumerable.Range(0, catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1]
         Functions.Shuffle(iota); // Zufallszahlen ohne Dopplungen. Easy.
         for (int i = 0; i < Global.NumQuestionsPerRound; i++) // Fügt die ersten N hinzu.
         {
             Global.CurrentQuestionRound.Questions.Add(iota[i]);
-            Global.CurrentQuestionRound.ChosenAnswers.Add(-1); // keine Antwort ausgewählt
         }
         Global.CurrentQuestionRound.QuestionCounter = 0; // Wir starten von 0 und gehen bis Global.NumQuestionsPerRound - 1
         Global.InsideQuestionRound = true; // Schalter umlegen

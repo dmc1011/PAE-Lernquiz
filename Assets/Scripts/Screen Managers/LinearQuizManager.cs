@@ -23,6 +23,7 @@ public class LinearQuizManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DataManager.ClearResults();
         // Get components for questionButton
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -94,6 +95,12 @@ public class LinearQuizManager : MonoBehaviour
 
     public void HighlightAnswer(Button button)
     {
+        bool isCorrect = button == answerButtons[0];
+        string givenAnswer = button.GetComponentInChildren<TextMeshProUGUI>().text;
+        string questionText = questionButtonLabel.text;
+
+        DataManager.AddAnswer(questionText, givenAnswer, isCorrect);
+
         ColorBlock cb = button.colors;
         cb.disabledColor = Color.green;
         answerButtons[0].colors = cb;

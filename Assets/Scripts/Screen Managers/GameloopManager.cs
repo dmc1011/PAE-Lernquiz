@@ -28,7 +28,6 @@ public class GameloopManager : MonoBehaviour
     private RectTransform AButton4_Transform;
 
     private JsonDataService DataService = new JsonDataService();
-    private int selected_answer = 0;
 
     void Start()
     {
@@ -56,7 +55,6 @@ public class GameloopManager : MonoBehaviour
             print("This will not work, you are not inside a question round.");
             return;
         }
-        Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = selected_answer;
         if (Global.CurrentQuestionRound.QuestionCounter == Global.NumQuestionsPerRound - 1)
         {
             // Alle Fragen beantwortet
@@ -75,7 +73,6 @@ public class GameloopManager : MonoBehaviour
         {
             return;
         }
-        selected_answer = 0;
     }
 
     public void AButton2ClickEvent()
@@ -84,7 +81,6 @@ public class GameloopManager : MonoBehaviour
         {
             return;
         }
-        selected_answer = 1;
     }
 
     public void AButton3ClickEvent()
@@ -93,7 +89,6 @@ public class GameloopManager : MonoBehaviour
         {
             return;
         }
-        selected_answer = 2;
     }
 
     public void AButton4ClickEvent()
@@ -102,7 +97,6 @@ public class GameloopManager : MonoBehaviour
         {
             return;
         }
-        selected_answer = 3;
     }
 
     private void SetRandomizedPositions()
