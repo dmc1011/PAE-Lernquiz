@@ -95,6 +95,7 @@ public class NewGameManager : MonoBehaviour
             Global.CurrentQuestionRound.Questions.Add(iota[i]);
         }
         Global.CurrentQuestionRound.QuestionCounter = 0; // Wir starten von 0 und gehen bis Global.NumQuestionsPerRound - 1
+        Global.CurrentQuestionRound.QuestionLimit = 5;
         Global.InsideQuestionRound = true; // Schalter umlegen
         SceneManager.LoadScene("Gameloop"); // Lets go.
     }

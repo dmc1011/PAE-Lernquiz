@@ -13,6 +13,7 @@ public static class DataManager
         public int CatalogueIndex; // Index in der Liste aller Kataloge
         public List<int> Questions; // Indices der Fragen im Katalog
         public int QuestionCounter; // Zählt hoch bis AnzahlFragenProFragerunde, danach endet die Fragerunde.
+        public int QuestionLimit; // ´Number of questions in a random quiz
     }
 
     public struct QuestionResult
