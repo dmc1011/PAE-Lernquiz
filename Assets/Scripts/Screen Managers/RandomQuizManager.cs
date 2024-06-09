@@ -28,6 +28,8 @@ public class RandomQuizManager : MonoBehaviour
 
     void Start()
     {
+        DataManager.ClearResults();
+
         if (SceneManager.GetActiveScene().name != "Gameloop") // TO DO: Gameloop-Szene umbenennen in RandomQuiz
         {
             print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than Gameloop");
@@ -130,6 +132,12 @@ public class RandomQuizManager : MonoBehaviour
 
     public void HighlightAnswer(Button button)
     {
+        bool isCorrect = button == answerButtons[0];
+        string givenAnswer = button.GetComponentInChildren<TextMeshProUGUI>().text;
+        string questionText = questionButtonLabel.text;
+
+        DataManager.AddAnswer(questionText, givenAnswer, isCorrect);
+
         ColorBlock cb = button.colors;
         cb.disabledColor = Color.green;
         answerButtons[0].colors = cb;
@@ -150,7 +158,6 @@ public class RandomQuizManager : MonoBehaviour
 
     private void ResetButtons()
     {
-        Global.CurrentQuestionRound.ChosenAnswers[Global.CurrentQuestionRound.QuestionCounter] = selected_answer;
         foreach (Button button in answerButtons)
         {
             button.colors = defaultColorBlock;
