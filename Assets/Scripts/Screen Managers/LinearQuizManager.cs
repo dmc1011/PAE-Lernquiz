@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class LinearQuizManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class LinearQuizManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DataManager.ClearResults();
         // Get components for questionButton
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -94,6 +96,11 @@ public class LinearQuizManager : MonoBehaviour
 
     public void HighlightAnswer(Button button)
     {
+        int questionIndex = nextQuestionIndex - 1;
+        int answerIndex = Array.IndexOf(answerButtons, button);
+
+        DataManager.AddAnswer(questionIndex, answerIndex, currentCatalogue);
+
         ColorBlock cb = button.colors;
         cb.disabledColor = Color.green;
         answerButtons[0].colors = cb;
