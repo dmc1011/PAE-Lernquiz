@@ -97,7 +97,7 @@ public class LinearQuizManager : MonoBehaviour
     {
         bool isCorrect = button == answerButtons[0];
         string givenAnswer = button.GetComponentInChildren<TextMeshProUGUI>().text;
-        string questionText = questionButtonLabel.text;
+        string questionText = currentCatalogue.questions[nextQuestionIndex - 1].text;
 
         DataManager.AddAnswer(questionText, givenAnswer, isCorrect);
 
