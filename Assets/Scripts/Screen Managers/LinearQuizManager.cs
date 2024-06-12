@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class LinearQuizManager : MonoBehaviour
 {
@@ -95,11 +96,10 @@ public class LinearQuizManager : MonoBehaviour
 
     public void HighlightAnswer(Button button)
     {
-        bool isCorrect = button == answerButtons[0];
-        string givenAnswer = button.GetComponentInChildren<TextMeshProUGUI>().text;
-        string questionText = questionButtonLabel.text;
+        int questionIndex = nextQuestionIndex - 1;
+        int answerIndex = Array.IndexOf(answerButtons, button);
 
-        DataManager.AddAnswer(questionText, givenAnswer, isCorrect);
+        DataManager.AddAnswer(questionIndex, answerIndex, currentCatalogue);
 
         ColorBlock cb = button.colors;
         cb.disabledColor = Color.green;
