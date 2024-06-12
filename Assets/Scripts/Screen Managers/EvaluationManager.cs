@@ -20,8 +20,9 @@ public class EvaluationManager : MonoBehaviour
             GameObject resultEntry = Instantiate(resultPrefab, resultContainer);
             EvaluationTableContent evaluationTableContent = resultEntry.GetComponent<EvaluationTableContent>();
 
+            // TODO: as soon as images are supported we might need to adapt the prefab
             evaluationTableContent.QuestionText.text = result.questionText;
-            evaluationTableContent.AnswerText.text = result.givenAnswer;
+            evaluationTableContent.AnswerText.text = result.answerText;
             evaluationTableContent.CorrectText.text = result.isCorrect ? "Richtig" : "Falsch";
         }
     }

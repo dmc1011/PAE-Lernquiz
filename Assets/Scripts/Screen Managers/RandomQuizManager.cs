@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 
 public class RandomQuizManager : MonoBehaviour
@@ -19,12 +20,12 @@ public class RandomQuizManager : MonoBehaviour
     private TextMeshProUGUI nextButtonLabel;
 
     private JsonDataService DataService = new JsonDataService();
-    private int selected_answer = 0;
     private bool isQuizOver = false;
     private int questionCount = 0;
     private int questionLimit;
     private ColorBlock defaultColorBlock;
     private Catalogue currentCatalogue;
+    private int nextQuestionIndex;
 
     void Start()
     {
@@ -68,8 +69,8 @@ public class RandomQuizManager : MonoBehaviour
         {
             nextButtonLabel.text = "Beenden";
         }
-
-        Question nextQuestion = currentCatalogue.questions[Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter]];
+        nextQuestionIndex = Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter];
+        Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
         
         ResetButtons();
         SetRandomizedPositions();
@@ -132,11 +133,11 @@ public class RandomQuizManager : MonoBehaviour
 
     public void HighlightAnswer(Button button)
     {
-        bool isCorrect = button == answerButtons[0];
-        string givenAnswer = button.GetComponentInChildren<TextMeshProUGUI>().text;
-        string questionText = questionButtonLabel.text;
+        // in contrast to LinearQuizManager nextQuestionIndex is not update at this point and still valid
+        int questionIndex = nextQuestionIndex;
+        int answerIndex = Array.IndexOf(answerButtons, button);
 
-        DataManager.AddAnswer(questionText, givenAnswer, isCorrect);
+        DataManager.AddAnswer(questionIndex, answerIndex, currentCatalogue);
 
         ColorBlock cb = button.colors;
         cb.disabledColor = Color.green;

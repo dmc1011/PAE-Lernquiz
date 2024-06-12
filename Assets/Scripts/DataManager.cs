@@ -19,16 +19,24 @@ public static class DataManager
     public struct QuestionResult
     {
         public string questionText;
-        public string givenAnswer;
+        public string answerText;
+        // TODO: add questionImage
+        // TODO: add answerImage
         public bool isCorrect;
     }
 
-    public static void AddAnswer(string questionText, string givenAnswer, bool isCorrect)
+    public static void AddAnswer(int questionIndex, int answerIndex, Catalogue catalogue)
     {
+        bool isCorrect = answerIndex == 0;
+        Question question = catalogue.questions[questionIndex];
+        Answer answer = question.answers[answerIndex];
+
         QuestionResults.Add(new QuestionResult
         {
-            questionText = questionText,
-            givenAnswer = givenAnswer,
+            questionText = question.text,
+            answerText = answer.text,
+            // TODO: questionImage = question.image
+            // TODO: answerImage = answer.image
             isCorrect = isCorrect
         });
     }
