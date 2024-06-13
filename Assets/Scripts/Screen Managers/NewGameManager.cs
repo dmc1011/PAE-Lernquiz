@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -96,10 +95,9 @@ public class NewGameManager : MonoBehaviour
         {
             Global.CurrentQuestionRound.questions.Add(iota[i]);
         }
-        //Global.CurrentQuestionRound.questionCounter = 0; // initialize question counter, counting upwards with every answered question
         Global.CurrentQuestionRound.questionLimit = 5; // number of questions that have to be answered in a random quiz
         Global.InsideQuestionRound = true;
-        SceneManager.LoadScene("Gameloop");
+        SceneManager.LoadScene("RandomQuiz");
     }
 
 }

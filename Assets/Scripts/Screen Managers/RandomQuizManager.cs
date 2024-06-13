@@ -31,9 +31,9 @@ public class RandomQuizManager : MonoBehaviour
     {
         DataManager.ClearResults();
 
-        if (SceneManager.GetActiveScene().name != "Gameloop") // TO DO: Gameloop-Szene umbenennen in RandomQuiz
+        if (SceneManager.GetActiveScene().name != "RandomQuiz")
         {
-            print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than Gameloop");
+            print("ERROR [RandomQuizManager.cs:Start()]: Dont use this script in any scene other than RandomQuiz");
             return;
         }
 
