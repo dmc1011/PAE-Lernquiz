@@ -346,9 +346,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446491fa06348e14c95275de75996182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QuestionText: {fileID: 6951492385360264287}
-  AnswerText: {fileID: 3639761182155397830}
-  CorrectText: {fileID: 2589966140894018522}
+  questionText: {fileID: 6951492385360264287}
+  answerText: {fileID: 3639761182155397830}
+  correctText: {fileID: 2589966140894018522}
 --- !u!1 &7572411300509348503
 GameObject:
   m_ObjectHideFlags: 0
