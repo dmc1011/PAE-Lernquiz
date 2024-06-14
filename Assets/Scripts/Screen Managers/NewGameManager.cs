@@ -76,11 +76,11 @@ public class NewGameManager : MonoBehaviour
     public void StartRandomRoundClickedEvent()
     {
         // check if chosen catalogue index is out of bounds
-        if (Global.CurrentQuestionRound.catalogueIndex >= dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory))
+        if (Global.CurrentQuestionRound.catalogueIndex >= catalogueCount)
         {
             print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " 
                 + Global.CurrentQuestionRound.catalogueIndex + " ist OutOfBounds. Es gibt " 
-                + dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) + " Fragenkataloge.");
+                + catalogueCount + " Fragenkataloge.");
             return;
         }
 
