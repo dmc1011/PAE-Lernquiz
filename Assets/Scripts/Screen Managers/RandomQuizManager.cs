@@ -10,20 +10,13 @@ public class RandomQuizManager : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI Fragenummer;
-    [SerializeField] private Button questionButton;
-    [SerializeField] private Button[] answerButtons = new Button[4];
+    [SerializeField] private QuizAreaManager quizAreaManager;
     [SerializeField] private Button nextButton;
 
-    private TextMeshProUGUI questionButtonLabel;
-    private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
-    private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
     private TextMeshProUGUI nextButtonLabel;
-
-    private JsonDataService DataService = new JsonDataService();
     private bool isQuizOver = false;
     private int questionCount = 0;
     private int questionLimit;
-    private ColorBlock defaultColorBlock;
     private Catalogue currentCatalogue;
     private int nextQuestionIndex;
 
@@ -38,20 +31,13 @@ public class RandomQuizManager : MonoBehaviour
         }
 
         // Get components and set default values
-        questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
         nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        foreach (Button button in answerButtons)
-        {
-            answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
-            answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
-        }
-
-        currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.catalogueIndex}.json");
-        defaultColorBlock = answerButtons[0].colors;
-        nextButton.interactable = false;
+        // Get current catalogue
+        currentCatalogue = Global.CurrentQuestionRound.catalogue;
         questionLimit = Global.CurrentQuestionRound.questionLimit;
-
+        nextButton.interactable = false;
+        
         // Display first question
         DisplayNextQuestion();
     }
@@ -59,111 +45,61 @@ public class RandomQuizManager : MonoBehaviour
 
     public void DisplayNextQuestion()
     {
-        if (isQuizOver)
+        if (isQuizOver || questionCount >= questionLimit)
         {
             LoadNextScene();
             return;
         }
         
-        if (questionCount == questionLimit - 1)
-        {
-            nextButtonLabel.text = "Beenden";
-        }
         nextQuestionIndex = Global.CurrentQuestionRound.questions[questionCount];
         Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
-        
-        ResetButtons();
-        SetRandomizedPositions();
-        SetContents(nextQuestion);
 
-        // questionCount will be 0 when first Question is displayed
-        questionCount += 1;
-        //Global.CurrentQuestionRound.questionCounter += 1;
+        quizAreaManager.ResetContents();
+        quizAreaManager.RandomizePositions();
+        quizAreaManager.SetContents(nextQuestion);
+
+        // The "last" question is at UBound - 1. The "Beenden" must be shown one question earlier.
+        if (questionCount == questionLimit - 1)
+            nextButtonLabel.text = "Beenden";
+
+        Fragenummer.text = "Random Quiz, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
+        questionCount += 1; // questionCount will be 0 when first Question is displayed
 
         // Quiz will be considered over as soon as last question is displayed
         if (questionCount >= questionLimit)
-        {
             isQuizOver = true;
-        }
+
     }
-
-
-    private void SetRandomizedPositions()
-    {
-        // Get the current positions
-        Vector3[] positions = new Vector3[4];
-        for (int i = 0; i < 4; i++)
-        {
-            positions[i] = answerButtonTransforms[i].position;
-        }
-
-        // Shuffle the positions
-        Functions.Shuffle(positions);
-
-        // Apply the new positions
-        for (int i = 0; i < 4; i++)
-        {
-            answerButtonTransforms[i].Translate(positions[i] - answerButtonTransforms[i].position);
-        }
-    }
-
-    private void SetContents(Question q)
-    {
-        Debug.Log("The current Catalogue: " + currentCatalogue.name);
-        Debug.Log("The current Question: " + q.id);
-        questionButtonLabel.text = q.text;
-
-        for (int i = 0; i < 4; i++)
-        {
-            answerButtonLabels[i].text = q.answers[i].text;
-        }
-
-        Fragenummer.text = "Random Quiz, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + q.id; 
-    }
-
 
     public void LoadNextScene()
     {
-        if (isQuizOver)
-        {
-            SceneManager.LoadScene("Evaluation");
-        }
+        SceneManager.LoadScene("Evaluation");
     }
 
-
-    public void HighlightAnswer(Button button)
+    public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
     {
-        // in contrast to LinearQuizManager nextQuestionIndex is not update at this point and still valid
-        int questionIndex = nextQuestionIndex;
-        int answerIndex = Array.IndexOf(answerButtons, button);
-
-        DataManager.AddAnswer(questionIndex, answerIndex, currentCatalogue);
-
-        ColorBlock cb = button.colors;
-        cb.disabledColor = Color.green;
-        answerButtons[0].colors = cb;
-
-        if (button != answerButtons[0])
+        switch (button)
         {
-            cb.disabledColor = Color.red;
-            button.colors = cb;
+            case QuizAreaManager.ButtonID.Q:
+                {
+                    // MS: There is currently no logic involved in pressing the question button.
+                    // But the event is forwarded for potential later use.
+                }
+                break;
+
+            case QuizAreaManager.ButtonID.A: // MS: I wanted to write it "exactly this way" to support
+            case QuizAreaManager.ButtonID.B: // the case where we have different logic for different buttons.
+            case QuizAreaManager.ButtonID.C: // Currently it's all the same. I know.
+            case QuizAreaManager.ButtonID.D: // This also filters any unwanted values of "button" if we add something in the future.
+                {
+                    // in contrast to LinearQuizManager nextQuestionIndex is not update at this point and still valid
+                    int questionIndex = nextQuestionIndex;
+                    DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
+                    nextButton.interactable = true;
+                }
+                break;
         }
 
-        foreach (Button b in answerButtons)
-        {
-            b.interactable = false;
-        }
-        nextButton.interactable = true;
     }
 
-
-    private void ResetButtons()
-    {
-        foreach (Button button in answerButtons)
-        {
-            button.colors = defaultColorBlock;
-            button.interactable = true;
-        }
-        nextButton.interactable = false;
-    }
 }
