@@ -1,15 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CataloguesManager : MonoBehaviour
 {
 
-    [SerializeField] private TMP_Dropdown CatalogueSelection;
-    [SerializeField] private TMP_Dropdown QuestionSelection;
+    [SerializeField] private TMP_Dropdown catalogueSelection;
+    [SerializeField] private TMP_Dropdown questionSelection;
     [SerializeField] private UnityEngine.UI.Button QButton;
     [SerializeField] private UnityEngine.UI.Button AButton1;
     [SerializeField] private UnityEngine.UI.Button AButton2;
@@ -22,7 +20,7 @@ public class CataloguesManager : MonoBehaviour
     private TextMeshProUGUI AButton4_Label;
 
 
-    private JsonDataService DataService = new JsonDataService();
+    private JsonDataService dataService = new JsonDataService();
 
     void Start()
     {
@@ -40,57 +38,57 @@ public class CataloguesManager : MonoBehaviour
 
     private void SetContents()
     {
-        CatalogueSelection.ClearOptions();
+        catalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        for (int i = 0; i < DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory); i++)
+        for (int i = 0; i < dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory); i++)
         {
-            options.Add(new(DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{i}.json").name));
+            options.Add(new(dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{i}.json").name));
         }
         if (options.Count == 0)
         {
             options.Add(new("Nicht verfügbar"));
         }
-        CatalogueSelection.AddOptions(options);
+        catalogueSelection.AddOptions(options);
         CatalogueSelectionChangedEvent(); // This will update QuestionSelection
     }
 
     public void CatalogueSelectionChangedEvent()
     {
-        QuestionSelection.ClearOptions();
+        questionSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        if (DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) != 0)
+        if (dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) != 0)
         {
-            for (int i = 0; i < DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions.Count; i++)
+            for (int i = 0; i < dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{catalogueSelection.value}.json").questions.Count; i++)
             {
-                options.Add(new(DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions[i].text));
+                options.Add(new(dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{catalogueSelection.value}.json").questions[i].text));
             }
         }
         if (options.Count == 0)
         {
             options.Add(new("-"));
         }
-        QuestionSelection.AddOptions(options);
+        questionSelection.AddOptions(options);
         QuestionSelectionChangedEvent();
     }
 
     public void QuestionSelectionChangedEvent()
     {
-        if (DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) == 0)
+        if (dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) == 0)
         {
             print("ERROR [CataloguesManager.cs:QuestionSelectionChangedEvent()]: Wir benötigen mehr Fragenkataloge, Milord.");
             return;
         }
-        if (DataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) < CatalogueSelection.value)
+        if (dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) < catalogueSelection.value)
         {
-            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + CatalogueSelection.value);
+            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + catalogueSelection.value);
             return;
         }
-        if (DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json").questions.Count < QuestionSelection.value)
+        if (dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.catalogueIndex}.json").questions.Count < questionSelection.value)
         {
-            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragennummer: " + CatalogueSelection.value + " in Fragenkatalognummer: " + QuestionSelection.value);
+            print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragennummer: " + catalogueSelection.value + " in Fragenkatalognummer: " + questionSelection.value);
             return;
         }
-        Question currentQuestion = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{CatalogueSelection.value}.json").questions[QuestionSelection.value];
+        Question currentQuestion = dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{catalogueSelection.value}.json").questions[questionSelection.value];
         QButton_Label.text = currentQuestion.text;
         AButton1_Label.text = currentQuestion.answers[0].text;
         AButton1_Label.text = currentQuestion.answers[0].text;

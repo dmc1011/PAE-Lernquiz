@@ -2057,8 +2057,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d856cb58c8e2bb4bba9d20fea4ef0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CatalogueSelection: {fileID: 1142848493}
-  QuestionSelection: {fileID: 219643753}
+  catalogueSelection: {fileID: 1142848493}
+  questionSelection: {fileID: 219643753}
   QButton: {fileID: 368050346}
   AButton1: {fileID: 1984464903}
   AButton2: {fileID: 1390959346}

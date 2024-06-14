@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,9 +20,9 @@ public class EvaluationManager : MonoBehaviour
             EvaluationTableContent evaluationTableContent = resultEntry.GetComponent<EvaluationTableContent>();
 
             // TODO: as soon as images are supported we might need to adapt the prefab
-            evaluationTableContent.QuestionText.text = result.questionText;
-            evaluationTableContent.AnswerText.text = result.answerText;
-            evaluationTableContent.CorrectText.text = result.isCorrect ? "Richtig" : "Falsch";
+            evaluationTableContent.questionText.text = result.questionText;
+            evaluationTableContent.answerText.text = result.answerText;
+            evaluationTableContent.correctText.text = result.isCorrect ? "Richtig" : "Falsch";
         }
     }
 }

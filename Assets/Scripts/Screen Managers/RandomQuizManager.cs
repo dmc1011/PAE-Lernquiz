@@ -31,9 +31,9 @@ public class RandomQuizManager : MonoBehaviour
     {
         DataManager.ClearResults();
 
-        if (SceneManager.GetActiveScene().name != "Gameloop") // TO DO: Gameloop-Szene umbenennen in RandomQuiz
+        if (SceneManager.GetActiveScene().name != "RandomQuiz")
         {
-            print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than Gameloop");
+            print("ERROR [RandomQuizManager.cs:Start()]: Dont use this script in any scene other than RandomQuiz");
             return;
         }
 
@@ -47,10 +47,10 @@ public class RandomQuizManager : MonoBehaviour
             answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
         }
 
-        currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+        currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.catalogueIndex}.json");
         defaultColorBlock = answerButtons[0].colors;
         nextButton.interactable = false;
-        questionLimit = Global.CurrentQuestionRound.QuestionLimit;
+        questionLimit = Global.CurrentQuestionRound.questionLimit;
 
         // Display first question
         DisplayNextQuestion();
@@ -69,7 +69,7 @@ public class RandomQuizManager : MonoBehaviour
         {
             nextButtonLabel.text = "Beenden";
         }
-        nextQuestionIndex = Global.CurrentQuestionRound.Questions[Global.CurrentQuestionRound.QuestionCounter];
+        nextQuestionIndex = Global.CurrentQuestionRound.questions[questionCount];
         Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
         
         ResetButtons();
@@ -78,7 +78,7 @@ public class RandomQuizManager : MonoBehaviour
 
         // questionCount will be 0 when first Question is displayed
         questionCount += 1;
-        Global.CurrentQuestionRound.QuestionCounter += 1;
+        //Global.CurrentQuestionRound.questionCounter += 1;
 
         // Quiz will be considered over as soon as last question is displayed
         if (questionCount >= questionLimit)
