@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Catalogues.unity
     guid: cb881e5dca93e1b4480c9bdc646d6424
   - enabled: 1
-    path: Assets/Scenes/Gameloop.unity
+    path: Assets/Scenes/RandomQuiz.unity
     guid: 256940c9bf5e50a4d9a7159dd6359eb3
   - enabled: 1
     path: Assets/Scenes/Evaluation.unity

@@ -36,7 +36,7 @@ public class LinearQuizManager : MonoBehaviour
         }
 
         // Load data and set default values
-        currentCatalogue = DataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.CatalogueIndex}.json");
+        currentCatalogue = Global.CurrentQuestionRound.catalogue;
         defaultColorBlock = answerButtons[0].colors;
         nextButton.interactable = false;
 

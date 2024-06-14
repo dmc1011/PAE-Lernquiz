@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+
 
 public static class DataManager
 {
@@ -10,10 +8,10 @@ public static class DataManager
     
     public struct QuestionRound
     {
-        public int CatalogueIndex; // Index in der Liste aller Kataloge
-        public List<int> Questions; // Indices der Fragen im Katalog
-        public int QuestionCounter; // Zählt hoch bis AnzahlFragenProFragerunde, danach endet die Fragerunde.
-        public int QuestionLimit; // ´Number of questions in a random quiz
+        public int catalogueIndex;
+        public Catalogue catalogue;
+        public List<int> questions; // chosen questions (incdices) for random quiz
+        public int questionLimit; // Number of questions in a random quiz
     }
 
     public struct QuestionResult
