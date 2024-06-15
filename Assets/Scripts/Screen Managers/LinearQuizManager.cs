@@ -1,43 +1,25 @@
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class LinearQuizManager : MonoBehaviour
 {
+
     [SerializeField] private TextMeshProUGUI Fragenummer;
-    [SerializeField] private Button questionButton;
-    [SerializeField] private Button[] answerButtons = new Button[4];
+    [SerializeField] private QuizAreaManager quizAreaManager;
     [SerializeField] private Button nextButton;
 
-    private TextMeshProUGUI questionButtonLabel;
-    private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
-    private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
-
-    private JsonDataService DataService = new JsonDataService();
     private Catalogue currentCatalogue;
     private int nextQuestionIndex = 0;
-    private ColorBlock defaultColorBlock;
-
-
+ 
     // Start is called before the first frame update
     void Start()
     {
         DataManager.ClearResults();
-        // Get components for questionButton
-        questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        // Get components for answer buttons and add them to the lists
-        foreach (Button button in answerButtons)
-        {
-            answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
-            answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
-        }
-
-        // Load data and set default values
+        // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
-        defaultColorBlock = answerButtons[0].colors;
         nextButton.interactable = false;
 
         // Display the first question
@@ -49,83 +31,43 @@ public class LinearQuizManager : MonoBehaviour
     public void DisplayNextQuestion()
     {
         if (nextQuestionIndex >= currentCatalogue.questions.Count)
-        {
             nextQuestionIndex = 0;
-        }
 
         Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
 
-        ResetButtons();
-        SetRandomizedPositions();
-        SetContents(nextQuestion);
+        quizAreaManager.ResetContents();
+        quizAreaManager.RandomizePositions();
+        quizAreaManager.SetContents(nextQuestion);
 
+        Fragenummer.text = $"{currentCatalogue.name}\nFrage {nextQuestion.id}";
+        nextButton.interactable = false;
         nextQuestionIndex += 1;
     }
 
-    // randomly reorder the answer buttons
-    private void SetRandomizedPositions()
+    public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
     {
-        // Get the current positions
-        Vector3[] positions = new Vector3[4];
-        for (int i = 0; i < 4; i++)
+        switch (button)
         {
-            positions[i] = answerButtonTransforms[i].position;
+            case QuizAreaManager.ButtonID.Q:
+                {
+                    // MS: There is currently no logic involved in pressing the question button.
+                    // But the event is forwarded for potential later use.
+                }
+                break;
+
+            case QuizAreaManager.ButtonID.A: // MS: I wanted to write it "exactly this way" to support
+            case QuizAreaManager.ButtonID.B: // the case where we have different logic for different buttons.
+            case QuizAreaManager.ButtonID.C: // Currently it's all the same. I know.
+            case QuizAreaManager.ButtonID.D: // This also filters any unwanted values of "button" if we add something in the future.
+                {
+                    int questionIndex = nextQuestionIndex - 1;
+                    DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
+                    nextButton.interactable = true;
+                }
+                break;
         }
 
-        // Shuffle the positions
-        Functions.Shuffle(positions);
-
-        // Apply the new positions
-        for (int i = 0; i < 4; i++)
-        {
-            answerButtonTransforms[i].Translate(positions[i] - answerButtonTransforms[i].position);
-        }
     }
 
-    private void SetContents(Question q)
-    {
-        questionButtonLabel.text = q.text;
-
-        for (int i = 0; i < 4; i++)
-        {
-            answerButtonLabels[i].text = q.answers[i].text;
-        }
-
-        Fragenummer.text = $"{currentCatalogue.name}\nFrage {q.id}";
-    }
-
-    public void HighlightAnswer(Button button)
-    {
-        int questionIndex = nextQuestionIndex - 1;
-        int answerIndex = Array.IndexOf(answerButtons, button);
-
-        DataManager.AddAnswer(questionIndex, answerIndex, currentCatalogue);
-
-        ColorBlock cb = button.colors;
-        cb.disabledColor = Color.green;
-        answerButtons[0].colors = cb;
-
-        if (button != answerButtons[0])
-        {
-            cb.disabledColor = Color.red;
-            button.colors = cb;
-        }
-
-        foreach (Button b in answerButtons)
-        {
-            b.interactable = false;
-        }
-        nextButton.interactable = true;
-    }
-
-    private void ResetButtons()
-    {
-        foreach (Button button in answerButtons)
-        {
-            button.colors = defaultColorBlock;
-            button.interactable = true;
-        }
-        nextButton.interactable = false;
-    }
 }
 
