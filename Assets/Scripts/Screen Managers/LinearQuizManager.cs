@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LinearQuizManager : MonoBehaviour
@@ -31,7 +32,7 @@ public class LinearQuizManager : MonoBehaviour
     public void DisplayNextQuestion()
     {
         if (nextQuestionIndex >= currentCatalogue.questions.Count)
-            nextQuestionIndex = 0;
+            LoadNextScene();
 
         Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
 
@@ -69,5 +70,9 @@ public class LinearQuizManager : MonoBehaviour
 
     }
 
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene("Evaluation");
+    }
 }
 
