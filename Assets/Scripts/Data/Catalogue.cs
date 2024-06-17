@@ -9,4 +9,12 @@ public class Catalogue
     public string name;
     public string ownerId;
     public List<Question> questions;
+
+    public Catalogue (string id, string name, string ownerId, List<Question> questions)
+    {
+        this.id = id;
+        this.name = name;
+        this.ownerId = ownerId;
+        this.questions = questions;
+    }
 }

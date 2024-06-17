@@ -68,7 +68,11 @@ public class NewGameManager : MonoBehaviour
         }
 
         // start quiz round
-        Global.CurrentQuestionRound.catalogue = dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.catalogueIndex}.json");
+
+        CatalogueTable catalogueTable = new CatalogueTable();
+        string catalogueId = Global.CurrentQuestionRound.catalogueIndex.ToString();
+        Debug.Log("Table: " + catalogueTable);
+        Global.CurrentQuestionRound.catalogue = catalogueTable.GetCatalogueById(catalogueId);
         Global.InsideQuestionRound = true;
         SceneManager.LoadScene("LinearQuiz");
     }
