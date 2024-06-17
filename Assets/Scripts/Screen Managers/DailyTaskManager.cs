@@ -35,9 +35,8 @@ public class DailyTask : MonoBehaviour
 
         // Get current catalogue
         currentCatalogue = Global.CurrentDailyTask.catalogue;
-        //questionLimit = Global.CurrentDailyTask.questionLimit;
-        questionLimit = 10;
-        nextButton.interactable = false;
+        questionLimit = Global.CurrentDailyTask.questionLimit;
+        nextButton.interactable = true;
         
         // Display first question
         DisplayNextQuestion();

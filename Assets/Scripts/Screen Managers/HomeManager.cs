@@ -37,11 +37,12 @@ public class HomeManager : MonoBehaviour
         Global.CurrentDailyTask.questions = new();
         int[] iota = Enumerable.Range(0, Global.CurrentDailyTask.catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1] (question indices)
         Functions.Shuffle(iota); // shuffle question indices
-        for (int i = 0; i < Global.NumQuestionsPerRound; i++) // select first n questions of randomized questions
+        Global.CurrentDailyTask.questionLimit = 10;
+        for (int i = 0; i <  Global.CurrentDailyTask.questionLimit; i++) // select first n questions of randomized questions
         {
             Global.CurrentDailyTask.questions.Add(iota[i]);
         }
-        Global.CurrentDailyTask.questionLimit = 10; // number of questions that have to be answered in a random quiz
+         // number of questions that have to be answered in a random quiz
         Global.InsideQuestionRound = true;
         SceneManager.LoadScene("DailyTask");
     }
