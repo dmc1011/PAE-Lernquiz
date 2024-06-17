@@ -23,6 +23,15 @@ public static class DataManager
         public bool isCorrect;
     }
 
+    public struct DailyTask
+    {
+        public int catalogueIndex;
+        public Catalogue catalogue;
+        public List<int> questions; // chosen questions (incdices) for random quiz
+        public int questionLimit;
+        public List<QuestionResult> answers;
+    }
+
     public static void AddAnswer(int questionIndex, int answerIndex, Catalogue catalogue)
     {
         bool isCorrect = answerIndex == 0;

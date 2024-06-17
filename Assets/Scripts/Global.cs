@@ -1,13 +1,14 @@
 
 public static class Global
 {
-    // Es folgen globale Einstellungen für die App
-    // Diese können nicht via Code geändert werden.
+    // Es folgen globale Einstellungen fï¿½r die App
+    // Diese kï¿½nnen nicht via Code geï¿½ndert werden.
     public static readonly int NumQuestionsPerRound = 5;
 
     // Falls True -> Wir sind im Gameloop und "AktuelleFragerunde" ist valide.
     // Falls False -> Wir sind "irgendwo" und "AktuelleFragerunde" ist default initialisiert (nutzlos).
     public static bool InsideQuestionRound = false;
+    public static DataManager.DailyTask CurrentDailyTask;
     public static DataManager.QuestionRound CurrentQuestionRound;
 
 }
