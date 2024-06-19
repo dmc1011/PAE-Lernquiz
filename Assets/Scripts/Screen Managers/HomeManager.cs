@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
 
-
     [SerializeField] private Button startDailyTask;
-
     JsonDataService dataService = new JsonDataService();
     private int catalogueCount;
+
+
     void Start()
         {
             catalogueCount = dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory);
@@ -42,7 +42,6 @@ public class HomeManager : MonoBehaviour
         {
             Global.CurrentDailyTask.questions.Add(iota[i]);
         }
-         // number of questions that have to be answered in a random quiz
         Global.InsideQuestionRound = true;
         SceneManager.LoadScene("DailyTask");
     }

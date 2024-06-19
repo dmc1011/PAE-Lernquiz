@@ -225,7 +225,7 @@ PrefabInstance:
     - target: {fileID: 3762821271658637301, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
       propertyPath: parentScreenManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1767197246}
     - target: {fileID: 4486158702640733660, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
       propertyPath: m_Name
       value: QuizArea

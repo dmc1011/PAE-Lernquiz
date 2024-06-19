@@ -5,9 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class DailyTask : MonoBehaviour
+public class DailyTaskManager : MonoBehaviour
 {
-
     
     [SerializeField] private TextMeshProUGUI Fragenummer;
     [SerializeField] private QuizAreaManager quizAreaManager;
@@ -19,11 +18,10 @@ public class DailyTask : MonoBehaviour
     private int questionLimit;
     private Catalogue currentCatalogue;
     private int nextQuestionIndex;
-    // Start is called before the first frame update
+
+
     void Start()
     {
-        DataManager.ClearResults();
-
         if (SceneManager.GetActiveScene().name != "DailyTask")
         {
             print("ERROR [DailyTaskManager.cs:Start()]: Dont use this script in any scene other than DailyTask");
@@ -36,7 +34,7 @@ public class DailyTask : MonoBehaviour
         // Get current catalogue
         currentCatalogue = Global.CurrentDailyTask.catalogue;
         questionLimit = Global.CurrentDailyTask.questionLimit;
-        nextButton.interactable = true;
+        nextButton.interactable = false;
         
         // Display first question
         DisplayNextQuestion();
@@ -63,7 +61,8 @@ public class DailyTask : MonoBehaviour
             nextButtonLabel.text = "Beenden";
 
         Fragenummer.text = "Daily Task, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
-        questionCount += 1; // questionCount will be 0 when first Question is displayed
+        nextButton.interactable = false;
+        questionCount += 1; // questionCount will be 0 when first question is displayed
 
         // Quiz will be considered over as soon as last question is displayed
         if (questionCount >= questionLimit)
