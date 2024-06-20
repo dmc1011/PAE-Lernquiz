@@ -1,3 +1,4 @@
+using UnityEngine;
 
 public static class Global
 {
@@ -5,11 +6,16 @@ public static class Global
     // Diese k�nnen nicht via Code ge�ndert werden.
     public static readonly int NumQuestionsPerRound = 5;
 
-    // Falls True -> Wir sind im Gameloop und "AktuelleFragerunde" ist valide.
-    // Falls False -> Wir sind "irgendwo" und "AktuelleFragerunde" ist default initialisiert (nutzlos).
+    // player prefs keys
+    public const string LastResetDateKey = "LastResetDate";
+    public const string IsDailyTaskCompletedKey = "IsDailyTaskCompleted";
+
+    // monitoring question round
     public static bool InsideQuestionRound = false;
-    public static DataManager.DailyTask CurrentDailyTask;
     public static DataManager.QuestionRound CurrentQuestionRound;
 
+    // monitoring daily task
+    public static bool isDailyTaskCompleted = PlayerPrefs.GetString(IsDailyTaskCompletedKey, "") == "true";
+    public static DataManager.DailyTask CurrentDailyTask;
 }
 
