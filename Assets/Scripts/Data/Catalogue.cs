@@ -5,16 +5,14 @@ using UnityEngine;
 [System.Serializable]
 public class Catalogue
 {
-    public string id;
+    public int id;
     public string name;
-    public string ownerId;
     public List<Question> questions;
 
-    public Catalogue (string id, string name, string ownerId, List<Question> questions)
+    public Catalogue (int id, string name, List<Question> questions)
     {
         this.id = id;
         this.name = name;
-        this.ownerId = ownerId;
         this.questions = questions;
     }
 }

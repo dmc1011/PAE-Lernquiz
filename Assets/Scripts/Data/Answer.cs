@@ -5,13 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class Answer
 {
-    public string id;
+    public int id;
     public string text;
-    public string questionId;
+    public int questionId;
     // TODO: answerImage
     public bool isCorrect;
 
-    public Answer (string id, string text, string questionId, bool isCorrect)
+    public Answer (int id, string text, int questionId, bool isCorrect)
     {
         this.id = id;
         this.text = text;

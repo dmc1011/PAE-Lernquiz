@@ -2,82 +2,109 @@ using Mono.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
-public class CatalogueTable : SQLiteHelper
+public class CatalogueTable
 {
     private const string TABLE_NAME = "Catalogue";
+    private IDbConnection dbConnection;
 
-    public CatalogueTable() : base()
+    public CatalogueTable(IDbConnection dbConnection)
     {
-        IDbCommand dbcmd = getDbCommand();
-        dbcmd.CommandText = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ( " +
-            "id TEXT PRIMARY KEY, " +
-            "name TEXT, " +
-            "ownerId TEXT )";
-        dbcmd.ExecuteNonQuery();
+        this.dbConnection = dbConnection;
     }
 
     public void InsertData(Catalogue catalogue)
     {
-        IDbCommand dbcmd = getDbCommand();
-        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (id, name, ownerId) VALUES (@id, @name, @ownerId)";
-        dbcmd.Parameters.Add(new SqliteParameter("@id", catalogue.id));
-        dbcmd.Parameters.Add(new SqliteParameter("@name", catalogue.name));
-        dbcmd.Parameters.Add(new SqliteParameter("@ownerId", catalogue.ownerId));
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name) VALUES (@Name)";
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
         dbcmd.ExecuteNonQuery();
     }
 
-    public Catalogue GetCatalogueById(string catalogueId)
+    public List<Catalogue> FindAllCatalogues()
     {
-        Debug.Log("Catalogue id: " + catalogueId);
-        Catalogue catalogue = null;
-        IDataReader reader = getDataById(catalogueId, TABLE_NAME);
-        Debug.Log(reader);
-        if (reader.Read())
-        {
-            string id = reader["id"].ToString();
-            string name = reader["name"].ToString();
-            string ownerId = reader["ownerId"].ToString();
-            List<Question> questions = GetQuestionsByCatalogueId(catalogueId);
-            catalogue = new Catalogue(id, name, ownerId, questions);
-        }
-        return catalogue;
-    }
-
-    public List<Question> GetQuestionsByCatalogueId(string catalogueId)
-    {
-        List<Question> questions = new List<Question>();
-        IDbCommand dbcmd = getDbCommand();
-        dbcmd.CommandText = "SELECT * FROM Question WHERE catalogueId = @catalogueId order by id";
-        dbcmd.Parameters.Add(new SqliteParameter("@catalogueId", catalogueId));
+        List<Catalogue> catalogues = new List<Catalogue>();
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM Catalogue order by Id";
 
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
         {
-            string id = reader["id"].ToString();
-            string text = reader["text"].ToString();
-            List<Answer> answers = GetAnswersByQuestionId(id);
+            int id = Convert.ToInt32(reader["Id"]);
+            string name = reader["Name"].ToString();
+            List<Question> questions = FindQuestionsByCatalogueId(id);
+            catalogues.Add(new Catalogue(id, name, questions));
+        }
+        return catalogues;
+    }
+
+    public Catalogue FindCatalogueByName(string catalogueName)
+    {
+        Catalogue catalogue = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE Name = @Name";
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogueName));
+        IDataReader reader = dbcmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            string name = reader["Name"].ToString();
+            List<Question> questions = FindQuestionsByCatalogueId(id);
+            catalogue = new Catalogue(id, name, questions);
+        }
+        return catalogue;
+    }
+
+    public Catalogue FindCatalogueById(int catalogueId)
+    {
+        Catalogue catalogue = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogueId));
+        IDataReader reader = dbcmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            string name = reader["Name"].ToString();
+            List<Question> questions = FindQuestionsByCatalogueId(catalogueId);
+            catalogue = new Catalogue(id, name, questions);
+        }
+        return catalogue;
+    }
+
+    public List<Question> FindQuestionsByCatalogueId(int catalogueId)
+    {
+        List<Question> questions = new List<Question>();
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM Question WHERE CatalogueId = @CatalogueId order by Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
+
+        IDataReader reader = dbcmd.ExecuteReader();
+        while (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            string text = reader["Text"].ToString();
+            List<Answer> answers = FindAnswersByQuestionId(id);
             questions.Add(new Question(id, text, catalogueId, answers));
         }
         return questions;
     }
 
-    public List<Answer> GetAnswersByQuestionId(string questionId)
+    public List<Answer> FindAnswersByQuestionId(int questionId)
     {
         List<Answer> answers = new List<Answer>();
-        IDbCommand dbcmd = getDbCommand();
-        dbcmd.CommandText = "SELECT * FROM Answer WHERE questionId = @questionId order by id";
-        dbcmd.Parameters.Add(new SqliteParameter("@questionId", questionId));
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM Answer WHERE QuestionId = @QuestionId order by Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@QuestionId", questionId));
 
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
         {
-            string id = reader["id"].ToString();
-            string text = reader["text"].ToString();
-            bool isCorrect = (bool)reader["isCorrect"];
+            int id = Convert.ToInt32(reader["Id"]);
+            string text = reader["Text"].ToString();
+            bool isCorrect = (bool)reader["IsCorrect"];
             answers.Add(new Answer(id, text, questionId, isCorrect));
         }
         return answers;

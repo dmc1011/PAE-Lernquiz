@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class LinearQuizManager : MonoBehaviour
     [SerializeField] private Button nextButton;
 
     private Catalogue currentCatalogue;
+    private List<Question> questions;
     private int nextQuestionIndex = 0;
  
     // Start is called before the first frame update
@@ -20,6 +22,7 @@ public class LinearQuizManager : MonoBehaviour
 
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
+        questions = currentCatalogue.questions;
         nextButton.interactable = false;
 
         // Display the first question
@@ -30,16 +33,16 @@ public class LinearQuizManager : MonoBehaviour
     // display question and answer text on the screen
     public void DisplayNextQuestion()
     {
-        if (nextQuestionIndex >= currentCatalogue.questions.Count)
+        if (nextQuestionIndex >= questions.Count)
             nextQuestionIndex = 0;
 
-        Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
+        Question nextQuestion = questions[nextQuestionIndex];
 
         quizAreaManager.ResetContents();
         quizAreaManager.RandomizePositions();
         quizAreaManager.SetContents(nextQuestion);
 
-        Fragenummer.text = $"{currentCatalogue.name}\nFrage {nextQuestion.id}";
+        Fragenummer.text = $"{currentCatalogue.name}\nFrage {nextQuestionIndex + 1}";
         nextButton.interactable = false;
         nextQuestionIndex += 1;
     }
