@@ -6,13 +6,11 @@ using UnityEngine.UI;
 
 public class HomeManager : MonoBehaviour
 {
-
     [SerializeField] private Button startDailyTask;
     JsonDataService dataService = new JsonDataService();
     private int catalogueCount;
-
-    // key for last reset date in player prefs
     string currentDate;
+
 
     void Start()
     {
@@ -21,35 +19,37 @@ public class HomeManager : MonoBehaviour
         if (IsNewDay())
         {
             ResetDailyTask();
-            Debug.Log("Daily Task reset successfully");
         }
     }
 
   
     public void StartDailyTaskClickedEvent()
     {
-        if (Global.isDailyTaskCompleted)
+        if (IsDailyTaskCompleted())
         {
             SceneManager.LoadScene("Evaluation");
             return;
         }
-        Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(0, catalogueCount);
 
         // load chosen catalogue into global data
+        Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(0, catalogueCount);
         Global.CurrentDailyTask.catalogue = dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentDailyTask.catalogueIndex}.json");
 
-        // initialize question round
+        // initialize daily task
         Global.CurrentDailyTask.questions = new();
         int[] iota = Enumerable.Range(0, Global.CurrentDailyTask.catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1] (question indices)
         Functions.Shuffle(iota); // shuffle question indices
-        Global.CurrentDailyTask.questionLimit = 10;
-        for (int i = 0; i <  Global.CurrentDailyTask.questionLimit; i++) // select first n questions of randomized questions
+        Global.CurrentDailyTask.questionLimit = Mathf.Min(10, Global.CurrentDailyTask.catalogue.questions.Count);
+        for (int i = 0; i < Global.CurrentDailyTask.questionLimit; i++) // select first n questions of randomized questions
         {
             Global.CurrentDailyTask.questions.Add(iota[i]);
             Debug.Log($"{i}");
         }
+
+        // start daily task
         Global.InsideQuestionRound = true;
         PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
+        PlayerPrefs.Save();
         SceneManager.LoadScene("DailyTask");
     }
 
@@ -71,5 +71,11 @@ public class HomeManager : MonoBehaviour
         PlayerPrefs.SetString(Global.LastResetDateKey, currentDate);
         PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "false");
         PlayerPrefs.Save();
+    }
+
+
+    public bool IsDailyTaskCompleted()
+    {
+        return PlayerPrefs.GetString(Global.IsDailyTaskCompletedKey) == "true"; ;
     }
 }

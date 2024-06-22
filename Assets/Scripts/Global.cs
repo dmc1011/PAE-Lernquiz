@@ -15,7 +15,6 @@ public static class Global
     public static DataManager.QuestionRound CurrentQuestionRound;
 
     // monitoring daily task
-    public static bool isDailyTaskCompleted = PlayerPrefs.GetString(IsDailyTaskCompletedKey, "") == "true";
     public static DataManager.DailyTask CurrentDailyTask;
 }
 
