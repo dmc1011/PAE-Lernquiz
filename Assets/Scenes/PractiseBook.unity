@@ -581,7 +581,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6966020018887049337, guid: 37ef2c690e0bdf441b584d6ac686c795, type: 3}
       propertyPath: m_text
-      value: Practise Book
+      value: "\xDCbungsbuch"
       objectReference: {fileID: 0}
     - target: {fileID: 7059918635947085576, guid: 37ef2c690e0bdf441b584d6ac686c795, type: 3}
       propertyPath: m_Name

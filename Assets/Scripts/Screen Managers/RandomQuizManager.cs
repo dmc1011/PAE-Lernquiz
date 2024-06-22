@@ -63,6 +63,7 @@ public class RandomQuizManager : MonoBehaviour
             nextButtonLabel.text = "Beenden";
 
         Fragenummer.text = "Random Quiz, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
+        nextButton.interactable = false;
         questionCount += 1; // questionCount will be 0 when first Question is displayed
 
         // Quiz will be considered over as soon as last question is displayed
