@@ -19,8 +19,10 @@ public class CataloguesManager : MonoBehaviour
     private TextMeshProUGUI AButton3_Label;
     private TextMeshProUGUI AButton4_Label;
 
+    CatalogueTable catalogueTable;
 
-    private JsonDataService dataService = new JsonDataService();
+
+    List<Catalogue> catalogues;
 
     void Start()
     {
@@ -33,6 +35,8 @@ public class CataloguesManager : MonoBehaviour
         AButton2_Label = AButton2.GetComponentInChildren<TextMeshProUGUI>();
         AButton3_Label = AButton3.GetComponentInChildren<TextMeshProUGUI>();
         AButton4_Label = AButton4.GetComponentInChildren<TextMeshProUGUI>();
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        catalogues = catalogueTable.FindAllCatalogues();
         SetContents();
     }
 
@@ -40,9 +44,10 @@ public class CataloguesManager : MonoBehaviour
     {
         catalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        for (int i = 0; i < dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory); i++)
+        for (int i = 0; i < catalogues.Count; i++)
         {
-            options.Add(new(dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{i}.json").name));
+            Catalogue catalogue = catalogues[i];
+            options.Add(new(catalogue.name));
         }
         if (options.Count == 0)
         {
@@ -56,11 +61,12 @@ public class CataloguesManager : MonoBehaviour
     {
         questionSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        if (dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) != 0)
+        if (catalogues.Count != 0)
         {
-            for (int i = 0; i < dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{catalogueSelection.value}.json").questions.Count; i++)
+            Catalogue catalogue = catalogueTable.FindCatalogueByName(catalogueSelection.options[catalogueSelection.value].text);
+            for (int i = 0; i < catalogue.questions.Count; i++)
             {
-                options.Add(new(dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{catalogueSelection.value}.json").questions[i].text));
+                options.Add(new(catalogue.questions[i].text));
             }
         }
         if (options.Count == 0)
@@ -73,22 +79,23 @@ public class CataloguesManager : MonoBehaviour
 
     public void QuestionSelectionChangedEvent()
     {
-        if (dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) == 0)
+        if (catalogues.Count == 0)
         {
             print("ERROR [CataloguesManager.cs:QuestionSelectionChangedEvent()]: Wir benötigen mehr Fragenkataloge, Milord.");
             return;
         }
-        if (dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory) < catalogueSelection.value)
+        if (catalogues.Count < catalogueSelection.value)
         {
             print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragenkatalognummer: " + catalogueSelection.value);
             return;
         }
-        if (dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.catalogueIndex}.json").questions.Count < questionSelection.value)
+        if (catalogueTable.FindCatalogueById(Global.CurrentQuestionRound.catalogueIndex).questions.Count < questionSelection.value)
         {
             print("ERROR [DropdownManager.cs.SetContents_QuestionAnswerButtons()]: Invalid Index for Fragennummer: " + catalogueSelection.value + " in Fragenkatalognummer: " + questionSelection.value);
             return;
         }
-        Question currentQuestion = dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{catalogueSelection.value}.json").questions[questionSelection.value];
+        Catalogue catalogue = catalogueTable.FindCatalogueByName(catalogueSelection.options[catalogueSelection.value].text);
+        Question currentQuestion = catalogue.questions[questionSelection.value];
         QButton_Label.text = currentQuestion.text;
         AButton1_Label.text = currentQuestion.answers[0].text;
         AButton1_Label.text = currentQuestion.answers[0].text;
