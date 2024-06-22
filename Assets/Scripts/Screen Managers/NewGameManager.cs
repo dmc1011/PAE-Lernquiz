@@ -12,8 +12,9 @@ public class NewGameManager : MonoBehaviour
     [SerializeField] private Button startLinearRound;
     [SerializeField] private Button startRandomRound;
 
-    JsonDataService dataService = new JsonDataService();
     private int catalogueCount;
+    CatalogueTable catalogueTable;
+    List<Catalogue> catalogues;
 
     void Start()
     {
@@ -22,7 +23,9 @@ public class NewGameManager : MonoBehaviour
         {
             print("ERROR [NewGameManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
         }
-        catalogueCount = dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory);
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        catalogues = catalogueTable.FindAllCatalogues();
+        catalogueCount = catalogues.Count;
         SetContents();
     }
 
@@ -30,9 +33,10 @@ public class NewGameManager : MonoBehaviour
     {
         catalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
-        for (int i = 0; i < catalogueCount; i++)
+        for (int i = 0; i < catalogues.Count; i++)
         {
-            options.Add(new(dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{i}.json").name));
+            Catalogue catalogue = catalogues[i];
+            options.Add(new(catalogue.name));
         }
         if (options.Count == 0)
         {
@@ -52,7 +56,7 @@ public class NewGameManager : MonoBehaviour
         }
         else
         {
-            Global.CurrentQuestionRound.catalogueIndex = catalogueSelection.value;
+            Global.CurrentQuestionRound.catalogueIndex = catalogueTable.FindCatalogueByName(catalogueSelection.options[catalogueSelection.value].text).id;
             startLinearRound.interactable = true;
             startRandomRound.interactable = true;
         }
@@ -61,14 +65,14 @@ public class NewGameManager : MonoBehaviour
     public void StartLinearRoundClickedEvent()
     {
         // invalid catalogue index
-        if (Global.CurrentQuestionRound.catalogueIndex >= catalogueCount)
+        if (!catalogues.Any(catalogue => catalogue.id == Global.CurrentQuestionRound.catalogueIndex))
         {
             print("ERROR: Fragerunde mit Katalognummer " + Global.CurrentQuestionRound.catalogueIndex + " ist OutOfBounds. Es gibt " + catalogueCount + " Fragenkataloge.");
             return;
         }
 
         // start quiz round
-        Global.CurrentQuestionRound.catalogue = dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.catalogueIndex}.json");
+        Global.CurrentQuestionRound.catalogue = catalogueTable.FindCatalogueById(Global.CurrentQuestionRound.catalogueIndex);
         Global.InsideQuestionRound = true;
         SceneManager.LoadScene("LinearQuiz");
     }
@@ -76,7 +80,7 @@ public class NewGameManager : MonoBehaviour
     public void StartRandomRoundClickedEvent()
     {
         // check if chosen catalogue index is out of bounds
-        if (Global.CurrentQuestionRound.catalogueIndex >= catalogueCount)
+        if (!catalogues.Any(catalogue => catalogue.id == Global.CurrentQuestionRound.catalogueIndex))
         {
             print("ERROR [NewGameManager.cs.StartZufallsRundeClickedEvent()]: Fragerunde mit Katalognummer " 
                 + Global.CurrentQuestionRound.catalogueIndex + " ist OutOfBounds. Es gibt " 
@@ -85,7 +89,7 @@ public class NewGameManager : MonoBehaviour
         }
 
         // load chosen catalogue into global data
-        Global.CurrentQuestionRound.catalogue = dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentQuestionRound.catalogueIndex}.json");
+        Global.CurrentQuestionRound.catalogue = catalogueTable.FindCatalogueById(Global.CurrentQuestionRound.catalogueIndex);
 
         // initialize question round
         Global.CurrentQuestionRound.questions = new();
