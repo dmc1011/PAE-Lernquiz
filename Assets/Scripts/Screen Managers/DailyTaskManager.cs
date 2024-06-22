@@ -46,7 +46,7 @@ public class DailyTaskManager : MonoBehaviour
             LoadNextScene();
             return;
         }
-        
+
         nextQuestionIndex = Global.CurrentDailyTask.questions[questionCount];
         Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
 
@@ -63,9 +63,10 @@ public class DailyTaskManager : MonoBehaviour
         questionCount += 1; // questionCount will be 0 when first question is displayed
 
         // Quiz will be considered over as soon as last question is displayed
-        if (questionCount >= questionLimit)
+        if (questionCount >= questionLimit) 
+        {
             isQuizOver = true;
-
+        }
     }
 
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,24 +8,32 @@ using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
     [SerializeField] private Button startDailyTask;
-    JsonDataService dataService = new JsonDataService();
+
     private int catalogueCount;
+    CatalogueTable catalogueTable;
+    List<Catalogue> catalogues;
+
     string currentDate;
 
 
     void Start()
     {
-        catalogueCount = dataService.CountJsonFilesForDirectory(JsonDataService.CatalogueDirectory);
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        catalogues = catalogueTable.FindAllCatalogues();
+        catalogueCount = catalogues.Count;
+
         currentDate = DateTime.Now.ToString("yyyy-MM-dd");
         if (IsNewDay())
         {
             ResetDailyTask();
+            Debug.Log("Daily Task reset");
         }
     }
 
   
     public void StartDailyTaskClickedEvent()
     {
+        Debug.Log("Daily Task has already been completed: " + IsDailyTaskCompleted());
         if (IsDailyTaskCompleted())
         {
             SceneManager.LoadScene("Evaluation");
@@ -33,7 +42,8 @@ public class HomeManager : MonoBehaviour
 
         // load chosen catalogue into global data
         Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(0, catalogueCount);
-        Global.CurrentDailyTask.catalogue = dataService.LoadData<Catalogue>(JsonDataService.CatalogueDirectory + $"/{Global.CurrentDailyTask.catalogueIndex}.json");
+        Debug.Log("Chose Catalogue: " + Global.CurrentDailyTask.catalogueIndex);
+        Global.CurrentDailyTask.catalogue = catalogueTable.FindCatalogueById(Global.CurrentDailyTask.catalogueIndex);
 
         // initialize daily task
         Global.CurrentDailyTask.questions = new();
@@ -43,7 +53,6 @@ public class HomeManager : MonoBehaviour
         for (int i = 0; i < Global.CurrentDailyTask.questionLimit; i++) // select first n questions of randomized questions
         {
             Global.CurrentDailyTask.questions.Add(iota[i]);
-            Debug.Log($"{i}");
         }
 
         // start daily task

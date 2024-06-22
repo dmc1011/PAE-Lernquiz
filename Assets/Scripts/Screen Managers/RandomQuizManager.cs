@@ -68,7 +68,9 @@ public class RandomQuizManager : MonoBehaviour
 
         // Quiz will be considered over as soon as last question is displayed
         if (questionCount >= questionLimit)
+        {
             isQuizOver = true;
+        }
 
     }
 
