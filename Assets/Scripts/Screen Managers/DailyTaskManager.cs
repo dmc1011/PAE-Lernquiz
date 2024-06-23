@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,6 @@ public class DailyTaskManager : MonoBehaviour
     private int questionLimit;
     private Catalogue currentCatalogue;
     private int nextQuestionIndex;
-
 
     void Start()
     {
@@ -43,6 +43,7 @@ public class DailyTaskManager : MonoBehaviour
     {
         if (isQuizOver || questionCount >= questionLimit)
         {
+            Global.CurrentDailyTask.answers = DataManager.QuestionResults;
             LoadNextScene();
             return;
         }
@@ -97,6 +98,6 @@ public class DailyTaskManager : MonoBehaviour
       // Update is called once per frame
     public void LoadNextScene()
     {
-        SceneManager.LoadScene("Evaluation");
+        SceneManager.LoadScene("DailyTaskEvaluation");
     }
 }

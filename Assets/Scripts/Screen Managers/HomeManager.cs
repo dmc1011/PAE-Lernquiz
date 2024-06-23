@@ -23,6 +23,7 @@ public class HomeManager : MonoBehaviour
         catalogueCount = catalogues.Count;
 
         currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+        
         if (IsNewDay())
         {
             ResetDailyTask();
@@ -36,7 +37,7 @@ public class HomeManager : MonoBehaviour
         Debug.Log("Daily Task has already been completed: " + IsDailyTaskCompleted());
         if (IsDailyTaskCompleted())
         {
-            SceneManager.LoadScene("Evaluation");
+            SceneManager.LoadScene("DailyTaskEvaluation");
             return;
         }
 
