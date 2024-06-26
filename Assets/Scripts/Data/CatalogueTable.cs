@@ -7,18 +7,36 @@ public class CatalogueTable
 {
     private const string TABLE_NAME = "Catalogue";
     private IDbConnection dbConnection;
+    private QuestionTable questionTable;
+    private AnswerTable answerTable;
 
-    public CatalogueTable(IDbConnection dbConnection)
+    public CatalogueTable(IDbConnection dbConnection, QuestionTable questionTable, AnswerTable answerTable)
     {
         this.dbConnection = dbConnection;
+        this.questionTable = questionTable;
+        this.answerTable = answerTable;
     }
 
-    public void AddCatalgoue(Catalogue catalogue)
+    public void AddCatalogue(Catalogue catalogue)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
         dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name) VALUES (@Name)";
         dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
         dbcmd.ExecuteNonQuery();
+        dbcmd.CommandText = "SELECT last_insert_rowid()";
+        int catalogueId = Convert.ToInt32(dbcmd.ExecuteScalar());
+
+        foreach (var question in catalogue.questions)
+        {
+            question.catalogueId = catalogueId;
+            questionTable.AddQuestion(question);
+            dbcmd.CommandText = "SELECT last_insert_rowid()";
+            int questionId = Convert.ToInt32(dbcmd.ExecuteScalar());
+            foreach (var answer in question.answers)
+            {
+                answerTable.AddAnswer(new Answer(answer.id, answer.text, questionId, answer.isCorrect));
+            }
+        }
     }
 
     public List<Catalogue> FindAllCatalogues()
@@ -74,6 +92,7 @@ public class CatalogueTable
         return catalogue;
     }
 
+    // HD TODO: also delete questions + answers for the selected catalogue
     public void DeleteCatalogueById(int catalogueId)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();

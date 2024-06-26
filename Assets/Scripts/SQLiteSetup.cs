@@ -30,10 +30,10 @@ public class SQLiteSetup : MonoBehaviour
             dbConnection.Open();
 
             CreateTables();
-
-            catalogueTable = new CatalogueTable(dbConnection);
+            
             questionTable = new QuestionTable(dbConnection);
             answerTable = new AnswerTable(dbConnection);
+            catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable);
         }
         else
         {
@@ -51,22 +51,7 @@ public class SQLiteSetup : MonoBehaviour
         string jsonFilePath = Path.Combine(Application.persistentDataPath, jsonRelativeFilePath);
         string jsonString = File.ReadAllText(jsonFilePath);
         Catalogue catalogue = JsonUtility.FromJson<Catalogue>(jsonString);
-        AddCatalogue(catalogue);
-    }
-
-    // Adds a catalogue and all questions and all answers from this catalogue
-    public void AddCatalogue(Catalogue catalogue)
-    {
-        catalogueTable.AddCatalgoue(catalogue);
-
-        foreach (var question in catalogue.questions)
-        {
-            questionTable.AddQuestion(question);
-            foreach (var answer in question.answers)
-            {
-                answerTable.AddAnswer(new Answer(answer.id, answer.text, question.id, answer.isCorrect));
-            }
-        }
+        catalogueTable.AddCatalogue(catalogue);
     }
 
     private void CreateTables()

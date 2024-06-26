@@ -20,8 +20,8 @@ public class CataloguesManager : MonoBehaviour
     private TextMeshProUGUI questionButtonLabel;
     private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
 
-    private SQLiteSetup sqlAccess;
     private Catalogue currentCatalogue;
+    CatalogueTable catalogueTable;
 
     private bool questionAddRecursionFailsafe = false; // This "should" never be needed... but. better safe than sorry.
     private bool invalidStart = true;
@@ -57,7 +57,7 @@ public class CataloguesManager : MonoBehaviour
 
         try
         {
-            sqlAccess = SQLiteSetup.Instance;
+            catalogueTable = SQLiteSetup.Instance.catalogueTable;
             invalidStart = false; // catalogue could be loaded -> all fine from here on out
             SetContents();
         }
@@ -84,7 +84,7 @@ public class CataloguesManager : MonoBehaviour
 
         if(!useTmpCatalogue)
         {
-            currentCatalogue = sqlAccess.catalogueTable.FindCatalogueByName(selectedCatalogueName);
+            currentCatalogue = catalogueTable.FindCatalogueByName(selectedCatalogueName);
             if (currentCatalogue == null)
                 useTmpCatalogue = true; // catalogue could not be found. Use a new one per default.
         }
@@ -93,7 +93,7 @@ public class CataloguesManager : MonoBehaviour
         {
             // Count how many "Neuer Fragenkatalog" there are to prevent duplicates
             int newCatalogueNameCounter = 0;
-            foreach (Catalogue c in sqlAccess.catalogueTable.FindAllCatalogues())
+            foreach (Catalogue c in catalogueTable.FindAllCatalogues())
             {
                 if(c.name.StartsWith("Neuer Fragenkatalog"))
                     newCatalogueNameCounter++;
@@ -182,7 +182,7 @@ public class CataloguesManager : MonoBehaviour
 
                     // these names are invalid or already exist
                     if (newCatalogueName == "Neu" ||
-                        sqlAccess.catalogueTable.FindCatalogueByName(newCatalogueName) != null ||
+                        catalogueTable.FindCatalogueByName(newCatalogueName) != null ||
                         (Global.tmpCatalogue != null && Global.tmpCatalogue.name == newCatalogueName))
                     {
                         print("ERROR: There already is a catalogue named \"" + newCatalogueName + "\"");
@@ -202,8 +202,8 @@ public class CataloguesManager : MonoBehaviour
                     else
                     {
                         print("DB Catalogue " + currentCatalogue.name + " renamed to " + newCatalogueName);
-                        sqlAccess.catalogueTable.UpdateCatalogueById(currentCatalogue.id, newCatalogueName);
-                        currentCatalogue = sqlAccess.catalogueTable.FindCatalogueByName(newCatalogueName); // reload the whole catalogue, just to be safe (might be unneccessary)
+                        catalogueTable.UpdateCatalogueById(currentCatalogue.id, newCatalogueName);
+                        currentCatalogue = catalogueTable.FindCatalogueByName(newCatalogueName); // reload the whole catalogue, just to be safe (might be unneccessary)
                     }
 
                     // Update UI to reflect the new catalogue name.
@@ -298,7 +298,7 @@ public class CataloguesManager : MonoBehaviour
         }
 
         // ab in die DB damit
-        sqlAccess.AddCatalogue(currentCatalogue);
+        catalogueTable.AddCatalogue(currentCatalogue);
 
         // update everything
         currentCatalogue = null;
@@ -319,7 +319,7 @@ public class CataloguesManager : MonoBehaviour
         else
         {
             // TODO: Add some "safety net" here. The user can really easy delete something by accident.
-            sqlAccess.catalogueTable.DeleteCatalogueById(currentCatalogue.id);
+            catalogueTable.DeleteCatalogueById(currentCatalogue.id);
         }
 
         // update everything
@@ -407,7 +407,7 @@ public class CataloguesManager : MonoBehaviour
         // TODO Helena: We only need the catalogue names here.
         // -> sqlAccess.catalogueTable.FindAllCatalogueNames();
 
-        List<Catalogue> catalogues = sqlAccess.catalogueTable.FindAllCatalogues();
+        List<Catalogue> catalogues = catalogueTable.FindAllCatalogues();
         catalogueSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
         for (int i = 0; i < catalogues.Count; i++)
