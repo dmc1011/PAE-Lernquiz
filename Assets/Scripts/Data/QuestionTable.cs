@@ -11,7 +11,7 @@ public class QuestionTable
         this.dbConnection = dbConnection;
     }
 
-    public void InsertData(Question question)
+    public void AddQuestion(Question question)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
         

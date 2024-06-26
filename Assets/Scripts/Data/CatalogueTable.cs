@@ -13,7 +13,7 @@ public class CatalogueTable
         this.dbConnection = dbConnection;
     }
 
-    public void InsertData(Catalogue catalogue)
+    public void AddCatalgoue(Catalogue catalogue)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
         dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name) VALUES (@Name)";
@@ -72,6 +72,23 @@ public class CatalogueTable
             catalogue = new Catalogue(id, name, questions);
         }
         return catalogue;
+    }
+
+    public void DeleteCatalogueById(int catalogueId)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "DELETE FROM " + TABLE_NAME + " WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogueId));
+        dbcmd.ExecuteNonQuery();
+    }
+
+    public void UpdateCatalogueById(int catalogueId, string newName)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET Name = @Name WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogueId));
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", newName));
+        dbcmd.ExecuteNonQuery();
     }
 
     public List<Question> FindQuestionsByCatalogueId(int catalogueId)

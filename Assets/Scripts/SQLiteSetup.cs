@@ -44,14 +44,14 @@ public class SQLiteSetup : MonoBehaviour
          string jsonString = File.ReadAllText(jsonFilePath);
          Catalogue catalogue = JsonUtility.FromJson<Catalogue>(jsonString);
 
-         catalogueTable.InsertData(catalogue);
+         catalogueTable.AddCatalgoue(catalogue);
 
          foreach (var question in catalogue.questions)
          {
-             questionTable.InsertData(question);
+             questionTable.AddQuestion(question);
              foreach (var answer in question.answers)
              {
-                 answerTable.InsertData(new Answer(answer.id, answer.text, question.id, answer.isCorrect));
+                 answerTable.AddAnswer(new Answer(answer.id, answer.text, question.id, answer.isCorrect));
              }
          }
 
@@ -59,14 +59,14 @@ public class SQLiteSetup : MonoBehaviour
         jsonString = File.ReadAllText(jsonFilePath);
         catalogue = JsonUtility.FromJson<Catalogue>(jsonString);
 
-        catalogueTable.InsertData(catalogue);
+        catalogueTable.AddCatalgoue(catalogue);
 
         foreach (var question in catalogue.questions)
         {
-            questionTable.InsertData(question);
+            questionTable.AddQuestion(question);
             foreach (var answer in question.answers)
             {
-                answerTable.InsertData(new Answer(answer.id, answer.text, question.id, answer.isCorrect));
+                answerTable.AddAnswer(new Answer(answer.id, answer.text, question.id, answer.isCorrect));
             }
         }*/
     }
