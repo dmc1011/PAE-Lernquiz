@@ -8,6 +8,7 @@ public class Question
     public int id;
     public string text;
     public int catalogueId;
+    public string name;
     // TODO: questionImage
     public List<Answer> answers;
 
@@ -15,6 +16,7 @@ public class Question
     {
         this.id = id;
         this.text = text;
+        this.name = "";
         this.catalogueId = catalogueId;
         this.answers = answers;
     }
