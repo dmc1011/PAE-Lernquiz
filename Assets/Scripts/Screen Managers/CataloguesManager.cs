@@ -4,6 +4,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using JetBrains.Annotations;
 
 public class CataloguesManager : MonoBehaviour
 {
@@ -33,7 +34,6 @@ public class CataloguesManager : MonoBehaviour
     private TEXT_INPUT textInputStatus = TEXT_INPUT.HIDDEN;
     private string currentTextInput = "";
 
-    private bool useTmpCatalogue = false; // Use the Global.tmpCatalogue instead of the ones from the DB
     private int questionIndexAfterReset = -1;
     private int catalogueIndexAfterReset = -1;
 
@@ -55,6 +55,7 @@ public class CataloguesManager : MonoBehaviour
         ToggleTextInput(textInputStatus);
         textInputField.onValueChanged.AddListener(UpdateCurrentInputFieldText);
 
+        // Use try here if something goes wrong when reading the DB -> This always happens when loading this screen directly and not from Home.
         try
         {
             catalogueTable = SQLiteSetup.Instance.catalogueTable;
@@ -71,6 +72,7 @@ public class CataloguesManager : MonoBehaviour
     private void SetContents()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
         // This cascades through every subsequent element and updates everything.
         CatalogueSelectionUpdate();
     }
@@ -78,9 +80,11 @@ public class CataloguesManager : MonoBehaviour
     public void CatalogueSelectionChangedEvent()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         questionIndexAfterReset = -1;
         string selectedCatalogueName = catalogueSelection.options[catalogueSelection.value].text;
-        useTmpCatalogue = catalogueSelection.value == catalogueSelection.options.Count - 1;
+        bool useTmpCatalogue = catalogueSelection.value == catalogueSelection.options.Count - 1;
 
         if(!useTmpCatalogue)
         {
@@ -116,6 +120,8 @@ public class CataloguesManager : MonoBehaviour
     public void QuestionSelectionChangedEvent()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         catalogueIndexAfterReset = -1;
         string selectedQuestionName = questionSelection.options[questionSelection.value].text;
 
@@ -123,7 +129,7 @@ public class CataloguesManager : MonoBehaviour
         {
             // Add the Question named "Frage N"
             Answer defaultAnswer = new(-1, "", -1, false);
-            List<Answer> answers = new List<Answer>();
+            List<Answer> answers = new();
             for (int i = 0; i < 4; i++)
             {
                 defaultAnswer.text = "Antwort " + (i + 1).ToString();
@@ -138,10 +144,23 @@ public class CataloguesManager : MonoBehaviour
                     newQuestionCounter++;
             }
 
-            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), -1, answers);
+            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), "", -1, answers);
+            questionIndexAfterReset = questionSelection.value;
 
-            currentCatalogue.questions.Add(newQuestion);
-            questionIndexAfterReset = currentCatalogue.questions.IndexOf(newQuestion);
+            if (currentCatalogue == Global.tmpCatalogue)
+            {
+                Global.tmpCatalogue.questions.Add(newQuestion);
+                currentCatalogue = Global.tmpCatalogue;
+            }
+
+            else
+            {
+                int currentCatalogueId = currentCatalogue.id;
+                catalogueTable.AddQuestion(currentCatalogueId, newQuestion);
+                currentCatalogue = catalogueTable.FindCatalogueById(currentCatalogueId);
+            }
+
+            print(questionIndexAfterReset);
 
             // This can result in an infinite recursion if the question name at the new questionIndex is somehow "Neu"
             // Just to be safe -> disable recursion for the following call.
@@ -214,14 +233,6 @@ public class CataloguesManager : MonoBehaviour
             case MODE.RENAME_QUESTION:
                 {
 
-                    // TODO MS:
-                    // Currently not doable because questions currently have no name.
-
-                    // Promts the user for a name.
-                    // This name is given to the currently selected question.
-                    // If the question is from tmpCatalogue, no DB-Update required.
-                    // Else DB-Update required.
-
                     string newQuestionName = currentTextInput;
                     string oldQuestionName = questionSelection.options[questionSelection.value].text;
 
@@ -242,7 +253,6 @@ public class CataloguesManager : MonoBehaviour
                         }
                     }
 
-                    
                     if (currentCatalogue == Global.tmpCatalogue)
                     {
                         Global.tmpCatalogue.questions[questionSelection.value].name = newQuestionName;
@@ -252,7 +262,12 @@ public class CataloguesManager : MonoBehaviour
 
                     else
                     {
-                        print("TODO");
+                        print("DB Question " + oldQuestionName + " renamed to " + newQuestionName);
+                        int catalogueId = currentCatalogue.id;
+                        int questionId = currentCatalogue.questions[questionSelection.value].id;
+                        questionIndexAfterReset = questionSelection.value;
+                        catalogueTable.UpdateQuestionByID(questionId, newQuestionName);
+                        currentCatalogue = catalogueTable.FindCatalogueById(catalogueId);
                     }
 
 
@@ -260,14 +275,14 @@ public class CataloguesManager : MonoBehaviour
                 break;
         }
 
-        QuestionSelectionUpdate();
+        
 
-        // Needed here to break multiple nested structures
+        // Needed here to break multiple nested structures (switch and loops)
         EndSelect:
 
         currentMode = MODE.NONE;
 
-
+        QuestionSelectionUpdate();
 
     }
 
@@ -275,6 +290,8 @@ public class CataloguesManager : MonoBehaviour
     public void EventCatalogueRenameButton()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         ToggleTextInput(TEXT_INPUT.VISIBLE, currentCatalogue.name);
         currentMode = MODE.RENAME_CATALOGUE;
     }
@@ -282,6 +299,7 @@ public class CataloguesManager : MonoBehaviour
     public void EventCatalogueAddButton()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
 
         print("EventCatalogueAddButton");
 
@@ -310,6 +328,8 @@ public class CataloguesManager : MonoBehaviour
     public void EventCatalogueDeleteButton()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         print("EventCatalogueDeleteButton");
 
         if(currentCatalogue == Global.tmpCatalogue)
@@ -330,6 +350,8 @@ public class CataloguesManager : MonoBehaviour
     public void EventQuestionRenameButton()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         print("EventQuestionRenameButton");
 
         if (currentCatalogue == null)
@@ -346,7 +368,28 @@ public class CataloguesManager : MonoBehaviour
     public void EventQuestionDeleteButton()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         print("EventQuestionDeleteButton");
+
+        Question currentQuestion = currentCatalogue.questions[questionSelection.value];
+        questionIndexAfterReset = questionSelection.value - 1; // next displayed question is the question "before" the one that was deleted.
+
+        if (currentCatalogue == Global.tmpCatalogue)
+        {
+            // trivial löschen. Es gibt ja keine IDs
+            Global.tmpCatalogue.questions.Remove(currentQuestion);
+            currentCatalogue = Global.tmpCatalogue;
+        }
+
+        else
+        {
+            catalogueTable.DeleteQuestionById(currentQuestion.id);
+            int currentCatalogueId = currentCatalogue.id;
+            currentCatalogue = catalogueTable.FindCatalogueById(currentCatalogueId);
+        }
+
+        QuestionSelectionUpdate();
 
         // TODO MS:
         // Prompts the user if they are really sure what they are doing.
@@ -361,6 +404,8 @@ public class CataloguesManager : MonoBehaviour
     public void EventQuestionEditButton()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         print("EventQuestionEditButton");
         // Prompts the user with a text-input-field where the current question is written out and editable.
         // Closing the prompt will update the question text.
@@ -371,6 +416,8 @@ public class CataloguesManager : MonoBehaviour
     public void EventAnswerEditButton(int answerButtonIndex)
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         print("EventAnswerEditButton " + answerButtonIndex.ToString());
         // Prompts the user with a text-input-field where the selected answer is written out and editable.
         // Closing the prompt will update the question text.
@@ -381,6 +428,8 @@ public class CataloguesManager : MonoBehaviour
     private void QuestionAndAnswersSetContents()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         if (currentCatalogue.questions.Count == 0)
         {
             // This should never happen. TODO (if a new question is made, it "exists" already)
@@ -403,6 +452,7 @@ public class CataloguesManager : MonoBehaviour
     private void CatalogueSelectionUpdate()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
 
         // TODO Helena: We only need the catalogue names here.
         // -> sqlAccess.catalogueTable.FindAllCatalogueNames();
@@ -426,6 +476,8 @@ public class CataloguesManager : MonoBehaviour
     private void QuestionSelectionUpdate()
     {
         if (invalidStart) return;
+        if (currentMode != MODE.NONE) return;
+
         questionSelection.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new();
         for (int i = 0; i < currentCatalogue.questions.Count; i++)
@@ -433,7 +485,7 @@ public class CataloguesManager : MonoBehaviour
             if (currentCatalogue.questions[i].name != "")
                 options.Add(new(currentCatalogue.questions[i].name));
             else
-                options.Add(new("Frage " + (i + 1).ToString()));
+                options.Add(new("Frage (id:" + (currentCatalogue.questions[i].id).ToString() + ")"));
         }
         options.Add(new("Neu")); // Option to add a new question
         questionSelection.AddOptions(options);

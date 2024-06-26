@@ -39,6 +39,19 @@ public class CatalogueTable
         }
     }
 
+    public void AddQuestion(int catalogueId, Question question)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        question.catalogueId = catalogueId;
+        questionTable.AddQuestion(question);
+        dbcmd.CommandText = "SELECT last_insert_rowid()";
+        int questionId = Convert.ToInt32(dbcmd.ExecuteScalar());
+        foreach (var answer in question.answers)
+        {
+            answerTable.AddAnswer(new Answer(answer.id, answer.text, questionId, answer.isCorrect));
+        }
+    }
+
     public List<Catalogue> FindAllCatalogues()
     {
         List<Catalogue> catalogues = new List<Catalogue>();
@@ -101,11 +114,29 @@ public class CatalogueTable
         dbcmd.ExecuteNonQuery();
     }
 
+    // HD TODO: also delete answers for the selected question
+    public void DeleteQuestionById(int questionId)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "DELETE FROM " + "Question" + " WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", questionId));
+        dbcmd.ExecuteNonQuery();
+    }
+
     public void UpdateCatalogueById(int catalogueId, string newName)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
         dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET Name = @Name WHERE Id = @Id";
         dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogueId));
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", newName));
+        dbcmd.ExecuteNonQuery();
+    }
+
+    public void UpdateQuestionByID(int questionID, string newName)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "UPDATE " + "Question" + " SET Name = @Name WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", questionID));
         dbcmd.Parameters.Add(new SqliteParameter("@Name", newName));
         dbcmd.ExecuteNonQuery();
     }
@@ -122,8 +153,9 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string text = reader["Text"].ToString();
+            string name = reader["Name"].ToString();
             List<Answer> answers = FindAnswersByQuestionId(id);
-            questions.Add(new Question(id, text, catalogueId, answers));
+            questions.Add(new Question(id, text, name, catalogueId, answers));
         }
         return questions;
     }
