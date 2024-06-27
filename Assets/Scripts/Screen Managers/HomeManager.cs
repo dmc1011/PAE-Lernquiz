@@ -42,15 +42,14 @@ public class HomeManager : MonoBehaviour
         }
 
         // load chosen catalogue into global data
-        Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(0, catalogueCount);
+        Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(1, catalogueCount + 1);
         Debug.Log("Chose Catalogue: " + Global.CurrentDailyTask.catalogueIndex);
         Global.CurrentDailyTask.catalogue = catalogueTable.FindCatalogueById(Global.CurrentDailyTask.catalogueIndex);
-
         // initialize daily task
         Global.CurrentDailyTask.questions = new();
         int[] iota = Enumerable.Range(0, Global.CurrentDailyTask.catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1] (question indices)
         Functions.Shuffle(iota); // shuffle question indices
-        Global.CurrentDailyTask.questionLimit = Mathf.Min(10, Global.CurrentDailyTask.catalogue.questions.Count);
+        Global.CurrentDailyTask.questionLimit = Mathf.Min(Global.DailyTaskSize, Global.CurrentDailyTask.catalogue.questions.Count);
         for (int i = 0; i < Global.CurrentDailyTask.questionLimit; i++) // select first n questions of randomized questions
         {
             Global.CurrentDailyTask.questions.Add(iota[i]);
@@ -58,8 +57,6 @@ public class HomeManager : MonoBehaviour
 
         // start daily task
         Global.InsideQuestionRound = true;
-        PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
-        PlayerPrefs.Save();
         SceneManager.LoadScene("DailyTask");
     }
 

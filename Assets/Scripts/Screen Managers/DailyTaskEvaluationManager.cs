@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static DataManager;
 
 public class DailyTaskEvaluationManager : MonoBehaviour
 {
@@ -8,6 +8,11 @@ public class DailyTaskEvaluationManager : MonoBehaviour
     [SerializeField] private GameObject resultPrefab;
     void Start()
     {
+        if (PlayerPrefs.GetString(Global.IsDailyTaskCompletedKey) == "false")
+        {
+            PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
+            PlayerPrefs.Save();
+        }
         DisplayResults();   
     }
 
@@ -15,15 +20,13 @@ public class DailyTaskEvaluationManager : MonoBehaviour
     {
         List<DataManager.QuestionResult> results = Global.CurrentDailyTask.answers;
 
-        foreach (var result in results)
+        for (int count = 1; count <= Global.DailyTaskSize; count++)
         {
             GameObject resultEntry = Instantiate(resultPrefab, resultContainer);
             EvaluationTableContent evaluationTableContent = resultEntry.GetComponent<EvaluationTableContent>();
-
-            // TODO: as soon as images are supported we might need to adapt the prefab
-            evaluationTableContent.questionText.text = result.questionText;
-            evaluationTableContent.answerText.text = result.answerText;
-            evaluationTableContent.correctText.text = result.isCorrect ? "Richtig" : "Falsch";
+            evaluationTableContent.questionText.text = PlayerPrefs.GetString($"dailyQuestion{count}");
+            evaluationTableContent.answerText.text = PlayerPrefs.GetString($"dailyAnswer{count}");
+            evaluationTableContent.correctText.text = PlayerPrefs.GetInt($"dailyAnswerCorrect{count}") == 1 ? "Richtig" : "Falsch";
         }
     }
 }

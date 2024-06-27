@@ -90,18 +90,18 @@ public class NewGameManager : MonoBehaviour
 
         // load chosen catalogue into global data
         Global.CurrentQuestionRound.catalogue = catalogueTable.FindCatalogueById(Global.CurrentQuestionRound.catalogueIndex);
+        int catalogueSize = Global.CurrentQuestionRound.catalogue.questions.Count;
 
         // initialize question round
         Global.CurrentQuestionRound.questions = new();
         int[] iota = Enumerable.Range(0, Global.CurrentQuestionRound.catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1] (question indices)
         Functions.Shuffle(iota); // shuffle question indices
-        for (int i = 0; i < Global.NumQuestionsPerRound; i++) // select first n questions of randomized questions
+        Global.CurrentQuestionRound.questionLimit = Mathf.Min(Global.RandomQuizSize, catalogueSize);
+        for (int i = 0; i < Global.CurrentQuestionRound.questionLimit; i++) // select first n questions of randomized questions
         {
             Global.CurrentQuestionRound.questions.Add(iota[i]);
         }
-        Global.CurrentQuestionRound.questionLimit = 5; // number of questions that have to be answered in a random quiz
         Global.InsideQuestionRound = true;
         SceneManager.LoadScene("RandomQuiz");
     }
-
 }

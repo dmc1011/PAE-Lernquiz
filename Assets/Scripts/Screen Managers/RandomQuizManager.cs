@@ -35,7 +35,7 @@ public class RandomQuizManager : MonoBehaviour
 
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
-        questionLimit = Global.CurrentQuestionRound.questionLimit;
+        questionLimit = Global.RandomQuizSize;
         nextButton.interactable = false;
         
         // Display first question

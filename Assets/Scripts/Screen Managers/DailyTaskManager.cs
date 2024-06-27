@@ -70,6 +70,19 @@ public class DailyTaskManager : MonoBehaviour
         }
     }
 
+    public void SaveAnswerInPlayerPrefs(int questionIndex, int answerIndex, Catalogue catalogue)
+    {
+        bool isCorrect = answerIndex == 0;
+        Question question = catalogue.questions[questionIndex];
+        Answer answer = question.answers[answerIndex];
+
+        PlayerPrefs.SetString($"dailyQuestion{questionCount}", question.text);
+        PlayerPrefs.SetString($"dailyAnswer{questionCount}", answer.text);
+        PlayerPrefs.SetInt($"dailyAnswerCorrect{questionCount}", isCorrect == true ? 1 : 0);
+        PlayerPrefs.Save();
+        Debug.Log("Saved Question " + questionCount);
+    }
+
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
     {
         switch (button)
@@ -89,6 +102,7 @@ public class DailyTaskManager : MonoBehaviour
                     // in contrast to LinearQuizManager nextQuestionIndex is not update at this point and still valid
                     int questionIndex = nextQuestionIndex;
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
+                    SaveAnswerInPlayerPrefs(questionIndex, (int)button, currentCatalogue);
                     nextButton.interactable = true;
                 }
                 break;
