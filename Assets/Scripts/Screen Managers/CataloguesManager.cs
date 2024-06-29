@@ -13,6 +13,7 @@ public class CataloguesManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown questionSelection;
     [SerializeField] private Button questionButton;
     [SerializeField] private Button[] answerButtons = new Button[4];
+    [SerializeField] private Button[] editButtons = new Button[5]; // Not relevant in which order, this is used to show/hide the buttons when text input is active
     [SerializeField] private Button addTmpCatalogueToDB;
     [SerializeField] private Button textInputAcceptButton;
     [SerializeField] private Button textInputDeclineButton;
@@ -29,6 +30,7 @@ public class CataloguesManager : MonoBehaviour
 
     enum MODE { NONE, RENAME_CATALOGUE, RENAME_QUESTION, EDIT_ANSWER, EDIT_QUESTION};
     private MODE currentMode = MODE.NONE;
+    private int editAnswerIndex = -1;
 
     enum TEXT_INPUT { HIDDEN, VISIBLE, ACCEPT, DECLINE };
     private TEXT_INPUT textInputStatus = TEXT_INPUT.HIDDEN;
@@ -128,12 +130,10 @@ public class CataloguesManager : MonoBehaviour
         if (selectedQuestionName == "Neu" && questionAddRecursionFailsafe == false)
         {
             // Add the Question named "Frage N"
-            Answer defaultAnswer = new(-1, "", -1, false);
             List<Answer> answers = new();
             for (int i = 0; i < 4; i++)
             {
-                defaultAnswer.text = "Antwort " + (i + 1).ToString();
-                answers.Add(defaultAnswer);
+                answers.Add(new(-1, "Antwort " + (i + 1).ToString(), -1, i == 0));
             }
 
             // Count how many "Neue Frage" there are to prevent duplicates
@@ -178,8 +178,8 @@ public class CataloguesManager : MonoBehaviour
 
         print("HandleTextInput for \"" + currentTextInput + "\"");
 
-        if (currentMode == MODE.NONE) goto EndSelect; // nothing to do here
-        if (currentTextInput.Length == 0) goto EndSelect; // nothing to do here
+        if (currentMode == MODE.NONE) goto switchEnd; // nothing to do here
+        if (currentTextInput.Length == 0) goto switchEnd; // nothing to do here
 
         print(currentMode);
         print("InputText: " + currentTextInput);
@@ -193,11 +193,8 @@ public class CataloguesManager : MonoBehaviour
                     string newCatalogueName = currentTextInput;
                     string oldCatalogueName = currentCatalogue.name;
 
-                    print("Rename from " + oldCatalogueName + " to " + newCatalogueName);
-
-                    // nothing changed.
                     if (newCatalogueName == oldCatalogueName)
-                        goto EndSelect;
+                        goto switchEnd;
 
                     // these names are invalid or already exist
                     if (newCatalogueName == "Neu" ||
@@ -205,7 +202,7 @@ public class CataloguesManager : MonoBehaviour
                         (Global.tmpCatalogue != null && Global.tmpCatalogue.name == newCatalogueName))
                     {
                         print("ERROR: There already is a catalogue named \"" + newCatalogueName + "\"");
-                        goto EndSelect;
+                        goto switchEnd;
                     }
 
                     // The catalogue is the tmp catalogue
@@ -220,8 +217,9 @@ public class CataloguesManager : MonoBehaviour
                     // The catalogue resides within the DB
                     else
                     {
+                        int currentCatalogueId = currentCatalogue.id;
                         print("DB Catalogue " + currentCatalogue.name + " renamed to " + newCatalogueName);
-                        catalogueTable.UpdateCatalogueById(currentCatalogue.id, newCatalogueName);
+                        catalogueTable.UpdateCatalogueById(currentCatalogueId, newCatalogueName);
                         currentCatalogue = catalogueTable.FindCatalogueByName(newCatalogueName); // reload the whole catalogue, just to be safe (might be unneccessary)
                     }
 
@@ -232,15 +230,15 @@ public class CataloguesManager : MonoBehaviour
 
             case MODE.RENAME_QUESTION:
                 {
-
+                    int currentQuestionIndex = questionSelection.value;
                     string newQuestionName = currentTextInput;
-                    string oldQuestionName = questionSelection.options[questionSelection.value].text;
+                    string oldQuestionName = questionSelection.options[currentQuestionIndex].text;
 
                     print("Rename from " + oldQuestionName + " to " + newQuestionName);
 
                     // nothing changed.
                     if (newQuestionName == oldQuestionName)
-                        goto EndSelect;
+                        goto switchEnd;
 
                     // TODO: Which requirements are there to rename a question?
                     //       names that already exist (in another catalogue) should be valid here.
@@ -249,36 +247,87 @@ public class CataloguesManager : MonoBehaviour
                         if(q.name == newQuestionName)
                         {
                             print("ERROR: You shall not name two questions the same! " + q.name + " already exists.");
-                            goto EndSelect;
+                            goto switchEnd;
                         }
                     }
 
+                    questionIndexAfterReset = currentQuestionIndex;
+
                     if (currentCatalogue == Global.tmpCatalogue)
                     {
-                        Global.tmpCatalogue.questions[questionSelection.value].name = newQuestionName;
+                        Global.tmpCatalogue.questions[currentQuestionIndex].name = newQuestionName;
                         currentCatalogue = Global.tmpCatalogue;
-                        questionIndexAfterReset = questionSelection.value;
                     }
 
                     else
                     {
+                        int currentCatalogueId = currentCatalogue.id;
+                        int currentQuestionId = currentCatalogue.questions[currentQuestionIndex].id;
                         print("DB Question " + oldQuestionName + " renamed to " + newQuestionName);
-                        int catalogueId = currentCatalogue.id;
-                        int questionId = currentCatalogue.questions[questionSelection.value].id;
-                        questionIndexAfterReset = questionSelection.value;
-                        catalogueTable.UpdateQuestionByID(questionId, newQuestionName);
-                        currentCatalogue = catalogueTable.FindCatalogueById(catalogueId);
+                        catalogueTable.UpdateQuestionNameByID(currentQuestionId, newQuestionName);
+                        currentCatalogue = catalogueTable.FindCatalogueById(currentCatalogueId);
                     }
 
 
-                }
-                break;
-        }
+                } break;
 
-        
+            case MODE.EDIT_QUESTION:
+                {
+                    string newQuestionText = currentTextInput;
+                    string oldQuestionText = questionButtonLabel.text;
 
-        // Needed here to break multiple nested structures (switch and loops)
-        EndSelect:
+                    if (newQuestionText == oldQuestionText)
+                        goto switchEnd;
+
+                    int currentQuestionIndex = questionSelection.value;
+
+                    questionIndexAfterReset = currentQuestionIndex;
+
+                    if (currentCatalogue == Global.tmpCatalogue)
+                    {
+                        Global.tmpCatalogue.questions[currentQuestionIndex].text = newQuestionText;
+                        currentCatalogue = Global.tmpCatalogue;
+                    }
+                    
+                    else
+                    {
+                        int currentCatalogueId = currentCatalogue.id;
+                        int currentQuestionId = currentCatalogue.questions[currentQuestionIndex].id;
+                        catalogueTable.UpdateQuestionTextByID(currentQuestionId, newQuestionText);
+                        currentCatalogue = catalogueTable.FindCatalogueById(currentCatalogueId);
+                    }
+
+
+                } break;
+
+                case MODE.EDIT_ANSWER:
+                {
+                    string newAnswerText = currentTextInput;
+                    string oldAnswerText = answerButtonLabels[editAnswerIndex].text;
+
+                    if(newAnswerText == oldAnswerText)
+                        goto switchEnd;
+
+                    int currentQuestionIndex = questionSelection.value;
+                    questionIndexAfterReset = currentQuestionIndex;
+
+                    if (currentCatalogue == Global.tmpCatalogue)
+                    {
+                        Global.tmpCatalogue.questions[currentQuestionIndex].answers[editAnswerIndex].text = newAnswerText;
+                        currentCatalogue = Global.tmpCatalogue;
+                    }
+
+                    else
+                    {
+                        int currentCatalogueId = currentCatalogue.id;
+                        int currentAnswerID = currentCatalogue.questions[currentQuestionIndex].answers[editAnswerIndex].id;
+                        catalogueTable.UpdateAnswerTextByID(currentAnswerID, newAnswerText);
+                        currentCatalogue = catalogueTable.FindCatalogueById(currentCatalogueId);
+                    }
+
+                } break;
+
+        } switchEnd: // Needed here to break multiple nested structures (switch, loops, etc)
 
         currentMode = MODE.NONE;
 
@@ -291,7 +340,6 @@ public class CataloguesManager : MonoBehaviour
     {
         if (invalidStart) return;
         if (currentMode != MODE.NONE) return;
-
         ToggleTextInput(TEXT_INPUT.VISIBLE, currentCatalogue.name);
         currentMode = MODE.RENAME_CATALOGUE;
     }
@@ -405,24 +453,21 @@ public class CataloguesManager : MonoBehaviour
     {
         if (invalidStart) return;
         if (currentMode != MODE.NONE) return;
-
         print("EventQuestionEditButton");
-        // Prompts the user with a text-input-field where the current question is written out and editable.
-        // Closing the prompt will update the question text.
-        // If the question is from tmpCatalogue, no DB-Update required.
-        // Else DB-Update required.
+        string questionText = questionButtonLabel.text;
+        ToggleTextInput(TEXT_INPUT.VISIBLE, questionText);
+        currentMode = MODE.EDIT_QUESTION;
     }
 
     public void EventAnswerEditButton(int answerButtonIndex)
     {
         if (invalidStart) return;
         if (currentMode != MODE.NONE) return;
-
         print("EventAnswerEditButton " + answerButtonIndex.ToString());
-        // Prompts the user with a text-input-field where the selected answer is written out and editable.
-        // Closing the prompt will update the question text.
-        // If the question is from tmpCatalogue, no DB-Update required.
-        // Else DB-Update required.
+        string answerText = answerButtonLabels[answerButtonIndex].text;
+        ToggleTextInput(TEXT_INPUT.VISIBLE, answerText);
+        currentMode = MODE.EDIT_ANSWER;
+        editAnswerIndex = answerButtonIndex;
     }
 
     private void QuestionAndAnswersSetContents()
@@ -506,6 +551,8 @@ public class CataloguesManager : MonoBehaviour
         textInputField.text = defaultText;
         catalogueSelection.gameObject.SetActive(textInput != TEXT_INPUT.VISIBLE);
         questionSelection.gameObject.SetActive(textInput != TEXT_INPUT.VISIBLE);
+        for(int i = 0; i < editButtons.Length; i++)
+            editButtons[i].gameObject.SetActive(textInput != TEXT_INPUT.VISIBLE);
         textInputField.gameObject.SetActive(textInput == TEXT_INPUT.VISIBLE);
         textInputAcceptButton.gameObject.SetActive(textInput == TEXT_INPUT.VISIBLE);
         textInputDeclineButton.gameObject.SetActive(textInput == TEXT_INPUT.VISIBLE);

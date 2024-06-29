@@ -132,12 +132,30 @@ public class CatalogueTable
         dbcmd.ExecuteNonQuery();
     }
 
-    public void UpdateQuestionByID(int questionID, string newName)
+    public void UpdateQuestionNameByID(int questionID, string newName)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
         dbcmd.CommandText = "UPDATE " + "Question" + " SET Name = @Name WHERE Id = @Id";
         dbcmd.Parameters.Add(new SqliteParameter("@Id", questionID));
         dbcmd.Parameters.Add(new SqliteParameter("@Name", newName));
+        dbcmd.ExecuteNonQuery();
+    }
+
+    public void UpdateQuestionTextByID(int questionID, string newText)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "UPDATE " + "Question" + " SET Text = @Text WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", questionID));
+        dbcmd.Parameters.Add(new SqliteParameter("@Text", newText));
+        dbcmd.ExecuteNonQuery();
+    }
+
+    public void UpdateAnswerTextByID(int answerID, string newText)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "UPDATE " + "Answer" + " SET Text = @Text WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", answerID));
+        dbcmd.Parameters.Add(new SqliteParameter("@Text", newText));
         dbcmd.ExecuteNonQuery();
     }
 
