@@ -109,4 +109,20 @@ public class CatalogueTable
         }
         return answers;
     }
+
+    public Catalogue FindRandomCatalogue()
+    {
+        Catalogue catalogue = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " ORDER BY RANDOM() LIMIT 1";
+        IDataReader reader = dbcmd.ExecuteReader();
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            string name = reader["Name"].ToString();
+            List<Question> questions = FindQuestionsByCatalogueId(id);
+            catalogue = new Catalogue(id, name, questions);
+        }
+        return catalogue;
+    }
 }
