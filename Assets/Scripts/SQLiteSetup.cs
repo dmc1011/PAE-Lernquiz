@@ -26,6 +26,10 @@ public class SQLiteSetup : MonoBehaviour
             dbConnection = new SqliteConnection(dbConnectionString);
             dbConnection.Open();
 
+            IDbCommand enableForeignKeyCommand = dbConnection.CreateCommand();
+            enableForeignKeyCommand.CommandText = "PRAGMA foreign_keys = ON;";
+            enableForeignKeyCommand.ExecuteNonQuery();
+
             CreateTables();
 
             catalogueTable = new CatalogueTable(dbConnection);
@@ -83,14 +87,14 @@ public class SQLiteSetup : MonoBehaviour
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 CatalogueId INTEGER,
                 Text TEXT,
-                FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id)
+                FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS Answer (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 QuestionId INTEGER,
                 Text TEXT,
                 IsCorrect BOOLEAN,
-                FOREIGN KEY(QuestionId) REFERENCES Question(Id)
+                FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
             );
         ";
         dbCommand.ExecuteNonQuery();
