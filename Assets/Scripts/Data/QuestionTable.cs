@@ -1,4 +1,6 @@
 using Mono.Data.Sqlite;
+using System.Collections.Generic;
+using System;
 using System.Data;
 
 public class QuestionTable
@@ -11,13 +13,14 @@ public class QuestionTable
         this.dbConnection = dbConnection;
     }
 
-    public void InsertData(Question question)
+    public void AddQuestion(Question question)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
         
-        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (CatalogueId, Text) VALUES (@CatalogueId, @Text)";
+        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (CatalogueId, Text, Name) VALUES (@CatalogueId, @Text, @Name)";
         dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", question.catalogueId));
         dbcmd.Parameters.Add(new SqliteParameter("@Text", question.text));
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", question.name));
         dbcmd.ExecuteNonQuery();
         
     }

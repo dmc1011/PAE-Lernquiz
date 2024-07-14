@@ -10,5 +10,6 @@ public static class Global
     public static bool InsideQuestionRound = false;
     public static DataManager.QuestionRound CurrentQuestionRound;
 
+    public static Catalogue tmpCatalogue = null;
 }
 
