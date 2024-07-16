@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SliderSync : MonoBehaviour
+public class SliderConfig : MonoBehaviour
 {
     public Slider greenSlider;
     public Slider redSlider;
