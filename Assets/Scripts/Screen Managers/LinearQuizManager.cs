@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LinearQuizManager : MonoBehaviour
@@ -72,5 +73,9 @@ public class LinearQuizManager : MonoBehaviour
 
     }
 
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene("Evaluation");
+    }
 }
 

@@ -3,12 +3,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System;
 
-
-public class RandomQuizManager : MonoBehaviour
+public class DailyTaskManager : MonoBehaviour
 {
-
+    
     [SerializeField] private TextMeshProUGUI Fragenummer;
     [SerializeField] private QuizAreaManager quizAreaManager;
     [SerializeField] private Button nextButton;
@@ -22,11 +20,9 @@ public class RandomQuizManager : MonoBehaviour
 
     void Start()
     {
-        DataManager.ClearResults();
-
-        if (SceneManager.GetActiveScene().name != "RandomQuiz")
+        if (SceneManager.GetActiveScene().name != "DailyTask")
         {
-            print("ERROR [RandomQuizManager.cs:Start()]: Dont use this script in any scene other than RandomQuiz");
+            print("ERROR [DailyTaskManager.cs:Start()]: Dont use this script in any scene other than DailyTask");
             return;
         }
 
@@ -34,24 +30,25 @@ public class RandomQuizManager : MonoBehaviour
         nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
 
         // Get current catalogue
-        currentCatalogue = Global.CurrentQuestionRound.catalogue;
-        questionLimit = Global.RandomQuizSize;
+        currentCatalogue = Global.CurrentDailyTask.catalogue;
+        questionLimit = Global.CurrentDailyTask.questionLimit;
         nextButton.interactable = false;
         
         // Display first question
         DisplayNextQuestion();
+        
     }
-
 
     public void DisplayNextQuestion()
     {
         if (isQuizOver || questionCount >= questionLimit)
         {
+            Global.CurrentDailyTask.answers = DataManager.QuestionResults;
             LoadNextScene();
             return;
         }
-        
-        nextQuestionIndex = Global.CurrentQuestionRound.questions[questionCount];
+
+        nextQuestionIndex = Global.CurrentDailyTask.questions[questionCount];
         Question nextQuestion = currentCatalogue.questions[nextQuestionIndex];
 
         quizAreaManager.ResetContents();
@@ -62,21 +59,28 @@ public class RandomQuizManager : MonoBehaviour
         if (questionCount == questionLimit - 1)
             nextButtonLabel.text = "Beenden";
 
-        Fragenummer.text = "Random Quiz, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
+        Fragenummer.text = "Daily Task, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
         nextButton.interactable = false;
-        questionCount += 1; // questionCount will be 0 when first Question is displayed
+        questionCount += 1; // questionCount will be 0 when first question is displayed
 
         // Quiz will be considered over as soon as last question is displayed
-        if (questionCount >= questionLimit)
+        if (questionCount >= questionLimit) 
         {
             isQuizOver = true;
         }
-
     }
 
-    public void LoadNextScene()
+    public void SaveAnswerInPlayerPrefs(int questionIndex, int answerIndex, Catalogue catalogue)
     {
-        SceneManager.LoadScene("Evaluation");
+        bool isCorrect = answerIndex == 0;
+        Question question = catalogue.questions[questionIndex];
+        Answer answer = question.answers[answerIndex];
+
+        PlayerPrefs.SetString($"dailyQuestion{questionCount}", question.text);
+        PlayerPrefs.SetString($"dailyAnswer{questionCount}", answer.text);
+        PlayerPrefs.SetInt($"dailyAnswerCorrect{questionCount}", isCorrect == true ? 1 : 0);
+        PlayerPrefs.Save();
+        Debug.Log("Saved Question " + questionCount);
     }
 
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
@@ -98,11 +102,16 @@ public class RandomQuizManager : MonoBehaviour
                     // in contrast to LinearQuizManager nextQuestionIndex is not update at this point and still valid
                     int questionIndex = nextQuestionIndex;
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
+                    SaveAnswerInPlayerPrefs(questionIndex, (int)button, currentCatalogue);
                     nextButton.interactable = true;
                 }
                 break;
         }
 
     }
-
+      // Update is called once per frame
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene("DailyTaskEvaluation");
+    }
 }
