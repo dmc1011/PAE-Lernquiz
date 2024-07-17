@@ -14,5 +14,6 @@ public static class Global
     // monitoring daily task
     public static DataManager.DailyTask CurrentDailyTask;
     public const int DailyTaskSize = 10;
+    public static Catalogue tmpCatalogue = null;
 }
 

@@ -3,6 +3,9 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System.IO;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 
 public class SQLiteSetup : MonoBehaviour
 {
@@ -26,11 +29,15 @@ public class SQLiteSetup : MonoBehaviour
             dbConnection = new SqliteConnection(dbConnectionString);
             dbConnection.Open();
 
-            CreateTables();
+            IDbCommand enableForeignKeyCommand = dbConnection.CreateCommand();
+            enableForeignKeyCommand.CommandText = "PRAGMA foreign_keys = ON;";
+            enableForeignKeyCommand.ExecuteNonQuery();
 
-            catalogueTable = new CatalogueTable(dbConnection);
+            CreateTables();
+            
             questionTable = new QuestionTable(dbConnection);
             answerTable = new AnswerTable(dbConnection);
+            catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable);
         }
         else
         {
@@ -38,37 +45,17 @@ public class SQLiteSetup : MonoBehaviour
         }
 
         // TODO: delete as soon as editor is implemented
+        // AddCatalogueFromJson("Catalogue/0.json");
+        // AddCatalogueFromJson("Catalogue/1.json");
 
-        /*
-         string jsonFilePath = Path.Combine(Application.persistentDataPath, "Catalogue/0.json");
-         string jsonString = File.ReadAllText(jsonFilePath);
-         Catalogue catalogue = JsonUtility.FromJson<Catalogue>(jsonString);
+    }
 
-         catalogueTable.InsertData(catalogue);
-
-         foreach (var question in catalogue.questions)
-         {
-             questionTable.InsertData(question);
-             foreach (var answer in question.answers)
-             {
-                 answerTable.InsertData(new Answer(answer.id, answer.text, question.id, answer.isCorrect));
-             }
-         }
-
-        jsonFilePath = Path.Combine(Application.persistentDataPath, "Catalogue/1.json");
-        jsonString = File.ReadAllText(jsonFilePath);
-        catalogue = JsonUtility.FromJson<Catalogue>(jsonString);
-
-        catalogueTable.InsertData(catalogue);
-
-        foreach (var question in catalogue.questions)
-        {
-            questionTable.InsertData(question);
-            foreach (var answer in question.answers)
-            {
-                answerTable.InsertData(new Answer(answer.id, answer.text, question.id, answer.isCorrect));
-            }
-        }*/
+    public void AddCatalogueFromJson(string jsonRelativeFilePath)
+    {
+        string jsonFilePath = Path.Combine(Application.persistentDataPath, jsonRelativeFilePath);
+        string jsonString = File.ReadAllText(jsonFilePath);
+        Catalogue catalogue = JsonUtility.FromJson<Catalogue>(jsonString);
+        catalogueTable.AddCatalogue(catalogue);
     }
 
     private void CreateTables()
@@ -83,14 +70,15 @@ public class SQLiteSetup : MonoBehaviour
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 CatalogueId INTEGER,
                 Text TEXT,
-                FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id)
+                Name TEXT,
+                FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS Answer (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 QuestionId INTEGER,
                 Text TEXT,
                 IsCorrect BOOLEAN,
-                FOREIGN KEY(QuestionId) REFERENCES Question(Id)
+                FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
             );
         ";
         dbCommand.ExecuteNonQuery();
