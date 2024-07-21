@@ -6,13 +6,15 @@ public static class DataManager
 
     public static List<QuestionResult> QuestionResults = new();
     
+
     public struct QuestionRound
     {
         public int catalogueIndex;
         public Catalogue catalogue;
         public List<int> questions; // chosen questions (incdices) for random quiz
-        public int questionLimit; // Number of questions in a random quiz
+        public int questionLimit;   // number of questions for random quiz
     }
+
 
     public struct QuestionResult
     {
@@ -22,6 +24,17 @@ public static class DataManager
         // TODO: add answerImage
         public bool isCorrect;
     }
+
+
+    public struct DailyTask
+    {
+        public int catalogueIndex;
+        public Catalogue catalogue;
+        public List<int> questions; // chosen questions (incdices) for random quiz
+        public int questionLimit;
+        public List<QuestionResult> answers;
+    }
+
 
     public static void AddAnswer(int questionIndex, int answerIndex, Catalogue catalogue)
     {
@@ -38,6 +51,7 @@ public static class DataManager
             isCorrect = isCorrect
         });
     }
+
 
     public static void ClearResults()
     {

@@ -1,15 +1,19 @@
+using UnityEngine;
 
 public static class Global
 {
-    // Es folgen globale Einstellungen für die App
-    // Diese können nicht via Code geändert werden.
-    public static readonly int NumQuestionsPerRound = 5;
+    // player prefs keys for daily task
+    public const string LastResetDateKey = "LastResetDate";
+    public const string IsDailyTaskCompletedKey = "IsDailyTaskCompleted";
 
-    // Falls True -> Wir sind im Gameloop und "AktuelleFragerunde" ist valide.
-    // Falls False -> Wir sind "irgendwo" und "AktuelleFragerunde" ist default initialisiert (nutzlos).
+    // monitoring question round
     public static bool InsideQuestionRound = false;
     public static DataManager.QuestionRound CurrentQuestionRound;
+    public const int RandomQuizSize = 5;
 
+    // monitoring daily task
+    public static DataManager.DailyTask CurrentDailyTask;
+    public const int DailyTaskSize = 10;
     public static Catalogue tmpCatalogue = null;
 }
 
