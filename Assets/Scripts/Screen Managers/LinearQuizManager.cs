@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LinearQuizManager : MonoBehaviour
@@ -11,6 +9,7 @@ public class LinearQuizManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI Fragenummer;
     [SerializeField] private QuizAreaManager quizAreaManager;
     [SerializeField] private Button nextButton;
+    [SerializeField] private ButtonNavigation nextButtonNavigation;
 
     private Catalogue currentCatalogue;
     private List<Question> questions;
@@ -75,7 +74,7 @@ public class LinearQuizManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        SceneManager.LoadScene("Evaluation");
+        nextButtonNavigation.LoadScene("Evaluation");
     }
 }
 

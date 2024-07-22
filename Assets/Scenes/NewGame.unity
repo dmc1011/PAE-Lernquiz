@@ -224,6 +224,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55e7398811a427c439eb2030ace40468, type: 3}
+--- !u!114 &168856152 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6905309683878962850, guid: 55e7398811a427c439eb2030ace40468, type: 3}
+  m_PrefabInstance: {fileID: 168856151}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c39a9aa1789d45f43b4f55b41811a63c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,6 +596,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3308907602844814365, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: bg
+      value: 
+      objectReference: {fileID: 168856152}
     - target: {fileID: 9118554949605893179, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -769,6 +784,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3308907602844814365, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: bg
+      value: 
+      objectReference: {fileID: 168856152}
     - target: {fileID: 9118554949605893179, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -983,6 +1002,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 9118554949605893179, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
   m_PrefabInstance: {fileID: 1170599710}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1736921530 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3308907602844814365, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+  m_PrefabInstance: {fileID: 1170599710}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5acab22a56d411a4db789e7eb15c5c1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1767197244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1066,7 +1096,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   catalogueSelection: {fileID: 1182600700}
   startLinearRound: {fileID: 1192283288}
+  startLinearRoundNavigation: {fileID: 1192283289}
   startRandomRound: {fileID: 1170599711}
+  startRandomRoundNavigation: {fileID: 1736921530}
 --- !u!1001 &1930924142
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1087,6 +1119,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Home
       objectReference: {fileID: 0}
+    - target: {fileID: 3308907602844814365, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: bg
+      value: 
+      objectReference: {fileID: 168856152}
     - target: {fileID: 9118554949605893179, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

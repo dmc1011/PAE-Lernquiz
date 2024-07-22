@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using TMPro;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using JetBrains.Annotations;
 
 public class CataloguesManager : MonoBehaviour
 {

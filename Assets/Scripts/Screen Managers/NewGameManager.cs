@@ -10,7 +10,9 @@ public class NewGameManager : MonoBehaviour
 
     [SerializeField] private TMP_Dropdown catalogueSelection;
     [SerializeField] private Button startLinearRound;
+    [SerializeField] private ButtonNavigation startLinearRoundNavigation;
     [SerializeField] private Button startRandomRound;
+    [SerializeField] private ButtonNavigation startRandomRoundNavigation;
 
     private int catalogueCount;
     CatalogueTable catalogueTable;
@@ -74,7 +76,7 @@ public class NewGameManager : MonoBehaviour
         // start quiz round
         Global.CurrentQuestionRound.catalogue = catalogueTable.FindCatalogueById(Global.CurrentQuestionRound.catalogueIndex);
         Global.InsideQuestionRound = true;
-        SceneManager.LoadScene("LinearQuiz");
+        startLinearRoundNavigation.LoadScene("LinearQuiz");
     }
 
     public void StartRandomRoundClickedEvent()
@@ -102,6 +104,6 @@ public class NewGameManager : MonoBehaviour
             Global.CurrentQuestionRound.questions.Add(iota[i]);
         }
         Global.InsideQuestionRound = true;
-        SceneManager.LoadScene("RandomQuiz");
+        startRandomRoundNavigation.LoadScene("RandomQuiz");
     }
 }

@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System;
 
 
 public class RandomQuizManager : MonoBehaviour
@@ -12,6 +10,7 @@ public class RandomQuizManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI Fragenummer;
     [SerializeField] private QuizAreaManager quizAreaManager;
     [SerializeField] private Button nextButton;
+    [SerializeField] private ButtonNavigation nextButtonNavigation;
 
     private TextMeshProUGUI nextButtonLabel;
     private bool isQuizOver = false;
@@ -76,7 +75,7 @@ public class RandomQuizManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        SceneManager.LoadScene("Evaluation");
+        nextButtonNavigation.LoadScene("Evaluation");
     }
 
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)

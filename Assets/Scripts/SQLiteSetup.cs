@@ -2,10 +2,6 @@ using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
 using System.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 
 public class SQLiteSetup : MonoBehaviour
 {
