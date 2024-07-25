@@ -39,8 +39,7 @@ public class HomeManager : MonoBehaviour
         Debug.Log("Daily Task has already been completed: " + IsDailyTaskCompleted());
         if (IsDailyTaskCompleted())
         {
-
-            LoadDailyTaskScene("Evaluation");
+            LoadDailyTaskScene("DailyTaskEvaluation");
             return;
         }
 
@@ -48,6 +47,8 @@ public class HomeManager : MonoBehaviour
         Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(1, catalogueCount + 1);
         Debug.Log("Chose Catalogue: " + Global.CurrentDailyTask.catalogueIndex);
         Global.CurrentDailyTask.catalogue = catalogueTable.FindCatalogueById(Global.CurrentDailyTask.catalogueIndex);
+        PlayerPrefs.SetInt("DailyTaskCatalogueId", Global.CurrentDailyTask.catalogueIndex);
+        PlayerPrefs.Save();
         // initialize daily task
         Global.CurrentDailyTask.questions = new();
         int[] iota = Enumerable.Range(0, Global.CurrentDailyTask.catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1] (question indices)
