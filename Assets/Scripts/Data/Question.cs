@@ -11,13 +11,15 @@ public class Question
     public string name;
     // TODO: questionImage
     public List<Answer> answers;
+    public List<AnswerHistory> answerHistory;
 
-    public Question(int id, string text, string name, int catalogueId, List<Answer> answers)
+    public Question(int id, string text, string name, int catalogueId, List<Answer> answers, List<AnswerHistory> answerHistory)
     {
         this.id = id;
         this.text = text;
         this.name = name;
         this.catalogueId = catalogueId;
         this.answers = answers;
+        this.answerHistory = answerHistory;
     }
 }

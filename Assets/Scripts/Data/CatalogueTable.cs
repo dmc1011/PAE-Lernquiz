@@ -9,12 +9,14 @@ public class CatalogueTable
     private IDbConnection dbConnection;
     private QuestionTable questionTable;
     private AnswerTable answerTable;
+    private AnswerHistoryTable answerHistoryTable;
 
-    public CatalogueTable(IDbConnection dbConnection, QuestionTable questionTable, AnswerTable answerTable)
+    public CatalogueTable(IDbConnection dbConnection, QuestionTable questionTable, AnswerTable answerTable, AnswerHistoryTable answerHistoryTable)
     {
         this.dbConnection = dbConnection;
         this.questionTable = questionTable;
         this.answerTable = answerTable;
+        this.answerHistoryTable = answerHistoryTable;
     }
 
     public void AddCatalogue(Catalogue catalogue)
@@ -173,7 +175,8 @@ public class CatalogueTable
             string text = reader["Text"].ToString();
             string name = reader["Name"].ToString();
             List<Answer> answers = FindAnswersByQuestionId(id);
-            questions.Add(new Question(id, text, name, catalogueId, answers));
+            List<AnswerHistory> answerHistory = answerHistoryTable.FindAnswerHistoryByQuestionId(id);
+            questions.Add(new Question(id, text, name, catalogueId, answers, answerHistory));
         }
         return questions;
     }

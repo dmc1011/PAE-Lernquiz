@@ -2,10 +2,6 @@ using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
 using System.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 
 public class SQLiteSetup : MonoBehaviour
 {
@@ -18,6 +14,7 @@ public class SQLiteSetup : MonoBehaviour
     public CatalogueTable catalogueTable { get; private set; }
     public QuestionTable questionTable { get; private set; }
     public AnswerTable answerTable { get; private set; }
+    public AnswerHistoryTable answerHistoryTable { get; private set; }
     void Awake()
     {
         if (Instance == null)
@@ -34,10 +31,11 @@ public class SQLiteSetup : MonoBehaviour
             enableForeignKeyCommand.ExecuteNonQuery();
 
             CreateTables();
-            
+
+            answerHistoryTable = new AnswerHistoryTable(dbConnection);
             questionTable = new QuestionTable(dbConnection);
             answerTable = new AnswerTable(dbConnection);
-            catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable);
+            catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable, answerHistoryTable);
         }
         else
         {
@@ -78,6 +76,13 @@ public class SQLiteSetup : MonoBehaviour
                 QuestionId INTEGER,
                 Text TEXT,
                 IsCorrect BOOLEAN,
+                FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
+            );
+            CREATE TABLE IF NOT EXISTS AnswerHistory (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                QuestionId INTEGER,
+                answerDate DATETIME,
+                wasCorrect BOOLEAN,
                 FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
             );
         ";
