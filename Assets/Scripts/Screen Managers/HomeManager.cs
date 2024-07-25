@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
     [SerializeField] private Button startDailyTask;
+    [SerializeField] private Background background;
+    private string targetScene;
 
     private int catalogueCount;
     CatalogueTable catalogueTable;
@@ -37,7 +39,8 @@ public class HomeManager : MonoBehaviour
         Debug.Log("Daily Task has already been completed: " + IsDailyTaskCompleted());
         if (IsDailyTaskCompleted())
         {
-            SceneManager.LoadScene("DailyTaskEvaluation");
+
+            LoadDailyTaskScene("Evaluation");
             return;
         }
 
@@ -57,7 +60,7 @@ public class HomeManager : MonoBehaviour
 
         // start daily task
         Global.InsideQuestionRound = true;
-        SceneManager.LoadScene("DailyTask");
+        LoadDailyTaskScene("DailyTask");
     }
 
     public bool IsNewDay()
@@ -84,5 +87,24 @@ public class HomeManager : MonoBehaviour
     public bool IsDailyTaskCompleted()
     {
         return PlayerPrefs.GetString(Global.IsDailyTaskCompletedKey) == "true"; ;
+    }
+
+    public void LoadDailyTaskScene(string sceneName)
+    {
+        targetScene = sceneName;
+        if (background != null)
+        {
+            float timeNeeded = background.TriggerEndSequence();
+            Invoke(nameof(LoadSceneInternal), timeNeeded);
+        }
+        else
+        {
+            LoadSceneInternal();
+        }
+    }
+
+    public void LoadSceneInternal()
+    {
+        SceneManager.LoadScene(targetScene);
     }
 }
