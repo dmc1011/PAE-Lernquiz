@@ -1,6 +1,12 @@
 
 public static class Global
 {
+    public enum GameMode
+    {
+        LinearQuiz,
+        RandomQuiz
+    }
+
     // player prefs keys for daily task
     public const string LastResetDateKey = "LastResetDate";
     public const string IsDailyTaskCompletedKey = "IsDailyTaskCompleted";

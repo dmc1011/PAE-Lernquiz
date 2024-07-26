@@ -93,6 +93,25 @@ public class HomeManager : MonoBehaviour
     public void LoadDailyTaskScene(string sceneName)
     {
         targetScene = sceneName;
+        StartSceneTransition();
+    }
+
+    public void LoadLinearGameSelection()
+    {
+        targetScene = "NewGame";
+        Global.CurrentQuestionRound.gameMode = Global.GameMode.LinearQuiz;
+        StartSceneTransition();
+    }
+
+    public void LoadRandomGameSelection()
+    {
+        targetScene = "NewGame";
+        Global.CurrentQuestionRound.gameMode = Global.GameMode.RandomQuiz;
+        StartSceneTransition();
+    }
+
+    public void StartSceneTransition()
+    {
         if (background != null)
         {
             float timeNeeded = background.TriggerEndSequence();
@@ -108,4 +127,7 @@ public class HomeManager : MonoBehaviour
     {
         SceneManager.LoadScene(targetScene);
     }
+
+    
+
 }

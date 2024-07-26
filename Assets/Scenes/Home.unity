@@ -236,9 +236,9 @@ RectTransform:
   m_Children:
   - {fileID: 583228602}
   - {fileID: 611511806}
-  - {fileID: 929282565}
   - {fileID: 136434393}
   - {fileID: 433081894}
+  - {fileID: 929282565}
   - {fileID: 1219335083}
   m_Father: {fileID: 18193479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -397,6 +397,22 @@ PrefabInstance:
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
       value: Random Quiz
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1767197248}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadRandomGameSelection
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HomeManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -791,6 +807,22 @@ PrefabInstance:
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
       value: Quiz
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1767197248}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadLinearGameSelection
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HomeManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument

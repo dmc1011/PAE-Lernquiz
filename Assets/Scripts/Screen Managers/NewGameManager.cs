@@ -17,6 +17,7 @@ public class NewGameManager : MonoBehaviour
     private int catalogueCount;
     CatalogueTable catalogueTable;
     List<Catalogue> catalogues;
+    private Global.GameMode gameMode;
 
     void Start()
     {
@@ -29,6 +30,8 @@ public class NewGameManager : MonoBehaviour
         catalogues = catalogueTable.FindAllCatalogues();
         catalogueCount = catalogues.Count;
         SetContents();
+        gameMode = Global.CurrentQuestionRound.gameMode;
+        Debug.Log(gameMode);
     }
 
     private void SetContents()
@@ -61,6 +64,21 @@ public class NewGameManager : MonoBehaviour
             Global.CurrentQuestionRound.catalogueIndex = catalogueTable.FindCatalogueByName(catalogueSelection.options[catalogueSelection.value].text).id;
             startLinearRound.interactable = true;
             startRandomRound.interactable = true;
+        }
+    }
+
+    public void StartQuiz()
+    {
+        switch(gameMode)
+        {
+            case Global.GameMode.LinearQuiz:
+                StartLinearRoundClickedEvent();
+                break;
+            case Global.GameMode.RandomQuiz:
+                StartRandomRoundClickedEvent(); 
+                break;
+            default: 
+                break;
         }
     }
 
