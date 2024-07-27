@@ -19,7 +19,7 @@ public class AnswerHistoryTable
         dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (QuestionId, AnswerDate, WasCorrect) VALUES(@QuestionId, @AnswerDate, @WasCorrect)";
         dbcmd.Parameters.Add(new SqliteParameter("@QuestionId", questionId));
         dbcmd.Parameters.Add(new SqliteParameter("@AnswerDate", DateTime.Now));
-        dbcmd.Parameters.Add(new SqliteParameter("@QuestionId", wasCorrect));
+        dbcmd.Parameters.Add(new SqliteParameter("@WasCorrect", wasCorrect));
         dbcmd.ExecuteNonQuery();
 
         // check number of history entried for question

@@ -12,6 +12,8 @@ public class QuizAreaManager : MonoBehaviour
     [SerializeField] private MonoBehaviour parentScreenManager;
 
     private TextMeshProUGUI questionButtonLabel;
+    private int questionId;
+    private AnswerHistoryTable answerHistoryTable;
     private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
     private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
     private ColorBlock defaultColorBlock;
@@ -24,6 +26,8 @@ public class QuizAreaManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
+
         // Get components for questionButton
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -42,6 +46,7 @@ public class QuizAreaManager : MonoBehaviour
     public void SetContents(Question q)
     {
         questionButtonLabel.text = q.text;
+        questionId = q.id;
 
         for (int i = 0; i < answerButtons.Length; i++)
             answerButtonLabels[i].text = q.answers[i].text;
@@ -90,6 +95,8 @@ public class QuizAreaManager : MonoBehaviour
         if (currentlyActiveButton == ButtonID.Q)
             return;
 
+        bool wasCorrect = true;
+
         // Always color button A in green.
         ColorBlock cb = button.colors;
         cb.disabledColor = Color.green;
@@ -97,9 +104,11 @@ public class QuizAreaManager : MonoBehaviour
 
         if (currentlyActiveButton != ButtonID.A) // right answer
         {
+            wasCorrect = false;
             cb.disabledColor = Color.red;
             button.colors = cb;
         }
+        answerHistoryTable.AddAnswerHistory(questionId, wasCorrect);
 
         for (int i = 0; i < answerButtons.Length; i++)
             answerButtons[i].interactable = false;

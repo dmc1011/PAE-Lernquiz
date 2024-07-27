@@ -65,8 +65,12 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogues.Add(new Catalogue(id, name, questions));
+            catalogues.Add(new Catalogue(id, name, currentQuestionId, questions));
         }
         return catalogues;
     }
@@ -83,8 +87,12 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogue = new Catalogue(id, name, questions);
+            catalogue = new Catalogue(id, name, currentQuestionId, questions);
         }
         return catalogue;
     }
@@ -101,8 +109,12 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(catalogueId);
-            catalogue = new Catalogue(id, name, questions);
+            catalogue = new Catalogue(id, name, currentQuestionId, questions);
         }
         return catalogue;
     }
@@ -209,8 +221,12 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogue = new Catalogue(id, name, questions);
+            catalogue = new Catalogue(id, name, currentQuestionId, questions);
         }
         return catalogue;
     }

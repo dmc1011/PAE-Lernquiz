@@ -15,6 +15,7 @@ public class SQLiteSetup : MonoBehaviour
     public QuestionTable questionTable { get; private set; }
     public AnswerTable answerTable { get; private set; }
     public AnswerHistoryTable answerHistoryTable { get; private set; }
+
     void Awake()
     {
         if (Instance == null)
@@ -62,7 +63,10 @@ public class SQLiteSetup : MonoBehaviour
         dbCommand.CommandText = @"
             CREATE TABLE IF NOT EXISTS Catalogue (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Name TEXT
+                Name TEXT,
+                CurrentQuestionId INTEGER,
+                CorrectAnsweredQuestionsCount INTEGER DEFAULT 0,
+                FOREIGN KEY(CurrentQuestionId) REFERENCES Question(Id)
             );
             CREATE TABLE IF NOT EXISTS Question (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,8 +85,8 @@ public class SQLiteSetup : MonoBehaviour
             CREATE TABLE IF NOT EXISTS AnswerHistory (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 QuestionId INTEGER,
-                answerDate DATETIME,
-                wasCorrect BOOLEAN,
+                AnswerDate DATETIME,
+                WasCorrect BOOLEAN,
                 FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
             );
         ";
