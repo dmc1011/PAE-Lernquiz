@@ -99,10 +99,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 0.8235295, b: 0.19215688, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.86063105, b: 0.362, a: 1}
-    m_PressedColor: {r: 1, g: 0.88684464, b: 0.482, a: 1}
-    m_SelectedColor: {r: 1, g: 0.9556924, b: 0.7971698, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.0627451, g: 0.99607843, b: 0.7137255, a: 1}
+    m_PressedColor: {r: 0.0627451, g: 0.9529412, b: 0.76862746, a: 1}
+    m_SelectedColor: {r: 0.0627451, g: 0.9960785, b: 0.7137255, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acab22a56d411a4db789e7eb15c5c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bg: {fileID: 0}
 --- !u!1 &7890233940817755145
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,8 +221,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4285726809
+  m_fontColor: {r: 0.3475208, g: 0, b: 0.4528302, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
