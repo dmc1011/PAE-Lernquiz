@@ -65,7 +65,6 @@ public class SQLiteSetup : MonoBehaviour
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Name TEXT,
                 CurrentQuestionId INTEGER,
-                CorrectAnsweredQuestionsCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CurrentQuestionId) REFERENCES Question(Id)
             );
             CREATE TABLE IF NOT EXISTS Question (
@@ -73,6 +72,7 @@ public class SQLiteSetup : MonoBehaviour
                 CatalogueId INTEGER,
                 Text TEXT,
                 Name TEXT,
+                CorrectAnswered BOOLEAN DEFAULT FALSE,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS Answer (

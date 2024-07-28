@@ -14,11 +14,13 @@ public class LinearQuizManager : MonoBehaviour
     private Catalogue currentCatalogue;
     private List<Question> questions;
     private int nextQuestionIndex = 0;
+    private CatalogueTable catalogueTable;
  
     // Start is called before the first frame update
     void Start()
     {
         DataManager.ClearResults();
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
 
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
@@ -37,6 +39,8 @@ public class LinearQuizManager : MonoBehaviour
             nextQuestionIndex = 0;
 
         Question nextQuestion = questions[nextQuestionIndex];
+        currentCatalogue.currentQuestionId = nextQuestion.id;
+        catalogueTable.UpdateCatalogue(currentCatalogue);
 
         quizAreaManager.ResetContents();
         quizAreaManager.RandomizePositions();
