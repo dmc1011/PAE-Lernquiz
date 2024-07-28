@@ -24,7 +24,7 @@ public class CatalogueTable
         IDbCommand dbcmd = dbConnection.CreateCommand();
         dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name, CurrentQuestionId) VALUES (@Name, @CurrentQuestionId)";
         dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
-        dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", -1));
+        dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", DBNull.Value));
         dbcmd.ExecuteNonQuery();
         dbcmd.CommandText = "SELECT last_insert_rowid()";
         int catalogueId = Convert.ToInt32(dbcmd.ExecuteScalar());
@@ -142,7 +142,7 @@ public class CatalogueTable
         dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET Name = @Name, CurrentQuestionId = @CurrentQuestionId WHERE Id = @Id";
         dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogue.id));
         dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
-        dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", catalogue.currentQuestionId));
+        dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", catalogue.currentQuestionId == -1 ? DBNull.Value : catalogue.currentQuestionId));
         dbcmd.ExecuteNonQuery();
     }
 
