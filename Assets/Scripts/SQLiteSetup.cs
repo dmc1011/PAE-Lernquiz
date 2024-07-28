@@ -72,7 +72,7 @@ public class SQLiteSetup : MonoBehaviour
                 CatalogueId INTEGER,
                 Text TEXT,
                 Name TEXT,
-                CorrectAnswered BOOLEAN DEFAULT FALSE,
+                CorrectAnswered BOOLEAN DEFAULT 0,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS Answer (
