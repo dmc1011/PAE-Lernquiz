@@ -4,7 +4,9 @@ public static class Global
     public enum GameMode
     {
         LinearQuiz,
-        RandomQuiz
+        RandomQuiz,
+        DailyTask,
+        Statistics
     }
 
     // player prefs keys for daily task

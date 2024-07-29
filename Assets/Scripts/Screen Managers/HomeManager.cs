@@ -64,7 +64,7 @@ public class HomeManager : MonoBehaviour
         LoadDailyTaskScene("DailyTask");
     }
 
-    public bool IsNewDay()
+    private bool IsNewDay()
     {
         string currentDate = DateTime.Now.ToString("yyy-MM-dd");
         string lastResetDate = PlayerPrefs.GetString(Global.LastResetDateKey, "");
@@ -76,7 +76,7 @@ public class HomeManager : MonoBehaviour
     }
 
 
-    public void ResetDailyTask()
+    private void ResetDailyTask()
     {
         Global.CurrentDailyTask = new DataManager.DailyTask();
         PlayerPrefs.SetString(Global.LastResetDateKey, currentDate);
@@ -85,7 +85,7 @@ public class HomeManager : MonoBehaviour
     }
 
 
-    public bool IsDailyTaskCompleted()
+    private bool IsDailyTaskCompleted()
     {
         return PlayerPrefs.GetString(Global.IsDailyTaskCompletedKey) == "true"; ;
     }
@@ -93,6 +93,7 @@ public class HomeManager : MonoBehaviour
     public void LoadDailyTaskScene(string sceneName)
     {
         targetScene = sceneName;
+        Global.CurrentQuestionRound.gameMode = Global.GameMode.DailyTask;
         StartSceneTransition();
     }
 
@@ -110,7 +111,14 @@ public class HomeManager : MonoBehaviour
         StartSceneTransition();
     }
 
-    public void StartSceneTransition()
+    public void LoadStatisticsSelection()
+    {
+        targetScene = "NewGame";
+        Global.CurrentQuestionRound.gameMode = Global.GameMode.Statistics;
+        StartSceneTransition();
+    }
+
+    private void StartSceneTransition()
     {
         if (background != null)
         {
@@ -123,11 +131,8 @@ public class HomeManager : MonoBehaviour
         }
     }
 
-    public void LoadSceneInternal()
+    private void LoadSceneInternal()
     {
         SceneManager.LoadScene(targetScene);
     }
-
-    
-
 }

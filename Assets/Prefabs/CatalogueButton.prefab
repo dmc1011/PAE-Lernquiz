@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 7185350448673722981}
   - component: {fileID: 8050938802950076688}
   - component: {fileID: 6494499935438851923}
-  - component: {fileID: 1679938449229896477}
+  - component: {fileID: 5095792281101691165}
   m_Layer: 5
   m_Name: CatalogueButton
   m_TagString: Untagged
@@ -256,8 +256,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8050938802950076688}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1679938449229896477
+      m_Calls:
+      - m_Target: {fileID: 5095792281101691165}
+        m_TargetAssemblyTypeName: CatalogueButtonHandler, Assembly-CSharp
+        m_MethodName: OnCatalogueSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5095792281101691165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -266,9 +278,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8313886460140748589}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5acab22a56d411a4db789e7eb15c5c1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 77018bd17501b78488e70be904e457e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  catalogueButton: {fileID: 6494499935438851923}
   bg: {fileID: 0}
 --- !u!1001 &4831066030714616244
 PrefabInstance:

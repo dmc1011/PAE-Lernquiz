@@ -6,7 +6,7 @@ using UnityEngine;
 public class CatalogueScrollHandler : MonoBehaviour
 {
     [SerializeField] private GameObject catalogueButtonPrefab;
-    [SerializeField] private GameObject buttonContainer;
+    [SerializeField] private Transform buttonContainer;
 
 
     // Start is called before the first frame update
@@ -14,7 +14,7 @@ public class CatalogueScrollHandler : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            GameObject catalogueButton = Instantiate(catalogueButtonPrefab, buttonContainer.transform);
+            GameObject catalogueButton = Instantiate(catalogueButtonPrefab, buttonContainer);
             TextMeshProUGUI buttonLabel = catalogueButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonLabel.text = i.ToString();
         }
