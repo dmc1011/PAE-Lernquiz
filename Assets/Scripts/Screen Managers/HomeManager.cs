@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
     [SerializeField] private Button startDailyTask;
+    [SerializeField] private Background background;
+    private string targetScene;
 
     private int catalogueCount;
     CatalogueTable catalogueTable;
@@ -37,7 +39,7 @@ public class HomeManager : MonoBehaviour
         Debug.Log("Daily Task has already been completed: " + IsDailyTaskCompleted());
         if (IsDailyTaskCompleted())
         {
-            SceneManager.LoadScene("DailyTaskEvaluation");
+            LoadDailyTaskScene("DailyTaskEvaluation");
             return;
         }
 
@@ -45,6 +47,8 @@ public class HomeManager : MonoBehaviour
         Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(1, catalogueCount + 1);
         Debug.Log("Chose Catalogue: " + Global.CurrentDailyTask.catalogueIndex);
         Global.CurrentDailyTask.catalogue = catalogueTable.FindCatalogueById(Global.CurrentDailyTask.catalogueIndex);
+        PlayerPrefs.SetInt("DailyTaskCatalogueId", Global.CurrentDailyTask.catalogueIndex);
+        PlayerPrefs.Save();
         // initialize daily task
         Global.CurrentDailyTask.questions = new();
         int[] iota = Enumerable.Range(0, Global.CurrentDailyTask.catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1] (question indices)
@@ -57,7 +61,7 @@ public class HomeManager : MonoBehaviour
 
         // start daily task
         Global.InsideQuestionRound = true;
-        SceneManager.LoadScene("DailyTask");
+        LoadDailyTaskScene("DailyTask");
     }
 
     public bool IsNewDay()
@@ -84,5 +88,24 @@ public class HomeManager : MonoBehaviour
     public bool IsDailyTaskCompleted()
     {
         return PlayerPrefs.GetString(Global.IsDailyTaskCompletedKey) == "true"; ;
+    }
+
+    public void LoadDailyTaskScene(string sceneName)
+    {
+        targetScene = sceneName;
+        if (background != null)
+        {
+            float timeNeeded = background.TriggerEndSequence();
+            Invoke(nameof(LoadSceneInternal), timeNeeded);
+        }
+        else
+        {
+            LoadSceneInternal();
+        }
+    }
+
+    public void LoadSceneInternal()
+    {
+        SceneManager.LoadScene(targetScene);
     }
 }
