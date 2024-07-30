@@ -628,6 +628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   catalogueButtonPrefab: {fileID: 8313886460140748589, guid: 2fa51e2cb5c219644b983d63305296ba, type: 3}
   buttonContainer: {fileID: 7765089585914684501}
+  bg: {fileID: 168856152}
 --- !u!1001 &1930924142
 PrefabInstance:
   m_ObjectHideFlags: 0

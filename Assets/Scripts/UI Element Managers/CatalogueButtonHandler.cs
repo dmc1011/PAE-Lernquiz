@@ -19,12 +19,18 @@ public class CatalogueButtonHandler : MonoBehaviour
         if (bg != null)
         {
             float timeNeeded = bg.TriggerEndSequence();
+            print(bg);
             Invoke(nameof(LoadSceneInternal), timeNeeded);
         }
         else
         {
             LoadSceneInternal();
         }
+    }
+
+    public void SetBackground(Background bg)
+    {
+        this.bg = bg;
     }
 
     private void LoadSceneInternal()

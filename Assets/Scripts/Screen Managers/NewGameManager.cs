@@ -16,6 +16,7 @@ public class NewGameManager : MonoBehaviour
 
     [SerializeField] private GameObject catalogueButtonPrefab;
     [SerializeField] private Transform buttonContainer;
+    [SerializeField] private Background bg = null;
 
     [HideInInspector] public static CatalogueTable catalogueTable;
     [HideInInspector] public static int catalogueCount;
@@ -44,6 +45,8 @@ public class NewGameManager : MonoBehaviour
         for (int i = 0; i < catalogueCount; i++)
         {
             GameObject catalogueButton = Instantiate(catalogueButtonPrefab, buttonContainer);
+            var manager = catalogueButton.GetComponent<CatalogueButtonHandler>();
+            manager.SetBackground(bg);
             TextMeshProUGUI buttonLabel = catalogueButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonLabel.text = catalogues[i].name;
         }
