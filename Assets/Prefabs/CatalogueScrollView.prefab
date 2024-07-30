@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 0
+  m_VerticalFit: 2
 --- !u!114 &8205799266908014134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,7 +341,6 @@ GameObject:
   - component: {fileID: 3314891882501085914}
   - component: {fileID: 2750362033393497430}
   - component: {fileID: 3237821244518549833}
-  - component: {fileID: 1879334629828621234}
   m_Layer: 5
   m_Name: CatalogueScrollView
   m_TagString: Untagged
@@ -427,7 +426,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 7018854641208037222}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 2079253570029133581}
@@ -438,20 +437,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1879334629828621234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7589948888437402885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9307b9af7f00ee1408b8fa065a8c4181, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  catalogueButtonPrefab: {fileID: 8313886460140748589, guid: 2fa51e2cb5c219644b983d63305296ba, type: 3}
-  buttonContainer: {fileID: 4948715492309682445}
 --- !u!1 &9101126543111786436
 GameObject:
   m_ObjectHideFlags: 0

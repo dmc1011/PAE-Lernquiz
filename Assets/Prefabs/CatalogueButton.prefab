@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   catalogueButton: {fileID: 6494499935438851923}
-  bg: {fileID: 0}
+  bg: {fileID: 6905309683878962850, guid: 55e7398811a427c439eb2030ace40468, type: 3}
 --- !u!1001 &4831066030714616244
 PrefabInstance:
   m_ObjectHideFlags: 0
