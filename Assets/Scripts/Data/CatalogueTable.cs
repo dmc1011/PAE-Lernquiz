@@ -9,19 +9,22 @@ public class CatalogueTable
     private IDbConnection dbConnection;
     private QuestionTable questionTable;
     private AnswerTable answerTable;
+    private AnswerHistoryTable answerHistoryTable;
 
-    public CatalogueTable(IDbConnection dbConnection, QuestionTable questionTable, AnswerTable answerTable)
+    public CatalogueTable(IDbConnection dbConnection, QuestionTable questionTable, AnswerTable answerTable, AnswerHistoryTable answerHistoryTable)
     {
         this.dbConnection = dbConnection;
         this.questionTable = questionTable;
         this.answerTable = answerTable;
+        this.answerHistoryTable = answerHistoryTable;
     }
 
     public void AddCatalogue(Catalogue catalogue)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name) VALUES (@Name)";
+        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name, CurrentQuestionId) VALUES (@Name, @CurrentQuestionId)";
         dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
+        dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", DBNull.Value));
         dbcmd.ExecuteNonQuery();
         dbcmd.CommandText = "SELECT last_insert_rowid()";
         int catalogueId = Convert.ToInt32(dbcmd.ExecuteScalar());
@@ -63,8 +66,12 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogues.Add(new Catalogue(id, name, questions));
+            catalogues.Add(new Catalogue(id, name, currentQuestionId, questions));
         }
         return catalogues;
     }
@@ -81,8 +88,12 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogue = new Catalogue(id, name, questions);
+            catalogue = new Catalogue(id, name, currentQuestionId, questions);
         }
         return catalogue;
     }
@@ -99,13 +110,16 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(catalogueId);
-            catalogue = new Catalogue(id, name, questions);
+            catalogue = new Catalogue(id, name, currentQuestionId, questions);
         }
         return catalogue;
     }
 
-    // HD TODO: also delete questions + answers for the selected catalogue
     public void DeleteCatalogueById(int catalogueId)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
@@ -114,7 +128,6 @@ public class CatalogueTable
         dbcmd.ExecuteNonQuery();
     }
 
-    // HD TODO: also delete answers for the selected question
     public void DeleteQuestionById(int questionId)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
@@ -123,15 +136,17 @@ public class CatalogueTable
         dbcmd.ExecuteNonQuery();
     }
 
-    public void UpdateCatalogueById(int catalogueId, string newName)
+    public void UpdateCatalogue(Catalogue catalogue)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET Name = @Name WHERE Id = @Id";
-        dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogueId));
-        dbcmd.Parameters.Add(new SqliteParameter("@Name", newName));
+        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET Name = @Name, CurrentQuestionId = @CurrentQuestionId WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogue.id));
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
+        dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", catalogue.currentQuestionId == -1 ? DBNull.Value : catalogue.currentQuestionId));
         dbcmd.ExecuteNonQuery();
     }
 
+    // HD TODO: integrate both Functions in updateQuestion in QuestionTable
     public void UpdateQuestionNameByID(int questionID, string newName)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
@@ -172,8 +187,10 @@ public class CatalogueTable
             int id = Convert.ToInt32(reader["Id"]);
             string text = reader["Text"].ToString();
             string name = reader["Name"].ToString();
+            bool correctAnswered = (bool)reader["CorrectAnswered"];
             List<Answer> answers = FindAnswersByQuestionId(id);
-            questions.Add(new Question(id, text, name, catalogueId, answers));
+            List<AnswerHistory> answerHistory = answerHistoryTable.FindAnswerHistoryByQuestionId(id);
+            questions.Add(new Question(id, text, name, correctAnswered, catalogueId, answers, answerHistory));
         }
         return questions;
     }
@@ -206,9 +223,34 @@ public class CatalogueTable
         {
             int id = Convert.ToInt32(reader["Id"]);
             string name = reader["Name"].ToString();
+            int currentQuestionIdIndex = reader.GetOrdinal("CurrentQuestionId");
+            int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
+                                    ? -1
+                                    : reader.GetInt32(currentQuestionIdIndex);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogue = new Catalogue(id, name, questions);
+            catalogue = new Catalogue(id, name, currentQuestionId, questions);
         }
         return catalogue;
+    }
+
+    public int FindCorrectAnsweredQuestionsCountByCatalogueId(int catalogueId)
+    {
+        int correctAnsweredQuestionsCount = 0;
+
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = @"
+            SELECT COUNT(*) AS CorrectAnsweredQuestionsCount
+            FROM Question
+            WHERE CatalogueId = @CatalogueId AND CorrectAnswered = 1;
+        ";
+        dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
+
+        object result = dbcmd.ExecuteScalar();
+        if (result != null)
+        {
+            correctAnsweredQuestionsCount = Convert.ToInt32(result);
+        }
+
+        return correctAnsweredQuestionsCount;
     }
 }
