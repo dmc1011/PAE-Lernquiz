@@ -11,11 +11,12 @@ public class CatalogueButtonHandler : MonoBehaviour
 {
     [SerializeField] private Button catalogueButton;
     [SerializeField] private Background bg = null;
-    private string targetSceneName = "";
+    private string targetScene = "";
+
 
     public void LoadScene(string sceneName)
     {
-        targetSceneName = sceneName;
+        targetScene = sceneName;
         if (bg != null)
         {
             float timeNeeded = bg.TriggerEndSequence();
@@ -28,16 +29,20 @@ public class CatalogueButtonHandler : MonoBehaviour
         }
     }
 
+
+    private void LoadSceneInternal()
+    {
+        SceneManager.LoadScene(targetScene);
+    }
+
+
     public void SetBackground(Background bg)
     {
         this.bg = bg;
     }
 
-    private void LoadSceneInternal()
-    {
-        SceneManager.LoadScene(targetSceneName);
-    }
 
+    // perform actions after selecting a catalogue, depending on chosen game mode
     public void OnCatalogueSelected()
     {
         switch (Global.CurrentQuestionRound.gameMode)
@@ -56,6 +61,8 @@ public class CatalogueButtonHandler : MonoBehaviour
         }
     }
 
+
+    // start linear quiz
     private void StartLinearRoundClickedEvent()
     {
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
@@ -74,6 +81,7 @@ public class CatalogueButtonHandler : MonoBehaviour
     }
 
 
+    // start random quiz
     private void StartRandomRoundClickedEvent()
     {
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
@@ -103,6 +111,7 @@ public class CatalogueButtonHandler : MonoBehaviour
     }
 
 
+    // start statistics
     private void ShowStatistics()
     {
         LoadScene("Statistics");

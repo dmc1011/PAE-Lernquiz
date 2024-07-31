@@ -1,6 +1,7 @@
 
 public static class Global
 {
+    // GameMode is used as context for catalogue selection: selecting a catalogue will trigger specific events and screen transition
     public enum GameMode
     {
         LinearQuiz,

@@ -9,13 +9,12 @@ public class HomeManager : MonoBehaviour
 {
     [SerializeField] private Button startDailyTask;
     [SerializeField] private Background background;
-    private string targetScene;
 
+    private string targetScene;
     private int catalogueCount;
     CatalogueTable catalogueTable;
     List<Catalogue> catalogues;
-
-    string currentDate;
+    private string currentDate;
 
 
     void Start()
@@ -25,7 +24,8 @@ public class HomeManager : MonoBehaviour
         catalogueCount = catalogues.Count;
 
         currentDate = DateTime.Now.ToString("yyyy-MM-dd");
-        
+
+        // reset daily task
         if (IsNewDay())
         {
             ResetDailyTask();
@@ -33,10 +33,10 @@ public class HomeManager : MonoBehaviour
         }
     }
 
-  
+
     public void StartDailyTaskClickedEvent()
     {
-        Debug.Log("Daily Task has already been completed: " + IsDailyTaskCompleted());
+        // show evaluation if daily task has already been completed
         if (IsDailyTaskCompleted())
         {
             LoadDailyTaskScene("DailyTaskEvaluation");
@@ -45,10 +45,10 @@ public class HomeManager : MonoBehaviour
 
         // load chosen catalogue into global data
         Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(1, catalogueCount + 1);
-        Debug.Log("Chose Catalogue: " + Global.CurrentDailyTask.catalogueIndex);
         Global.CurrentDailyTask.catalogue = catalogueTable.FindCatalogueById(Global.CurrentDailyTask.catalogueIndex);
         PlayerPrefs.SetInt("DailyTaskCatalogueId", Global.CurrentDailyTask.catalogueIndex);
         PlayerPrefs.Save();
+
         // initialize daily task
         Global.CurrentDailyTask.questions = new();
         int[] iota = Enumerable.Range(0, Global.CurrentDailyTask.catalogue.questions.Count).ToArray(); // [0, 1, 2, ..., Count - 1] (question indices)
@@ -63,6 +63,7 @@ public class HomeManager : MonoBehaviour
         Global.InsideQuestionRound = true;
         LoadDailyTaskScene("DailyTask");
     }
+
 
     private bool IsNewDay()
     {
@@ -90,12 +91,14 @@ public class HomeManager : MonoBehaviour
         return PlayerPrefs.GetString(Global.IsDailyTaskCompletedKey) == "true"; ;
     }
 
+
     public void LoadDailyTaskScene(string sceneName)
     {
         targetScene = sceneName;
         Global.CurrentQuestionRound.gameMode = Global.GameMode.DailyTask;
         StartSceneTransition();
     }
+
 
     public void LoadLinearGameSelection()
     {
@@ -104,6 +107,7 @@ public class HomeManager : MonoBehaviour
         StartSceneTransition();
     }
 
+
     public void LoadRandomGameSelection()
     {
         targetScene = "NewGame";
@@ -111,12 +115,14 @@ public class HomeManager : MonoBehaviour
         StartSceneTransition();
     }
 
+
     public void LoadStatisticsSelection()
     {
         targetScene = "NewGame";
         Global.CurrentQuestionRound.gameMode = Global.GameMode.Statistics;
         StartSceneTransition();
     }
+
 
     private void StartSceneTransition()
     {
@@ -130,6 +136,7 @@ public class HomeManager : MonoBehaviour
             LoadSceneInternal();
         }
     }
+
 
     private void LoadSceneInternal()
     {
