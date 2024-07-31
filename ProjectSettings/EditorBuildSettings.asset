@@ -38,6 +38,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DailyTaskEvaluation.unity
     guid: 89f90952b1f131b489119eac719e612e
+  - enabled: 1
+    path: Assets/Scenes/Datenschutz.unity
+    guid: 57da3cbcbf8713949b257524df20a59c
+  - enabled: 1
+    path: Assets/Scenes/Hilfe.unity
+    guid: 9f8eb0cd52964ec40b46f489e7bb4b1c
+  - enabled: 1
+    path: Assets/Scenes/SoundEffect.unity
+    guid: 5938affe525b2b7408ae7df56bbb54a0
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 6504cfa3fec3beb42bae8d6899d62479, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: a389421d061b56840a93f53e44e4c185, type: 2}
