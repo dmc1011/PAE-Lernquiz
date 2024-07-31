@@ -98,7 +98,6 @@ public class QuizAreaManager : MonoBehaviour
             return;
 
         bool wasCorrect = true;
-        bool correctAnswered = true;
 
         // Always color button A in green.
         ColorBlock cb = button.colors;
@@ -108,14 +107,13 @@ public class QuizAreaManager : MonoBehaviour
         if (currentlyActiveButton != ButtonID.A) // right answer
         {
             wasCorrect = false;
-            correctAnswered = false;
             cb.disabledColor = Color.red;
             button.colors = cb;
         }
 
-        if(correctAnswered && !question.correctAnswered)
+        if(wasCorrect)
         {
-            question.correctAnswered = correctAnswered;
+            question.correctAnsweredCount += 1;
             questionTable.UpdateQuestion(question);
         }
 
