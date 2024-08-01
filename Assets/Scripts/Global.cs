@@ -1,6 +1,15 @@
 
 public static class Global
 {
+    // GameMode is used as context for catalogue selection: selecting a catalogue will trigger specific events and screen transition
+    public enum GameMode
+    {
+        LinearQuiz,
+        RandomQuiz,
+        DailyTask,
+        Statistics
+    }
+
     // player prefs keys for daily task
     public const string LastResetDateKey = "LastResetDate";
     public const string IsDailyTaskCompletedKey = "IsDailyTaskCompleted";

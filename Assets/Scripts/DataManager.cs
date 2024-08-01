@@ -11,8 +11,9 @@ public static class DataManager
     {
         public int catalogueIndex;
         public Catalogue catalogue;
-        public List<int> questions; // chosen questions (incdices) for random quiz
-        public int questionLimit;   // number of questions for random quiz
+        public List<int> questions;         // chosen questions (incdices) for random quiz
+        public int questionLimit;           // number of questions for random quiz
+        public Global.GameMode gameMode;    // saves the chosen game mode of current question round (e.g. "RandomQuiz")
     }
 
 
