@@ -24,4 +24,13 @@ public class QuestionTable
         dbcmd.ExecuteNonQuery();
         
     }
+
+    public void UpdateQuestion(Question question)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET CorrectAnswered = @CorrectAnswered WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", question.id));
+        dbcmd.Parameters.Add(new SqliteParameter("@CorrectAnswered", question.correctAnswered));
+        dbcmd.ExecuteNonQuery();
+    }
 }

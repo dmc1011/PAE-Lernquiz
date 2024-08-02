@@ -102,7 +102,7 @@ public class CataloguesManager : MonoBehaviour
                 if(c.name.StartsWith("Neuer Fragenkatalog"))
                     newCatalogueNameCounter++;
             }
-            Global.tmpCatalogue ??= new(-1, "Neuer Fragenkatalog" + (newCatalogueNameCounter > 0 ? (" " + newCatalogueNameCounter.ToString()) : ""), new()); // If null -> make a new one.
+            Global.tmpCatalogue ??= new(-1, "Neuer Fragenkatalog" + (newCatalogueNameCounter > 0 ? (" " + newCatalogueNameCounter.ToString()) : ""), -1, new()); // If null -> make a new one.
             currentCatalogue = Global.tmpCatalogue;
             catalogueSelection.value = catalogueSelection.options.Count - 1; // The last index is always "Neu" or the Global.tmpCatalogue
             UpdateCatalogueSelectionTextForCurrentCatalogue();
@@ -142,7 +142,7 @@ public class CataloguesManager : MonoBehaviour
                     newQuestionCounter++;
             }
 
-            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), "", -1, answers);
+            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), "", false, -1, answers, new List<AnswerHistory>());
             questionIndexAfterReset = questionSelection.value;
 
             if (currentCatalogue == Global.tmpCatalogue)
@@ -217,7 +217,8 @@ public class CataloguesManager : MonoBehaviour
                     {
                         int currentCatalogueId = currentCatalogue.id;
                         print("DB Catalogue " + currentCatalogue.name + " renamed to " + newCatalogueName);
-                        catalogueTable.UpdateCatalogueById(currentCatalogueId, newCatalogueName);
+                        currentCatalogue.name = newCatalogueName;
+                        catalogueTable.UpdateCatalogue(currentCatalogue);
                         currentCatalogue = catalogueTable.FindCatalogueByName(newCatalogueName); // reload the whole catalogue, just to be safe (might be unneccessary)
                     }
 
