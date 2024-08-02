@@ -5,14 +5,14 @@ using UnityEngine.EventSystems;
 
 public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public RectTransform sideMenuRectTransform;
-    public Button toggleButton;
+    [SerializeField] private RectTransform sideMenuRectTransform;
+    [SerializeField] private Button settingsButton;
     private float width;
     private float startPositionX;
     private float startingAnchoredPositionX;
 
     public enum Side { left, right }
-    public Side side;
+    [SerializeField] private Side side;
 
     private bool isOpen = false; 
 
@@ -24,7 +24,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         float initialPosition = (side == Side.right) ? GetMaxPosition() : GetMinPosition();
         sideMenuRectTransform.anchoredPosition = new Vector2(initialPosition, 0);
 
-        toggleButton.onClick.AddListener(ToggleMenu);
+        settingsButton.onClick.AddListener(ToggleMenu);
     }
 
     public void OnDrag(PointerEventData eventData)
