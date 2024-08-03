@@ -2170,6 +2170,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 18193479}
     m_Modifications:
+    - target: {fileID: 4180190775130091381, guid: 3183fbddc08887043befbb0a832c9b95, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7657321358022699501, guid: 3183fbddc08887043befbb0a832c9b95, type: 3}
       propertyPath: m_Name
       value: Logo

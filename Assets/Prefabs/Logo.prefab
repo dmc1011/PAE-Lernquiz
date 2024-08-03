@@ -161,7 +161,6 @@ GameObject:
   - component: {fileID: 8424121807089535279}
   - component: {fileID: 6382748530062107142}
   - component: {fileID: 4562679072076163653}
-  - component: {fileID: 4180190775130091381}
   m_Layer: 5
   m_Name: Logo
   m_TagString: Untagged
@@ -229,24 +228,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4180190775130091381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7657321358022699501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a7cd237d4c5f8040a7c28999f8b4062, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inner: {fileID: 6401094642725685656}
-  outline: {fileID: 6322388589786434694}
-  outlineBlur: {fileID: 2492523747676975173}
-  innerColor: {r: 0.14651857, g: 0, b: 0.254717, a: 1}
-  outlineColor: {r: 0.99026465, g: 0.4009434, b: 1, a: 1}
-  neonColor: {r: 0.94275093, g: 0, b: 1, a: 1}
 --- !u!1 &8283907224559997065
 GameObject:
   m_ObjectHideFlags: 0
