@@ -22,7 +22,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     private float currentAnimationTime = 0.0f;
 
     // This determines how long the animation takes to complete in Seconds
-    private const float animationTime = 0.25f;
+    private const float animationTime = 0.4f;
 
     void Start()
     {
