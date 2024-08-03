@@ -15,6 +15,7 @@ public class SQLiteSetup : MonoBehaviour
     public QuestionTable questionTable { get; private set; }
     public AnswerTable answerTable { get; private set; }
     public AnswerHistoryTable answerHistoryTable { get; private set; }
+    public CatalogueSessionHistoryTable catalogueSessionHistoryTable { get; private set; }
 
     void Awake()
     {
@@ -36,7 +37,8 @@ public class SQLiteSetup : MonoBehaviour
             answerHistoryTable = new AnswerHistoryTable(dbConnection);
             questionTable = new QuestionTable(dbConnection);
             answerTable = new AnswerTable(dbConnection);
-            catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable, answerHistoryTable);
+            catalogueSessionHistoryTable = new CatalogueSessionHistoryTable(dbConnection);
+            catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable, answerHistoryTable, catalogueSessionHistoryTable);
         }
         else
         {
@@ -65,6 +67,7 @@ public class SQLiteSetup : MonoBehaviour
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Name TEXT,
                 CurrentQuestionId INTEGER,
+                TotalTimeSpent INTEGER DEFAULT 0,
                 FOREIGN KEY(CurrentQuestionId) REFERENCES Question(Id)
             );
             CREATE TABLE IF NOT EXISTS Question (
@@ -72,7 +75,7 @@ public class SQLiteSetup : MonoBehaviour
                 CatalogueId INTEGER,
                 Text TEXT,
                 Name TEXT,
-                CorrectAnswered BOOLEAN DEFAULT 0,
+                CorrectAnsweredCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS Answer (
@@ -88,6 +91,13 @@ public class SQLiteSetup : MonoBehaviour
                 AnswerDate DATETIME,
                 WasCorrect BOOLEAN,
                 FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
+            );
+            CREATE TABLE IF NOT EXISTS CatalogueSessionHistory (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                CatalogueId INTEGER,
+                SessionDate DATETIME,
+                TimeSpent INTEGER,
+                FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
         ";
         dbCommand.ExecuteNonQuery();

@@ -10,13 +10,15 @@ public class CatalogueTable
     private QuestionTable questionTable;
     private AnswerTable answerTable;
     private AnswerHistoryTable answerHistoryTable;
+    private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
 
-    public CatalogueTable(IDbConnection dbConnection, QuestionTable questionTable, AnswerTable answerTable, AnswerHistoryTable answerHistoryTable)
+    public CatalogueTable(IDbConnection dbConnection, QuestionTable questionTable, AnswerTable answerTable, AnswerHistoryTable answerHistoryTable, CatalogueSessionHistoryTable catalogueSessionHistoryTable)
     {
         this.dbConnection = dbConnection;
         this.questionTable = questionTable;
         this.answerTable = answerTable;
         this.answerHistoryTable = answerHistoryTable;
+        this.catalogueSessionHistoryTable = catalogueSessionHistoryTable;
     }
 
     public void AddCatalogue(Catalogue catalogue)
@@ -70,8 +72,10 @@ public class CatalogueTable
             int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
+            int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogues.Add(new Catalogue(id, name, currentQuestionId, questions));
+            List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
+            catalogues.Add(new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories));
         }
         return catalogues;
     }
@@ -92,8 +96,10 @@ public class CatalogueTable
             int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
+            int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, questions);
+            List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories);
         }
         return catalogue;
     }
@@ -114,8 +120,10 @@ public class CatalogueTable
             int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
+            int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             List<Question> questions = FindQuestionsByCatalogueId(catalogueId);
-            catalogue = new Catalogue(id, name, currentQuestionId, questions);
+            List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories);
         }
         return catalogue;
     }
@@ -139,10 +147,17 @@ public class CatalogueTable
     public void UpdateCatalogue(Catalogue catalogue)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET Name = @Name, CurrentQuestionId = @CurrentQuestionId WHERE Id = @Id";
+        dbcmd.CommandText = @"
+            UPDATE " + TABLE_NAME + @"
+            SET Name = @Name,
+                CurrentQuestionId = @CurrentQuestionId,
+                TotalTimeSpent = @TotalTimeSpent
+            WHERE Id = @Id;
+        ";
         dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogue.id));
         dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
         dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", catalogue.currentQuestionId == -1 ? DBNull.Value : catalogue.currentQuestionId));
+        dbcmd.Parameters.Add(new SqliteParameter("@TotalTimeSpent", catalogue.totalTimeSpent));
         dbcmd.ExecuteNonQuery();
     }
 
@@ -187,10 +202,10 @@ public class CatalogueTable
             int id = Convert.ToInt32(reader["Id"]);
             string text = reader["Text"].ToString();
             string name = reader["Name"].ToString();
-            bool correctAnswered = (bool)reader["CorrectAnswered"];
+            int correctAnsweredCount = Convert.ToInt32(reader["CorrectAnsweredCount"]);
             List<Answer> answers = FindAnswersByQuestionId(id);
             List<AnswerHistory> answerHistory = answerHistoryTable.FindAnswerHistoryByQuestionId(id);
-            questions.Add(new Question(id, text, name, correctAnswered, catalogueId, answers, answerHistory));
+            questions.Add(new Question(id, text, name, correctAnsweredCount, catalogueId, answers, answerHistory));
         }
         return questions;
     }
@@ -227,8 +242,10 @@ public class CatalogueTable
             int currentQuestionId = reader.IsDBNull(currentQuestionIdIndex)
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
+            int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, questions);
+            List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories);
         }
         return catalogue;
     }
@@ -241,7 +258,7 @@ public class CatalogueTable
         dbcmd.CommandText = @"
             SELECT COUNT(*) AS CorrectAnsweredQuestionsCount
             FROM Question
-            WHERE CatalogueId = @CatalogueId AND CorrectAnswered = 1;
+            WHERE CatalogueId = @CatalogueId AND CorrectAnsweredCount > 0;
         ";
         dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
 
