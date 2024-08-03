@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static UnityEngine.GraphicsBuffer;
 
 public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -14,8 +15,14 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     public enum Side { left, right }
     [SerializeField] private Side side;
 
-    private bool isOpen = false; 
+    private bool isOpen = false;
+    private bool isInAnimation = false;
+    private float targetPositionForCurrentAnimation = 0.0f;
+    private float startPositionForCurrentAnimation = 0.0f;
+    private float currentAnimationTime = 0.0f;
 
+    // This determines how long the animation takes to complete in Seconds
+    private const float animationTime = 0.25f;
 
     void Start()
     {
@@ -25,6 +32,24 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         sideMenuRectTransform.anchoredPosition = new Vector2(initialPosition, 0);
 
         settingsButton.onClick.AddListener(ToggleMenu);
+    }
+
+    void Update()
+    {
+        if (isInAnimation)
+        {
+            currentAnimationTime += Time.deltaTime;
+            if (currentAnimationTime < animationTime)
+            {
+                sideMenuRectTransform.anchoredPosition = new Vector2(
+                    Mathf.Lerp(startPositionForCurrentAnimation, targetPositionForCurrentAnimation,
+                    Mathf.Pow(currentAnimationTime / animationTime, 2.0f)), 0);
+            } else
+            {
+                sideMenuRectTransform.anchoredPosition = new Vector2(targetPositionForCurrentAnimation, 0);  // Ensure exact final position
+                isInAnimation = false;
+            }
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -44,8 +69,10 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     public void OnPointerUp(PointerEventData eventData)
     {
         bool shouldOpen = isAfterHalfPoint();
-        float targetPosition = shouldOpen ? GetMinPosition() : GetMaxPosition();
-        StartCoroutine(HandleMenuSlide(.25f, sideMenuRectTransform.anchoredPosition.x, targetPosition));
+        targetPositionForCurrentAnimation = shouldOpen ? GetMinPosition() : GetMaxPosition();
+        startPositionForCurrentAnimation = sideMenuRectTransform.anchoredPosition.x;
+        currentAnimationTime = 0.0f;
+        isInAnimation = true;
         isOpen = shouldOpen; 
     }
 
@@ -71,20 +98,12 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         return width / 2;
     }
 
-    private IEnumerator HandleMenuSlide(float slideTime, float startingX, float targetX)
-    {
-        for (float i = 0; i <= slideTime; i += .025f)
-        {
-            sideMenuRectTransform.anchoredPosition = new Vector2(Mathf.Lerp(startingX, targetX, i / slideTime), 0);
-            yield return new WaitForSecondsRealtime(.025f);
-        }
-        sideMenuRectTransform.anchoredPosition = new Vector2(targetX, 0);  // Ensure exact final position
-    }
-
     private void ToggleMenu()
     {
-        float targetPosition = isOpen ? GetMaxPosition() : GetMinPosition();
-        StartCoroutine(HandleMenuSlide(.25f, sideMenuRectTransform.anchoredPosition.x, targetPosition));
+        targetPositionForCurrentAnimation = isOpen ? GetMaxPosition() : GetMinPosition();
+        startPositionForCurrentAnimation = sideMenuRectTransform.anchoredPosition.x;
+        currentAnimationTime = 0.0f;
+        isInAnimation = true;
         isOpen = !isOpen; 
     }
 }
