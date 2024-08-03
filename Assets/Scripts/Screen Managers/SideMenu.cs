@@ -8,28 +8,29 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 {
     [SerializeField] private RectTransform sideMenuRectTransform;
     [SerializeField] private Button settingsButton;
+
+    // Positioning
     private float width;
     private float startPositionX;
     private float startingAnchoredPositionX;
+    private float onScreenPosition;
+    private float offScreenPosition;
+    private bool isOnScreen = false;
 
-    public enum Side { left, right }
-    [SerializeField] private Side side;
-
-    private bool isOpen = false;
+    // Animation
     private bool isInAnimation = false;
     private float targetPositionForCurrentAnimation = 0.0f;
     private float startPositionForCurrentAnimation = 0.0f;
     private float currentAnimationTime = 0.0f;
-
-    // This determines how long the animation takes to complete in Seconds
     private const float animationTime = 0.4f;
 
     void Start()
     {
         width = Screen.width;
+        onScreenPosition = width * 0.5f;
+        offScreenPosition = width * 1.5f;
 
-        float initialPosition = (side == Side.right) ? GetMaxPosition() : GetMinPosition();
-        sideMenuRectTransform.anchoredPosition = new Vector2(initialPosition, 0);
+        sideMenuRectTransform.anchoredPosition = new Vector2(offScreenPosition, 0);
 
         settingsButton.onClick.AddListener(ToggleMenu);
     }
@@ -55,7 +56,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     public void OnDrag(PointerEventData eventData)
     {
         sideMenuRectTransform.anchoredPosition = new Vector2(
-            Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), GetMinPosition(), GetMaxPosition()), 
+            Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), onScreenPosition, offScreenPosition), 
             0);
     }
 
@@ -69,41 +70,24 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     public void OnPointerUp(PointerEventData eventData)
     {
         bool shouldOpen = isAfterHalfPoint();
-        targetPositionForCurrentAnimation = shouldOpen ? GetMinPosition() : GetMaxPosition();
+        targetPositionForCurrentAnimation = shouldOpen ? onScreenPosition : offScreenPosition;
         startPositionForCurrentAnimation = sideMenuRectTransform.anchoredPosition.x;
         currentAnimationTime = 0.0f;
         isInAnimation = true;
-        isOpen = shouldOpen; 
+        isOnScreen = shouldOpen; 
     }
 
     private bool isAfterHalfPoint()
     {
-        if (side == Side.right)
-            return sideMenuRectTransform.anchoredPosition.x < width;
-        else
-            return sideMenuRectTransform.anchoredPosition.x < 0;
-    }
-
-    private float GetMinPosition()
-    {
-        if (side == Side.right)
-            return width * 0.6f;
-        return -width * 0.4f;
-    }
-
-    private float GetMaxPosition()
-    {
-        if (side == Side.right)
-            return width * 1.4f;
-        return width / 2;
+        return sideMenuRectTransform.anchoredPosition.x < width;
     }
 
     private void ToggleMenu()
     {
-        targetPositionForCurrentAnimation = isOpen ? GetMaxPosition() : GetMinPosition();
+        targetPositionForCurrentAnimation = isOnScreen ? offScreenPosition : onScreenPosition;
         startPositionForCurrentAnimation = sideMenuRectTransform.anchoredPosition.x;
         currentAnimationTime = 0.0f;
         isInAnimation = true;
-        isOpen = !isOpen; 
+        isOnScreen = !isOnScreen; 
     }
 }
