@@ -581,8 +581,14 @@ public class CataloguesManager : MonoBehaviour
         currentMode = MODE.NONE; // Whatever was started -> it is gone now.
     }
 
+    public void OnOpenFileBrowserImportButtonClicked()
+    {
+        StartCoroutine(OpenFileBrowserAndLoadCatalogue());
+    }
+
     private IEnumerator OpenFileBrowserAndLoadCatalogue()
     {
+        FileBrowser.SetFilters(false, ".json");
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Wähle einen Katalog", "Öffnen");
 
         if (FileBrowser.Success)
@@ -604,6 +610,7 @@ public class CataloguesManager : MonoBehaviour
             Catalogue catalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(path));
             Debug.Log("Loaded Catalogue succesfully.");
             catalogueTable.AddCatalogue(catalogue);
+            CatalogueSelectionUpdate();
         }
         catch (Exception e)
         {
@@ -612,14 +619,15 @@ public class CataloguesManager : MonoBehaviour
         }
     }
 
-    public void OnOpenFileBrowserImportButtonClicked()
+    public void OnOpenFileBrowserExportButtonClicked()
     {
-        StartCoroutine(OpenFileBrowserAndLoadCatalogue());
+        StartCoroutine(OpenFileBrowserAndSaveCatalogue());
     }
 
     private IEnumerator OpenFileBrowserAndSaveCatalogue()
     {
-        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Save", "Save");
+        FileBrowser.SetFilters(false, ".json");
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Wähle einen Speicherort", "Speichern");
 
         if (FileBrowser.Success)
             SaveCatalogue(FileBrowser.Result);
@@ -640,10 +648,4 @@ public class CataloguesManager : MonoBehaviour
             Debug.LogError($"Unable to save data: {e.Message}");
         }
     }
-
-    public void OnOpenFileBrowserExportButtonClicked()
-    {
-        StartCoroutine(OpenFileBrowserAndSaveCatalogue());
-    }
-
 }
