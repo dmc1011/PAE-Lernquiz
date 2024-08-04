@@ -38,7 +38,5 @@ public class LogoAnimator : MonoBehaviour
         outline.color = new Color(outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a * (0.8f + 0.2f * (Mathf.Sin(time) / 2 + 0.5f)));
         outlineBlur.color = new Color(neonColor.r, neonColor.g, neonColor.b, neonColor.a * (0.35f + 0.65f * Mathf.Clamp(neonFlicker, 0, 0.5f)));
         neonFlicker *= 0.9f;
-        print(neonFlicker);
-
     }
 }
