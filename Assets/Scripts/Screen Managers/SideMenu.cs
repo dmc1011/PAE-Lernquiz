@@ -3,12 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using static UnityEngine.GraphicsBuffer;
+using UnityEditor.Experimental.GraphView;
 
 public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private RectTransform sideMenuRectTransform;
-    [SerializeField] private RectTransform sideMenuGearIcon;
-    [SerializeField] private Button settingsButton;
+    [SerializeField] private RectTransform sideMenuGearIconTransform;
+    [SerializeField] private CircleCollider2D sideMenuGearIconCollider;
 
     // Positioning
     private float width;
@@ -17,6 +18,8 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     private float onScreenPosition;
     private float offScreenPosition;
     private bool isOnScreen = false;
+    private bool isDragged = false;
+    private bool isIconPressed = false;
 
     // Animation
     private bool isInAnimation = false;
@@ -30,10 +33,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         width = Screen.width;
         onScreenPosition = width * 0.5f;
         offScreenPosition = width * 1.5f;
-
         sideMenuRectTransform.anchoredPosition = new Vector2(offScreenPosition, 0);
-
-        settingsButton.onClick.AddListener(ToggleMenu);
     }
 
     void Update()
@@ -52,17 +52,27 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
                 sideMenuRectTransform.anchoredPosition = new Vector2(targetPositionForCurrentAnimation, 0);  // Ensure exact final position
                 RotateGear();
                 isInAnimation = false;
+                isOnScreen = sideMenuRectTransform.anchoredPosition.x == onScreenPosition;
+            }
+        }
+        else
+        {
+            if(!isDragged && sideMenuRectTransform.anchoredPosition.x != onScreenPosition && sideMenuRectTransform.anchoredPosition.x != offScreenPosition)
+            {
+                StartAnimation(isAfterHalfPoint());
             }
         }
     }
 
     private void RotateGear()
     {
-        sideMenuGearIcon.rotation = Quaternion.Euler(0, 0, 360 * sideMenuRectTransform.anchoredPosition.x / (Mathf.Abs(onScreenPosition - offScreenPosition)));
+        sideMenuGearIconTransform.rotation = Quaternion.Euler(0, 0, 360 * sideMenuRectTransform.anchoredPosition.x / (Mathf.Abs(onScreenPosition - offScreenPosition)));
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        isDragged = true;
+        isIconPressed = false;
         sideMenuRectTransform.anchoredPosition = new Vector2(
             Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), onScreenPosition, offScreenPosition),
             0);
@@ -71,19 +81,32 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        StopAllCoroutines();
+        if (sideMenuGearIconCollider.OverlapPoint(eventData.position))
+        {
+            isIconPressed = true;
+        }
         startPositionX = eventData.position.x;
         startingAnchoredPositionX = sideMenuRectTransform.anchoredPosition.x;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        bool shouldOpen = isAfterHalfPoint();
+        isDragged = false;
+        if(isIconPressed)
+        {
+            ToggleMenu();
+            isIconPressed = false;
+        }
+        
+    }
+
+    private void StartAnimation(bool shouldOpen)
+    {
         targetPositionForCurrentAnimation = shouldOpen ? onScreenPosition : offScreenPosition;
         startPositionForCurrentAnimation = sideMenuRectTransform.anchoredPosition.x;
         currentAnimationTime = 0.0f;
         isInAnimation = true;
-        isOnScreen = shouldOpen; 
+        isOnScreen = shouldOpen;
     }
 
     private bool isAfterHalfPoint()
@@ -93,10 +116,6 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 
     private void ToggleMenu()
     {
-        targetPositionForCurrentAnimation = isOnScreen ? offScreenPosition : onScreenPosition;
-        startPositionForCurrentAnimation = sideMenuRectTransform.anchoredPosition.x;
-        currentAnimationTime = 0.0f;
-        isInAnimation = true;
-        isOnScreen = !isOnScreen; 
+        StartAnimation(!isOnScreen);
     }
 }
