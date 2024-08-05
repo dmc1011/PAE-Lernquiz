@@ -337,7 +337,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6966020018887049337, guid: 37ef2c690e0bdf441b584d6ac686c795, type: 3}
       propertyPath: m_text
-      value: Neues Spiel
+      value: Auswahl
       objectReference: {fileID: 0}
     - target: {fileID: 7059918635947085576, guid: 37ef2c690e0bdf441b584d6ac686c795, type: 3}
       propertyPath: m_Name
@@ -728,6 +728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   catalogueButtonPrefab: {fileID: 8313886460140748589, guid: 2fa51e2cb5c219644b983d63305296ba, type: 3}
+  dailyTaskButtonPrefab: {fileID: 3158214299015622591, guid: f41d76c6a89618a4abaf068629bd231c, type: 3}
   buttonContainer: {fileID: 7765089585914684501}
   bg: {fileID: 168856152}
 --- !u!1 &2087281701
