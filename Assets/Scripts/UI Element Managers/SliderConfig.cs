@@ -34,6 +34,7 @@ public class SliderConfig : MonoBehaviour
     public void OnValidate()
     {
         SetValue(value1, value2, value3);
+        Start();
     }
 
     public void SetValue(float a, float b, float c)

@@ -84,7 +84,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.34428573
+  m_Value: 0.5847953
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.21038437, a: 1}
+  m_Color: {r: 0.119050294, g: 0.823, b: 0.06728931, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -308,7 +308,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.34428573
+  m_FillAmount: 0.5847953
   m_FillClockwise: 0
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.019191265, a: 1}
+  m_Color: {r: 0.816, g: 0, b: 0.03709087, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.7014286
+  m_FillAmount: 0.6690058
   m_FillClockwise: 0
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.29032436, g: 0.2028302, b: 1, a: 1}
+  m_Color: {r: 0.28362694, g: 0.066015, b: 0.48900002, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -533,9 +533,9 @@ MonoBehaviour:
   color3: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
   colorText: {r: 1, g: 1, b: 1, a: 1}
   colorCenter: {r: 0.28362694, g: 0.066015, b: 0.48900002, a: 1}
-  value1: 4.82
-  value2: 5
-  value3: 4.18
+  value1: 5
+  value2: 0.72
+  value3: 2.83
 --- !u!1 &7238019428083198071
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,7 +878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.33962262, g: 0.20024918, b: 0.20024918, a: 1}
+  m_Color: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1054,7 +1054,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.7014286
+  m_Value: 0.6690058
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
