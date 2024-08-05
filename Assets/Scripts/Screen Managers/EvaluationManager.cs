@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class EvaluationManager : MonoBehaviour
 {
-    [SerializeField] private Transform resultContainer;
-    [SerializeField] private GameObject resultPrefab;
+
+    [SerializeField] private EvaluationButton evaluationButtonPrefab;
+    [SerializeField] private EvaluationStatistics evaluationStatistics;
+    [SerializeField] private Transform scrollTransform;
+
     void Start()
     {
         DisplayResults();   
@@ -14,15 +17,21 @@ public class EvaluationManager : MonoBehaviour
     {
         List<DataManager.QuestionResult> results = DataManager.QuestionResults;
 
-        foreach (var result in results)
-        {
-            GameObject resultEntry = Instantiate(resultPrefab, resultContainer);
-            EvaluationTableContent evaluationTableContent = resultEntry.GetComponent<EvaluationTableContent>();
+        int numAnswers = results.Count;
+        int numCorrectAnswers = 0;
 
-            // TODO: as soon as images are supported we might need to adapt the prefab
-            evaluationTableContent.questionText.text = result.questionText;
-            evaluationTableContent.answerText.text = result.answerText;
-            evaluationTableContent.correctText.text = result.isCorrect ? "Richtig" : "Falsch";
+        { // Scope this for i
+            int i = 0;
+            foreach (var result in results)
+            {
+                EvaluationButton entry = Instantiate(evaluationButtonPrefab, scrollTransform);
+                entry.Set(i + 1, result.isCorrect, result.questionText);
+                numCorrectAnswers += result.isCorrect ? 1 : 0;
+                i++;
+            }
         }
+
+        evaluationStatistics.Set(numAnswers, numCorrectAnswers);
+
     }
 }

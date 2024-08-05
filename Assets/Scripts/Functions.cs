@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using UnityEngine;
 
 
 
@@ -17,6 +18,14 @@ public static class Functions
             ts[i] = ts[r];
             ts[r] = tmp;
         }
+    }
+
+    public static Color Lerp3(Color a, Color b, Color c, float t)
+    {
+        if (t > 0.5f)
+            return Color.Lerp(b, c, (t - 0.5f) * 2);
+        else
+            return Color.Lerp(a, b, t * 2);
     }
 
 }

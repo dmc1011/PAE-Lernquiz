@@ -20,7 +20,6 @@ public class CatalogueButtonHandler : MonoBehaviour
         if (bg != null)
         {
             float timeNeeded = bg.TriggerEndSequence();
-            print(bg);
             Invoke(nameof(LoadSceneInternal), timeNeeded);
         }
         else
