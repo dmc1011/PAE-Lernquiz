@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class NewGameManager : MonoBehaviour
 {
     [SerializeField] private GameObject catalogueButtonPrefab;      // used for dynamically rendering catalogue buttons
+    [SerializeField] private GameObject dailyTaskButtonPrefab;
     [SerializeField] private Transform buttonContainer;             // 'content' element of scroll view
     [SerializeField] private Background bg = null;
 
@@ -35,6 +36,18 @@ public class NewGameManager : MonoBehaviour
     // renders a catalogue button for each existing catalogue on the scroll view element
     private void SetCatalogueButtons()
     {
+        if (Global.CurrentQuestionRound.gameMode == Global.GameMode.Statistics)
+        {
+            GameObject catalogueButton = Instantiate(dailyTaskButtonPrefab, buttonContainer);
+
+            // set background on runtime
+            var manager = catalogueButton.GetComponent<CatalogueButtonHandler>();
+            manager.SetBackground(bg);
+
+            TextMeshProUGUI buttonLabel = catalogueButton.GetComponentInChildren<TextMeshProUGUI>();
+            buttonLabel.text = "Daily Task";
+        }
+
         for (int i = 0; i < catalogueCount; i++)
         {
             GameObject catalogueButton = Instantiate(catalogueButtonPrefab, buttonContainer);
