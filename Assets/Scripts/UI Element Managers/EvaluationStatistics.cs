@@ -47,6 +47,13 @@ public class EvaluationStatistics : MonoBehaviour
     {
         currentNumAnswers = numAnswers;
         currentNumCorrectAnswers = numCorrectAnswers;
-        isInAnimation = true;
+        if(currentNumAnswers > 0)
+        {
+            isInAnimation = true;
+        }
+        else
+        {
+            textLabel.text = "Nichts beantwortet";
+        }
     }
 }
