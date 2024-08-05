@@ -7,6 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private RectTransform sideMenuRectTransform;
+    [SerializeField] private RectTransform sideMenuGearIcon;
     [SerializeField] private Button settingsButton;
 
     // Positioning
@@ -45,19 +46,27 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
                 sideMenuRectTransform.anchoredPosition = new Vector2(
                     Mathf.Lerp(startPositionForCurrentAnimation, targetPositionForCurrentAnimation,
                     Mathf.Pow(currentAnimationTime / animationTime, 2.0f)), 0);
+                RotateGear();
             } else
             {
                 sideMenuRectTransform.anchoredPosition = new Vector2(targetPositionForCurrentAnimation, 0);  // Ensure exact final position
+                RotateGear();
                 isInAnimation = false;
             }
         }
     }
 
+    private void RotateGear()
+    {
+        sideMenuGearIcon.rotation = Quaternion.Euler(0, 0, 360 * sideMenuRectTransform.anchoredPosition.x / (Mathf.Abs(onScreenPosition - offScreenPosition)));
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
         sideMenuRectTransform.anchoredPosition = new Vector2(
-            Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), onScreenPosition, offScreenPosition), 
+            Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), onScreenPosition, offScreenPosition),
             0);
+        RotateGear();
     }
 
     public void OnPointerDown(PointerEventData eventData)
