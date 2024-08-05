@@ -21,6 +21,7 @@ public class ButtonNavigation : MonoBehaviour
         }
         else
         {
+            Debug.Log("Loaded Scene directly");
             LoadSceneInternal();
         }
     }
