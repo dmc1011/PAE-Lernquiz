@@ -10,13 +10,17 @@ public class QuizAreaManager : MonoBehaviour
     [SerializeField] private Button questionButton;
     [SerializeField] private Button[] answerButtons = new Button[4];
     [SerializeField] private MonoBehaviour parentScreenManager;
+    [SerializeField] private Color right;
+    [SerializeField] private Color wrong;
 
     private TextMeshProUGUI questionButtonLabel;
     private Question question;
     private AnswerHistoryTable answerHistoryTable;
     private QuestionTable questionTable;
-    private List<TextMeshProUGUI> answerButtonLabels = new List<TextMeshProUGUI>();
-    private List<RectTransform> answerButtonTransforms = new List<RectTransform>();
+    private List<TextMeshProUGUI> answerButtonLabels = new();
+    private List<RectTransform> answerButtonTransforms = new();
+    private List<Image> answerButtonCorrectImages = new();
+    private List<Image> answerButtonWrongImages = new();
     private ColorBlock defaultColorBlock;
 
     // The enum is used so "button objects" can solely stay in the QuizAreaManager.
@@ -38,6 +42,22 @@ public class QuizAreaManager : MonoBehaviour
         {
             answerButtonLabels.Add(button.GetComponentInChildren<TextMeshProUGUI>());
             answerButtonTransforms.Add(button.transform.GetComponent<RectTransform>());
+            Image[] images = button.GetComponentsInChildren<Image>();
+
+            for(int i = 0; i < images.Length; i++)
+            {
+                if (images[i].name == "Correct")
+                    answerButtonCorrectImages.Add(images[i]);
+                else if (images[i].name == "Wrong")
+                    answerButtonWrongImages.Add(images[i]);
+            }
+        }
+        for(int i = 0; i < answerButtonCorrectImages.Count; i++)
+        {
+            answerButtonCorrectImages[i].color = new(Mathf.Clamp(right.r * 2, 0, 1), Mathf.Clamp(right.g * 2, 0, 1), Mathf.Clamp(right.b * 2, 0, 1));
+            answerButtonWrongImages[i].color = new(Mathf.Clamp(wrong.r * 2, 0, 1), Mathf.Clamp(wrong.g * 2, 0, 1), Mathf.Clamp(wrong.b * 2, 0, 1));
+            answerButtonCorrectImages[i].gameObject.SetActive(false);
+            answerButtonWrongImages[i].gameObject.SetActive(false);
         }
 
         // Get the default color of a question button
@@ -63,6 +83,8 @@ public class QuizAreaManager : MonoBehaviour
             answerButtonLabels[i].text = "";
             answerButtons[i].colors = defaultColorBlock;
             answerButtons[i].interactable = true;
+            answerButtonCorrectImages[i].gameObject.SetActive(false);
+            answerButtonWrongImages[i].gameObject.SetActive(false);
         }
         currentlyActiveButton = ButtonID.NONE;
     }
@@ -101,17 +123,19 @@ public class QuizAreaManager : MonoBehaviour
 
         // Always color button A in green.
         ColorBlock cb = button.colors;
-        cb.disabledColor = Color.green;
+        cb.disabledColor = new(right.r, right.g, right.b);
         answerButtons[0].colors = cb;
+        answerButtonCorrectImages[0].gameObject.SetActive(true);
 
         if (currentlyActiveButton != ButtonID.A) // right answer
         {
             wasCorrect = false;
-            cb.disabledColor = Color.red;
+            cb.disabledColor = new(wrong.r, wrong.g, wrong.b);
             button.colors = cb;
+            answerButtonWrongImages[(int)currentlyActiveButton].gameObject.SetActive(true);
         }
 
-        if(wasCorrect)
+        if (wasCorrect)
         {
             question.correctAnsweredCount += 1;
             questionTable.UpdateQuestion(question);
