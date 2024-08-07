@@ -59,6 +59,7 @@ MonoBehaviour:
   - {fileID: 2134035523026212310}
   - {fileID: 4304211736678096700}
   - {fileID: 3516528909610564497}
+  parentScreenManager: {fileID: 0}
 --- !u!1001 &183901278916791750
 PrefabInstance:
   m_ObjectHideFlags: 0
