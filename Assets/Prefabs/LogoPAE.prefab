@@ -58,14 +58,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.9728837, a: 0.59607846}
+  m_Color: {r: 1, g: 0, b: 0.9728837, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1398fefe3ce8cd64899a4fa0ad313ca4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 58c85c0b607974d4297e3243709db856, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2017afeb62d17fb4ca3b14aa0d0af4da, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 061675c3c6f0a234f83f9ed3d2af33e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 6382748530062107142}
   - component: {fileID: 4562679072076163653}
   m_Layer: 5
-  m_Name: Logo
+  m_Name: LogoPAE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -286,14 +286,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9039504, g: 0.28235292, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.8}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d078b897e10c4a74f8a0406b810666a6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 27b36301edd883449a9954d9cecc75ab, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
