@@ -1,11 +1,7 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using static UnityEngine.GraphicsBuffer;
-using UnityEditor.Experimental.GraphView;
 
-public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
+public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
 {
     [SerializeField] private RectTransform sideMenuRectTransform;
     [SerializeField] private RectTransform sideMenuGearIconTransform;
@@ -19,14 +15,15 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
     private float offScreenPosition;
     private bool isOnScreen = false;
     private bool isDragged = false;
-    private bool isIconPressed = false;
+    private bool isGearIconPressed = false;
 
     // Animation
     private bool isInAnimation = false;
     private float targetPositionForCurrentAnimation = 0.0f;
     private float startPositionForCurrentAnimation = 0.0f;
     private float currentAnimationTime = 0.0f;
-    private const float animationTime = 0.4f;
+    private const float defaultAnimationTimeTarget = 0.4f;
+    private float currentAnimationTimeTarget = defaultAnimationTimeTarget;
 
     void Start()
     {
@@ -41,11 +38,11 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         if (isInAnimation)
         {
             currentAnimationTime += Time.deltaTime;
-            if (currentAnimationTime < animationTime)
+            if (currentAnimationTime < currentAnimationTimeTarget)
             {
                 sideMenuRectTransform.anchoredPosition = new Vector2(
                     Mathf.Lerp(startPositionForCurrentAnimation, targetPositionForCurrentAnimation,
-                    Mathf.Pow(currentAnimationTime / animationTime, 2.0f)), 0);
+                    Mathf.Pow(currentAnimationTime / currentAnimationTimeTarget, 2.0f)), 0);
                 RotateGear();
             } else
             {
@@ -62,51 +59,67 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
                 StartAnimation(isAfterHalfPoint());
             }
         }
-    }
 
-    private void RotateGear()
-    {
-        sideMenuGearIconTransform.rotation = Quaternion.Euler(0, 0, 360 * sideMenuRectTransform.anchoredPosition.x / (Mathf.Abs(onScreenPosition - offScreenPosition)));
+        // This fires independent of any raycasts and can replace the "OnPointer" callbacks in a more robust way.
+        if (Input.GetButtonUp("Fire1"))
+            PointerUp();
+
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        isDragged = true;
-        isIconPressed = false;
-        sideMenuRectTransform.anchoredPosition = new Vector2(
-            Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), onScreenPosition, offScreenPosition),
-            0);
-        RotateGear();
+        if (!isDragged)
+        {
+            startPositionX = eventData.position.x;
+            startingAnchoredPositionX = sideMenuRectTransform.anchoredPosition.x;
+            isDragged = true;
+        }
+        else
+        {
+            isGearIconPressed = false;
+            sideMenuRectTransform.anchoredPosition = new Vector2(
+                Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), onScreenPosition, offScreenPosition),
+                0);
+            RotateGear();
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         if (sideMenuGearIconCollider.OverlapPoint(eventData.position))
         {
-            isIconPressed = true;
+            isGearIconPressed = true;
         }
         startPositionX = eventData.position.x;
         startingAnchoredPositionX = sideMenuRectTransform.anchoredPosition.x;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    private void PointerUp()
     {
         isDragged = false;
-        if(isIconPressed)
+        if (isGearIconPressed)
         {
             ToggleMenu();
-            isIconPressed = false;
+            isGearIconPressed = false;
         }
-        
     }
 
     private void StartAnimation(bool shouldOpen)
     {
         targetPositionForCurrentAnimation = shouldOpen ? onScreenPosition : offScreenPosition;
         startPositionForCurrentAnimation = sideMenuRectTransform.anchoredPosition.x;
+
+        // Relative distance from the center ( 0 = exactly centered, 1 = exactly at start or end)
+        float distanceFromBorders = 2 * Mathf.Abs(startPositionForCurrentAnimation - width) / width;
+        currentAnimationTimeTarget = defaultAnimationTimeTarget * Mathf.Pow(1 - distanceFromBorders, 0.5f);
         currentAnimationTime = 0.0f;
         isInAnimation = true;
         isOnScreen = shouldOpen;
+    }
+
+    private void RotateGear()
+    {
+        sideMenuGearIconTransform.rotation = Quaternion.Euler(0, 0, 360 * sideMenuRectTransform.anchoredPosition.x / (Mathf.Abs(onScreenPosition - offScreenPosition)));
     }
 
     private bool isAfterHalfPoint()
