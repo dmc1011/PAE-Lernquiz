@@ -10,7 +10,7 @@ public class QuizAreaManager : MonoBehaviour
     [SerializeField] private Button questionButton;
     [SerializeField] private Button[] answerButtons = new Button[4];
     [SerializeField] private MonoBehaviour parentScreenManager;
-    [SerializeField] private Color right;
+    [SerializeField] private Color correct;
     [SerializeField] private Color wrong;
 
     private TextMeshProUGUI questionButtonLabel;
@@ -27,6 +27,8 @@ public class QuizAreaManager : MonoBehaviour
     // while notifying the outside world about which buttons were pressed is still possible.
     public enum ButtonID { A /* = 0 -> correct answer */, B, C, D, Q, NONE }; 
     private ButtonID currentlyActiveButton = ButtonID.NONE;
+
+    private bool showResultsOnly = false;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +56,7 @@ public class QuizAreaManager : MonoBehaviour
         }
         for(int i = 0; i < answerButtonCorrectImages.Count; i++)
         {
-            answerButtonCorrectImages[i].color = new(Mathf.Clamp(right.r * 2, 0, 1), Mathf.Clamp(right.g * 2, 0, 1), Mathf.Clamp(right.b * 2, 0, 1));
+            answerButtonCorrectImages[i].color = new(Mathf.Clamp(correct.r * 2, 0, 1), Mathf.Clamp(correct.g * 2, 0, 1), Mathf.Clamp(correct.b * 2, 0, 1));
             answerButtonWrongImages[i].color = new(Mathf.Clamp(wrong.r * 2, 0, 1), Mathf.Clamp(wrong.g * 2, 0, 1), Mathf.Clamp(wrong.b * 2, 0, 1));
             answerButtonCorrectImages[i].gameObject.SetActive(false);
             answerButtonWrongImages[i].gameObject.SetActive(false);
@@ -69,10 +71,44 @@ public class QuizAreaManager : MonoBehaviour
     {
         questionButtonLabel.text = q.text;
         question = q;
-
         for (int i = 0; i < answerButtons.Length; i++)
             answerButtonLabels[i].text = q.answers[i].text;
+    }
 
+    public void SetContents(DataManager.QuestionResult result)
+    {
+        showResultsOnly = true;
+        ResetContents();
+        questionButtonLabel.text = result.questionText;
+        int selectedAnswer = 0;
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            answerButtonLabels[i].text = result.answerTexts[i];
+            if (result.answerTexts[i].Equals(result.selectedAnswerText))
+            {
+                selectedAnswer = i;
+            }
+        }
+        SetColorsAndDisable((ButtonID)selectedAnswer);
+    }
+
+    private void SetColorsAndDisable(ButtonID buttonID)
+    {
+        ColorBlock cb;
+        cb = answerButtons[(int)ButtonID.A].colors;
+        cb.disabledColor = new(correct.r, correct.g, correct.b);
+        answerButtons[(int)ButtonID.A].colors = cb;
+        answerButtonCorrectImages[(int)ButtonID.A].gameObject.SetActive(true);
+        if (buttonID != ButtonID.A)
+        {
+            cb = answerButtons[(int)buttonID].colors;
+            cb.disabledColor = new(wrong.r, wrong.g, wrong.b);
+            answerButtons[(int)buttonID].colors = cb;
+            answerButtonWrongImages[(int)buttonID].gameObject.SetActive(true);
+        }
+        for (int i = 0; i < answerButtons.Length; i++)
+            answerButtons[i].interactable = false;
+        questionButton.interactable = false;
     }
 
     // Reset the contents of all buttons
@@ -86,6 +122,7 @@ public class QuizAreaManager : MonoBehaviour
             answerButtonCorrectImages[i].gameObject.SetActive(false);
             answerButtonWrongImages[i].gameObject.SetActive(false);
         }
+        questionButton.interactable = true;
         currentlyActiveButton = ButtonID.NONE;
     }
 
@@ -109,6 +146,10 @@ public class QuizAreaManager : MonoBehaviour
     // Handle the events of button presses
     public void EventButtonPressed(Button button)
     {
+        // While in evaluation, button presses should do nothing.
+        if(showResultsOnly)
+            return;
+
         if(button == questionButton)
             currentlyActiveButton = ButtonID.Q;
         else
@@ -119,32 +160,15 @@ public class QuizAreaManager : MonoBehaviour
         if (currentlyActiveButton == ButtonID.Q)
             return;
 
-        bool wasCorrect = true;
+        SetColorsAndDisable(currentlyActiveButton);
 
-        // Always color button A in green.
-        ColorBlock cb = button.colors;
-        cb.disabledColor = new(right.r, right.g, right.b);
-        answerButtons[0].colors = cb;
-        answerButtonCorrectImages[0].gameObject.SetActive(true);
-
-        if (currentlyActiveButton != ButtonID.A) // right answer
-        {
-            wasCorrect = false;
-            cb.disabledColor = new(wrong.r, wrong.g, wrong.b);
-            button.colors = cb;
-            answerButtonWrongImages[(int)currentlyActiveButton].gameObject.SetActive(true);
-        }
-
+        bool wasCorrect = currentlyActiveButton == ButtonID.A;
         if (wasCorrect)
         {
             question.correctAnsweredCount += 1;
             questionTable.UpdateQuestion(question);
         }
-
         answerHistoryTable.AddAnswerHistory(question.id, wasCorrect);
-
-        for (int i = 0; i < answerButtons.Length; i++)
-            answerButtons[i].interactable = false;
 
         // MS: Ich weiß wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
         // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das ändern.

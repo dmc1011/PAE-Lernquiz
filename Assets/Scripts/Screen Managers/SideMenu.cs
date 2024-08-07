@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
@@ -27,8 +28,15 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
     private const float defaultAnimationTimeTarget = 0.4f;
     private float currentAnimationTimeTarget = defaultAnimationTimeTarget;
 
+    // For EvaluationScreens
+    private bool isEvaluation = false;
+
     void Start()
     {
+        if(SceneManager.GetActiveScene().name == "Evaluation")
+        {
+            isEvaluation = true;
+        }        
         width = Screen.width;
         onScreenPosition = width * 0.5f;
         offScreenPosition = width * 1.5f;
@@ -88,7 +96,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (sideMenuGearIconCollider.OverlapPoint(eventData.position))
+        if (!isEvaluation && sideMenuGearIconCollider.OverlapPoint(eventData.position))
         {
             isGearIconPressed = true;
         }
@@ -128,6 +136,11 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
 
     private void Animations()
     {
+        if(isEvaluation) // There is no gear icon inside evaluations
+        {
+            return;
+        }
+
         float t = sideMenuRectTransform.anchoredPosition.x / (Mathf.Abs(onScreenPosition - offScreenPosition)) - 0.5f;
         // Rotate Gear
         sideMenuGearIconTransform.rotation = Quaternion.Euler(0, 0, 360 * t);
@@ -143,7 +156,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
         return sideMenuRectTransform.anchoredPosition.x < width;
     }
 
-    private void ToggleMenu()
+    public void ToggleMenu()
     {
         StartAnimation(!isOnScreen, true);
     }

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static DataManager;
 
 public class DailyTaskManager : MonoBehaviour
 {
@@ -20,11 +21,8 @@ public class DailyTaskManager : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name != "DailyTask")
-        {
-            print("ERROR [DailyTaskManager.cs:Start()]: Dont use this script in any scene other than DailyTask");
-            return;
-        }
+        PlayerPrefs.SetString("evaluationFor", "DailyTask");
+        PlayerPrefs.Save();
 
         // Get components and set default values
         nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -36,7 +34,6 @@ public class DailyTaskManager : MonoBehaviour
         
         // Display first question
         DisplayNextQuestion();
-        
     }
 
     public void DisplayNextQuestion()
@@ -72,13 +69,14 @@ public class DailyTaskManager : MonoBehaviour
 
     public void SaveAnswerInPlayerPrefs(int questionIndex, int answerIndex, Catalogue catalogue)
     {
-        bool isCorrect = answerIndex == 0;
-        Question question = catalogue.questions[questionIndex];
-        Answer answer = question.answers[answerIndex];
-
-        PlayerPrefs.SetString($"dailyQuestion{questionCount}", question.text);
-        PlayerPrefs.SetString($"dailyAnswer{questionCount}", answer.text);
-        PlayerPrefs.SetInt($"dailyAnswerCorrect{questionCount}", isCorrect == true ? 1 : 0);
+        DataManager.QuestionResult questionResult = new DataManager.QuestionResult(questionIndex, answerIndex, catalogue);
+        PlayerPrefs.SetString($"dailyQuestion{questionCount}", questionResult.questionText);
+        PlayerPrefs.SetString($"dailyAnswerA{questionCount}", questionResult.answerTexts[0]);
+        PlayerPrefs.SetString($"dailyAnswerB{questionCount}", questionResult.answerTexts[1]);
+        PlayerPrefs.SetString($"dailyAnswerC{questionCount}", questionResult.answerTexts[2]);
+        PlayerPrefs.SetString($"dailyAnswerD{questionCount}", questionResult.answerTexts[3]);
+        PlayerPrefs.SetString($"dailyAnswer{questionCount}", questionResult.selectedAnswerText);
+        PlayerPrefs.SetInt($"dailyAnswerCorrect{questionCount}", questionResult.isCorrect ? 1 : 0);
         PlayerPrefs.Save();
         Debug.Log("Saved Question " + questionCount);
     }
@@ -112,6 +110,6 @@ public class DailyTaskManager : MonoBehaviour
       // Update is called once per frame
     public void LoadNextScene()
     {
-        SceneManager.LoadScene("DailyTaskEvaluation");
+        SceneManager.LoadScene("Evaluation");
     }
 }
