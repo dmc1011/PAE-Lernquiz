@@ -9,6 +9,9 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
     [SerializeField] private RectTransform sideMenuGearIconTransform;
     [SerializeField] private CircleCollider2D sideMenuGearIconCollider;
     [SerializeField] private Image sideMenuHandleInner;
+    [SerializeField] private Image sideMenuHandleOuter;
+    [SerializeField] private Color colorInner;
+    [SerializeField] private Color colorOuter;
 
     // Positioning
     private float width;
@@ -146,9 +149,8 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
         sideMenuGearIconTransform.rotation = Quaternion.Euler(0, 0, 360 * t);
 
         // Dynamically blend inner handle
-        Color c = sideMenuHandleInner.color;
-        sideMenuHandleInner.color = new(c.r, c.g, c.b, 1-t);
-    
+        sideMenuHandleInner.color = Color.Lerp(colorOuter, colorInner, t);
+        sideMenuHandleOuter.color = Color.Lerp(colorOuter, colorInner, t);
     }
 
     private bool isAfterHalfPoint()

@@ -1627,6 +1627,9 @@ MonoBehaviour:
   sideMenuGearIconTransform: {fileID: 1554957938}
   sideMenuGearIconCollider: {fileID: 1554957942}
   sideMenuHandleInner: {fileID: 823084261}
+  sideMenuHandleOuter: {fileID: 2013265180}
+  colorInner: {r: 0.5647059, g: 0.007843138, b: 1, a: 1}
+  colorOuter: {r: 0.19607843, g: 0, b: 0.34901962, a: 1}
 --- !u!222 &1574602048
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1877,6 +1880,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2013265180 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4760432369191979135, guid: f854456269739b04dbcee5646eccac88, type: 3}
+  m_PrefabInstance: {fileID: 7924594859935907731}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &6217846246625465536
