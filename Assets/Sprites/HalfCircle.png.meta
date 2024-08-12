@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bc3f80ce13455e24199998366ce54dd5
+guid: 37ebfc7bbe55ae547828f08c77182cb5
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -173,18 +173,40 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: HalfCircle_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 254
+        height: 127
+      alignment: 9
+      pivot: {x: 0.5, y: 0.008}
+      border: {x: 126, y: 0, z: 126, w: 125}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42518d83f73a1bd4eb59c14b286fd529
+      internalID: -1107746977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      HalfCircle_0: -1107746977
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

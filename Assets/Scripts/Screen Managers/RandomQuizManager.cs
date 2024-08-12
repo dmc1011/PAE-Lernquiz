@@ -21,6 +21,9 @@ public class RandomQuizManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.SetString("evaluationFor", "RandomQuiz");
+        PlayerPrefs.Save();
+
         DataManager.ClearResults();
 
         if (SceneManager.GetActiveScene().name != "RandomQuiz")
