@@ -1,7 +1,5 @@
 using System.Linq;
-using System.Runtime.CompilerServices;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Global;
@@ -131,7 +129,7 @@ public class CatalogueButtonHandler : MonoBehaviour
 
         // start statistics
         StatisticManager.isDailyTaskStatistic = false;
-        Global.CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
+        CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
 
         LoadScene("Statistics");
     }
