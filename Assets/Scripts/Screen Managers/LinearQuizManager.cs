@@ -37,6 +37,10 @@ public class LinearQuizManager : MonoBehaviour
         startTime = DateTime.Now;
         sessionStartTime = DateTime.Now;
 
+        int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
+        if (currentQuestionIndex != -1)
+            nextQuestionIndex = currentQuestionIndex;
+
         // Display the first question
         DisplayNextQuestion();
     }
