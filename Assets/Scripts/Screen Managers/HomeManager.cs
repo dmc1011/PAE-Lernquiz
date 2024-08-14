@@ -39,7 +39,8 @@ public class HomeManager : MonoBehaviour
         // show evaluation if daily task has already been completed
         if (IsDailyTaskCompleted())
         {
-            LoadDailyTaskScene("DailyTaskEvaluation");
+            Global.CurrentQuestionRound.gameMode = Global.GameMode.DailyTask;
+            LoadDailyTaskScene("Evaluation");
             return;
         }
 

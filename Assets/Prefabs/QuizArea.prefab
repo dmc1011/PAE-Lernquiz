@@ -60,8 +60,8 @@ MonoBehaviour:
   - {fileID: 4304211736678096700}
   - {fileID: 3516528909610564497}
   parentScreenManager: {fileID: 0}
-  correct: {r: 0, g: 0.7058824, b: 0, a: 0}
-  wrong: {r: 0.7, g: 0, b: 0, a: 1}
+  correct: {r: 0.3160377, g: 1, b: 0.3160377, a: 0}
+  wrong: {r: 1, g: 0.1745283, b: 0.1745283, a: 1}
 --- !u!1001 &183901278916791750
 PrefabInstance:
   m_ObjectHideFlags: 0

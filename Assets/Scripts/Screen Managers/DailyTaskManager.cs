@@ -78,7 +78,6 @@ public class DailyTaskManager : MonoBehaviour
         PlayerPrefs.SetString($"dailyAnswer{questionCount}", questionResult.selectedAnswerText);
         PlayerPrefs.SetInt($"dailyAnswerCorrect{questionCount}", questionResult.isCorrect ? 1 : 0);
         PlayerPrefs.Save();
-        Debug.Log("Saved Question " + questionCount);
     }
 
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
