@@ -12,7 +12,10 @@ public class QuizAreaManager : MonoBehaviour
     [SerializeField] private MonoBehaviour parentScreenManager;
     [SerializeField] private Color correct;
     [SerializeField] private Color wrong;
-
+    [SerializeField] private GameObject bookmarkIcon;
+    [SerializeField] private Color bookmarkActiveColor = new Color(255, 222, 6, 255);
+    
+    private bool isBookmarkSet;
     private TextMeshProUGUI questionButtonLabel;
     private Question question;
     private AnswerHistoryTable answerHistoryTable;
@@ -64,6 +67,8 @@ public class QuizAreaManager : MonoBehaviour
 
         // Get the default color of a question button
         defaultColorBlock = answerButtons[0].colors;
+
+        isBookmarkSet = false;
     }
 
     // Set the contents of all buttons
@@ -170,10 +175,26 @@ public class QuizAreaManager : MonoBehaviour
         }
         answerHistoryTable.AddAnswerHistory(question.id, wasCorrect);
 
-        // MS: Ich weiß wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
-        // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das ändern.
+        // MS: Ich weiï¿½ wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
+        // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das ï¿½ndern.
         parentScreenManager.BroadcastMessage("EventButtonPressedCallback", currentlyActiveButton);
         
+    }
+
+    public void SetBookmarkIcon ()
+    {
+        Image img = bookmarkIcon.GetComponent<Image>();
+
+            if (!isBookmarkSet) 
+            {
+                isBookmarkSet = !isBookmarkSet;
+                img.color = bookmarkActiveColor;
+            } 
+            else 
+            {
+                isBookmarkSet = !isBookmarkSet;
+                img.color = Color.white;
+            }
     }
 
 }
