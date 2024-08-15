@@ -19,6 +19,7 @@ public class LinearQuizManager : MonoBehaviour
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private DateTime startTime;
     private DateTime sessionStartTime;
+    private int firstAnsweredQuestionIndex; 
 
     // Start is called before the first frame update
     void Start()
@@ -38,8 +39,10 @@ public class LinearQuizManager : MonoBehaviour
         sessionStartTime = DateTime.Now;
 
         int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
-        if (currentQuestionIndex != -1)
+        if (currentQuestionIndex != -1) 
             nextQuestionIndex = currentQuestionIndex;
+
+        firstAnsweredQuestionIndex = nextQuestionIndex;
 
         // Display the first question
         DisplayNextQuestion();
@@ -54,9 +57,11 @@ public class LinearQuizManager : MonoBehaviour
             nextQuestionIndex = 0;
             TimeSpan duration = DateTime.Now - sessionStartTime;
             int secondsSpent = (int)duration.TotalSeconds;
+            if (firstAnsweredQuestionIndex == 0)
+                catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, secondsSpent);
 
-            catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, secondsSpent);
             sessionStartTime = DateTime.Now;
+            firstAnsweredQuestionIndex = 0;
         }
 
         Question nextQuestion = questions[nextQuestionIndex];

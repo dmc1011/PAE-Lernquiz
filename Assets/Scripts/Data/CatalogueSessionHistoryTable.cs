@@ -39,7 +39,7 @@ public class CatalogueSessionHistoryTable
     {
         List<CatalogueSessionHistory> catalogueSessionHistories = new List<CatalogueSessionHistory>();
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId";
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId ORDER BY SessionDate DESC";
         dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
 
         IDataReader reader = dbcmd.ExecuteReader();
@@ -51,5 +51,23 @@ public class CatalogueSessionHistoryTable
             catalogueSessionHistories.Add(new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent));
         }
         return catalogueSessionHistories;
+    }
+
+    public CatalogueSessionHistory FindLatestCatalogueSessionHistoryByCatalogueId(int catalogueId)
+    {
+        CatalogueSessionHistory catalogueSessionHistory = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId ORDER BY SessionDate DESC LIMIT 1";
+        dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
+
+        IDataReader reader = dbcmd.ExecuteReader();
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            int timeSpent = Convert.ToInt32(reader["TimeSpent"]);
+            DateTime sessionDate = (DateTime)reader["SessionDate"];
+            catalogueSessionHistory = new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent);
+        }
+        return catalogueSessionHistory;
     }
 }

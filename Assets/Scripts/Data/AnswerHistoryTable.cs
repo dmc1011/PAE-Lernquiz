@@ -52,4 +52,22 @@ public class AnswerHistoryTable
         }
         return answerHistory;
     }
+
+    public AnswerHistory FindLatestAnswerHistoryByQuestionId(int questionId)
+    {
+        AnswerHistory answerHistory = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE QuestionId = @QuestionId ORDER BY AnswerDate DESC LIMIT 1";
+        dbcmd.Parameters.Add(new SqliteParameter("@QuestionId", questionId));
+
+        IDataReader reader = dbcmd.ExecuteReader();
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            bool wasCorrect = (bool)reader["WasCorrect"];
+            DateTime answerDate = (DateTime)reader["answerDate"];
+            answerHistory = new AnswerHistory(id, questionId, answerDate, wasCorrect);
+        }
+        return answerHistory;
+    }
 }
