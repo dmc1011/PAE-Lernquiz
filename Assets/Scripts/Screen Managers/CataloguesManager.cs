@@ -147,7 +147,7 @@ public class CataloguesManager : MonoBehaviour
                     newQuestionCounter++;
             }
 
-            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), "", 0, -1, answers, new List<AnswerHistory>());
+            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), "", 0, -1, false, answers, new List<AnswerHistory>());
             questionIndexAfterReset = questionSelection.value;
 
             if (currentCatalogue == Global.tmpCatalogue)

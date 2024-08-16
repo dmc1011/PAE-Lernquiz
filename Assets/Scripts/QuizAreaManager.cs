@@ -197,4 +197,10 @@ public class QuizAreaManager : MonoBehaviour
             }
     }
 
+    public void SaveBookmark()
+    {
+        question.enabledForPractice = isBookmarkSet;
+        questionTable.UpdateQuestion(question);
+    }
+
 }

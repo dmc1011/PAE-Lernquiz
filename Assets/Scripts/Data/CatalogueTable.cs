@@ -203,9 +203,10 @@ public class CatalogueTable
             string text = reader["Text"].ToString();
             string name = reader["Name"].ToString();
             int correctAnsweredCount = Convert.ToInt32(reader["CorrectAnsweredCount"]);
+            bool enabledForPractice = (bool)reader["EnabledForPractice"];
             List<Answer> answers = FindAnswersByQuestionId(id);
             List<AnswerHistory> answerHistory = answerHistoryTable.FindAnswerHistoryByQuestionId(id);
-            questions.Add(new Question(id, text, name, correctAnsweredCount, catalogueId, answers, answerHistory));
+            questions.Add(new Question(id, text, name, correctAnsweredCount, catalogueId, enabledForPractice, answers, answerHistory));
         }
         return questions;
     }
