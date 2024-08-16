@@ -1002,6 +1002,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 9118554949605893179, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
   m_PrefabInstance: {fileID: 1420540447}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1420540449 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 990465694013008213, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+  m_PrefabInstance: {fileID: 1420540447}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1507544111 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7144070815074321500, guid: b532d954940c2c64fae4dc8b029e143b, type: 3}
@@ -1192,6 +1197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   evaluationButtonPrefab: {fileID: 2726896529737572801, guid: b761413e388307f44a1a018ee45b680b, type: 3}
+  NewGameButton: {fileID: 1420540449}
   evaluationStatistics: {fileID: 2013586110}
   scrollTransform: {fileID: 1507544111}
   sideMenu: {fileID: 32766211}
