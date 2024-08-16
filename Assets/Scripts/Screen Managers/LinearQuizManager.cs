@@ -17,9 +17,10 @@ public class LinearQuizManager : MonoBehaviour
     private int nextQuestionIndex = 0;
     private CatalogueTable catalogueTable;
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
+    private AnswerHistoryTable answerHistoryTable;
     private DateTime startTime;
-    private DateTime sessionStartTime;
-    private int firstAnsweredQuestionIndex; 
+    private DateTime subSessionStartTime;
+    private int currentSessionId;
 
     // Start is called before the first frame update
     void Start()
@@ -30,19 +31,29 @@ public class LinearQuizManager : MonoBehaviour
         DataManager.ClearResults();
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
         catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
+        answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
 
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         questions = currentCatalogue.questions;
         nextButton.interactable = false;
         startTime = DateTime.Now;
-        sessionStartTime = DateTime.Now;
+        subSessionStartTime = DateTime.Now;
 
         int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
         if (currentQuestionIndex != -1) 
             nextQuestionIndex = currentQuestionIndex;
 
-        firstAnsweredQuestionIndex = nextQuestionIndex;
+        if (nextQuestionIndex == 0) {
+            // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
+            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
+            currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
+        }  
+        else {
+            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
+            currentSessionId = currentSession.id;
+        }
+        
 
         // Display the first question
         DisplayNextQuestion();
@@ -55,13 +66,11 @@ public class LinearQuizManager : MonoBehaviour
         if (nextQuestionIndex >= questions.Count)
         {
             nextQuestionIndex = 0;
-            TimeSpan duration = DateTime.Now - sessionStartTime;
-            int secondsSpent = (int)duration.TotalSeconds;
-            if (firstAnsweredQuestionIndex == 0)
-                catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, secondsSpent);
 
-            sessionStartTime = DateTime.Now;
-            firstAnsweredQuestionIndex = 0;
+            UpdateSessionHistory();
+            int newSessionId = catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false);
+            currentSessionId = newSessionId;
+            subSessionStartTime = DateTime.Now;
         }
 
         Question nextQuestion = questions[nextQuestionIndex];
@@ -109,6 +118,7 @@ public class LinearQuizManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        UpdateSessionHistory();
         SaveTimeSpent();
     }
 
@@ -120,6 +130,20 @@ public class LinearQuizManager : MonoBehaviour
         // Update TotalTimeSpent in the current catalogue
         currentCatalogue.totalTimeSpent += secondsSpent;
         catalogueTable.UpdateCatalogue(currentCatalogue);
+
+        UpdateSessionHistory();
+    }
+
+    private void UpdateSessionHistory()
+    {
+        TimeSpan duration = DateTime.Now - subSessionStartTime;
+        int secondsSpent = (int)duration.TotalSeconds;
+
+        CatalogueSessionHistory currentSessionHistory = catalogueSessionHistoryTable.FindCatalogueSessionHistoryById(currentSessionId);
+        List<AnswerHistory> answerHistoriesForSession = answerHistoryTable.FindAnswerHistoryBySessionId(currentSessionId);
+        bool sessionCompleted = answerHistoriesForSession.Count == currentCatalogue.questions.Count;
+
+        catalogueSessionHistoryTable.UpdateCatalogueSessionHistory(currentSessionId, currentSessionHistory.timeSpent + secondsSpent, sessionCompleted);
     }
 }
 

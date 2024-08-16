@@ -90,13 +90,16 @@ public class SQLiteSetup : MonoBehaviour
                 QuestionId INTEGER,
                 AnswerDate DATETIME,
                 WasCorrect BOOLEAN,
-                FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
+                SessionId INTEGER,
+                FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE,
+                FOREIGN KEY(SessionId) REFERENCES CatalogueSessionHistory(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS CatalogueSessionHistory (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 CatalogueId INTEGER,
                 SessionDate DATETIME,
                 TimeSpent INTEGER,
+                IsCompleted BOOL,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
         ";
