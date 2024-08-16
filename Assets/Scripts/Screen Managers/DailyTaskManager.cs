@@ -56,7 +56,7 @@ public class DailyTaskManager : MonoBehaviour
         if (questionCount == questionLimit - 1)
             nextButtonLabel.text = "Beenden";
 
-        Fragenummer.text = "Daily Task, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
+        Fragenummer.text = "Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
         nextButton.interactable = false;
         questionCount += 1; // questionCount will be 0 when first question is displayed
 
@@ -78,7 +78,6 @@ public class DailyTaskManager : MonoBehaviour
         PlayerPrefs.SetString($"dailyAnswer{questionCount}", questionResult.selectedAnswerText);
         PlayerPrefs.SetInt($"dailyAnswerCorrect{questionCount}", questionResult.isCorrect ? 1 : 0);
         PlayerPrefs.Save();
-        Debug.Log("Saved Question " + questionCount);
     }
 
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)

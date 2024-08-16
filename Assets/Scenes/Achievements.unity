@@ -299,6 +299,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Achievements
       objectReference: {fileID: 0}
+    - target: {fileID: 84408647635785776, guid: 70119fa4c5fe33f49be0700eaa2d6a1e, type: 3}
+      propertyPath: m_fontSize
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 84408647635785776, guid: 70119fa4c5fe33f49be0700eaa2d6a1e, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 3747386886168633014, guid: 70119fa4c5fe33f49be0700eaa2d6a1e, type: 3}
       propertyPath: m_Name
       value: Canvas
