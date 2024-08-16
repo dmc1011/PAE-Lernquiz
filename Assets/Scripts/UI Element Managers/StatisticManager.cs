@@ -79,21 +79,23 @@ public class StatisticManager : MonoBehaviour
 
         int isCorrectCount = 0;
         int isFalseCount = 0;
-        int notAnsweredCount = 0;
-        foreach (var question in currentCatalogue.questions)
+        int notAnsweredCount = currentCatalogue.questions.Count;
+        if (catalogueSessionHistories.Count > 0)
         {
-            AnswerHistory answerhistory = answerHistoryTable.FindLatestAnswerHistoryByQuestionId(question.id);
-            if (answerhistory == null)
+            CatalogueSessionHistory session = catalogueSessionHistories[0];
+            List<AnswerHistory> answerHistories = answerHistoryTable.FindAnswerHistoryBySessionId(session.id);
+            foreach (var answerHistory in answerHistories)
             {
-                notAnsweredCount++;
-                continue;
+                bool wasCorrect = answerHistory.wasCorrect;
+                if (wasCorrect)
+                    isCorrectCount++;
+                else
+                    isFalseCount++;
+
+                notAnsweredCount--;
             }
-            bool wasCorrect = answerhistory.wasCorrect;
-            if (wasCorrect)
-                isCorrectCount++;
-            else
-                isFalseCount++;
         }
+        
         barConfig.SetValue(isCorrectCount, isFalseCount, notAnsweredCount);
     }
 }
