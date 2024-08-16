@@ -495,6 +495,18 @@ PrefabInstance:
       value: Question
       objectReference: {fileID: 0}
     - target: {fileID: 5372156770757845957, guid: deda472d2e933354a8c39f34d58b1ae7, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372156770757845957, guid: deda472d2e933354a8c39f34d58b1ae7, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.g
+      value: 0.7764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372156770757845957, guid: deda472d2e933354a8c39f34d58b1ae7, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.r
+      value: 0.8666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372156770757845957, guid: deda472d2e933354a8c39f34d58b1ae7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}

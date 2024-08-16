@@ -46,8 +46,8 @@ public class SQLiteSetup : MonoBehaviour
         }
 
         // TODO: delete as soon as editor is implemented
-        // AddCatalogueFromJson("Catalogue/0.json");
-        // AddCatalogueFromJson("Catalogue/1.json");
+        //AddCatalogueFromJson("Catalogue/0.json");
+        //AddCatalogueFromJson("Catalogue/1.json");
 
     }
 
