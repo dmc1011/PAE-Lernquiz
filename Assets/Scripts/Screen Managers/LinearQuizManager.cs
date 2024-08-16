@@ -143,6 +143,12 @@ public class LinearQuizManager : MonoBehaviour
         List<AnswerHistory> answerHistoriesForSession = answerHistoryTable.FindAnswerHistoryBySessionId(currentSessionId);
         bool sessionCompleted = answerHistoriesForSession.Count == currentCatalogue.questions.Count;
 
+        if (sessionCompleted)
+        {
+            currentCatalogue.sessionCount = currentCatalogue.sessionCount + 1;
+            catalogueTable.UpdateCatalogue(currentCatalogue);
+        }
+
         catalogueSessionHistoryTable.UpdateCatalogueSessionHistory(currentSessionId, currentSessionHistory.timeSpent + secondsSpent, sessionCompleted);
     }
 }

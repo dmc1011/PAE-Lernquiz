@@ -41,6 +41,7 @@ public class StatisticManager : MonoBehaviour
         {
             dailyTaskStatisticPanel.gameObject.SetActive(false);
             catalogueNameDisplay.text = Global.CurrentQuestionRound.catalogue.name;
+            catalogueLevelDisplay.text = "Stufe " + Global.CurrentQuestionRound.catalogue.sessionCount.ToString();
 
             catalogueSessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
             SetStatistics();

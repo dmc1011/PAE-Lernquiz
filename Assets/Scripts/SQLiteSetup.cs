@@ -68,6 +68,7 @@ public class SQLiteSetup : MonoBehaviour
                 Name TEXT,
                 CurrentQuestionId INTEGER,
                 TotalTimeSpent INTEGER DEFAULT 0,
+                SessionCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CurrentQuestionId) REFERENCES Question(Id)
             );
             CREATE TABLE IF NOT EXISTS Question (

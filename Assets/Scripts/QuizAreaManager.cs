@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class QuizAreaManager : MonoBehaviour
 {
@@ -175,8 +176,12 @@ public class QuizAreaManager : MonoBehaviour
             question.correctAnsweredCount += 1;
             questionTable.UpdateQuestion(question);
         }
-        CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(question.catalogueId);
-        answerHistoryTable.AddAnswerHistory(question.id, wasCorrect, currentSession.id);
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene.Equals("LinearQuiz"))
+        {
+            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(question.catalogueId);
+            answerHistoryTable.AddAnswerHistory(question.id, wasCorrect, currentSession.id);
+        }
 
         // MS: Ich wei� wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
         // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das �ndern.
