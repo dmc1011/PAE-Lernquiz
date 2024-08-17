@@ -267,6 +267,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 662dc0cebaf6d2f4e954f7f947dbe104, type: 3}
+--- !u!114 &51238070 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3436985541284246051, guid: 662dc0cebaf6d2f4e954f7f947dbe104, type: 3}
+  m_PrefabInstance: {fileID: 51238069}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdb157558be213499cb8631185a28cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &64320159
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +580,7 @@ MonoBehaviour:
   catalogueNameDisplay: {fileID: 9052656366774168133}
   catalogueLevelDisplay: {fileID: 205981270}
   timeValuesDisplay: {fileID: 1819154172}
+  barConfig: {fileID: 51238070}
 --- !u!114 &413502104 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8690889484828672911, guid: 70119fa4c5fe33f49be0700eaa2d6a1e, type: 3}
@@ -997,9 +1009,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Antworten im aktuellen Durchlauf
-
-'
+  m_text: Antworten im aktuellen Durchlauf
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

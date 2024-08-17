@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class QuizAreaManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class QuizAreaManager : MonoBehaviour
     private TextMeshProUGUI questionButtonLabel;
     private Question question;
     private AnswerHistoryTable answerHistoryTable;
+    private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private QuestionTable questionTable;
     private List<TextMeshProUGUI> answerButtonLabels = new();
     private List<RectTransform> answerButtonTransforms = new();
@@ -38,6 +40,7 @@ public class QuizAreaManager : MonoBehaviour
     {
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
         questionTable = SQLiteSetup.Instance.questionTable;
+        catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
 
         // Get components for questionButton
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -173,7 +176,12 @@ public class QuizAreaManager : MonoBehaviour
             question.correctAnsweredCount += 1;
             questionTable.UpdateQuestion(question);
         }
-        answerHistoryTable.AddAnswerHistory(question.id, wasCorrect);
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene.Equals("LinearQuiz"))
+        {
+            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(question.catalogueId);
+            answerHistoryTable.AddAnswerHistory(question.id, wasCorrect, currentSession.id);
+        }
 
         // MS: Ich wei� wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
         // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das �ndern.

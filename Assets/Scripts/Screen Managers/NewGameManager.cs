@@ -16,6 +16,9 @@ public class NewGameManager : MonoBehaviour
     [HideInInspector] public static List<Catalogue> catalogues;
     [HideInInspector] public static Global.GameMode gameMode;
 
+    private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
+    private AnswerHistoryTable answerHistoryTable;
+
     void Start()
     {
         // Failsafe
@@ -26,6 +29,8 @@ public class NewGameManager : MonoBehaviour
         }
 
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
+        answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
         catalogues = catalogueTable.FindAllCatalogues();
         catalogueCount = catalogues.Count;
         gameMode = Global.CurrentQuestionRound.gameMode;       // get current GameMode: defines behavior of events triggered by selecting a catalogue
@@ -51,6 +56,7 @@ public class NewGameManager : MonoBehaviour
         for (int i = 0; i < catalogueCount; i++)
         {
             GameObject catalogueButton = Instantiate(catalogueButtonPrefab, buttonContainer);
+            SliderConfig sliderConfig = catalogueButton.GetComponentInChildren<SliderConfig>();
 
             // set background on runtime
             var manager = catalogueButton.GetComponent<CatalogueButtonHandler>();
@@ -59,6 +65,33 @@ public class NewGameManager : MonoBehaviour
             // display catalogue name on button
             TextMeshProUGUI buttonLabel = catalogueButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonLabel.text = catalogues[i].name;
+
+            SetProgressCircleStatistics(catalogues[i], sliderConfig);
         }
+    }
+
+    private void SetProgressCircleStatistics(Catalogue catalogue, SliderConfig sliderConfig)
+    {
+        int isCorrectCount = 0;
+        int isFalseCount = 0;
+        int notAnsweredCount = catalogue.questions.Count;
+        CatalogueSessionHistory session = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(catalogue.id);
+        if (session != null)
+        {
+            List<AnswerHistory> answerHistories = answerHistoryTable.FindAnswerHistoryBySessionId(session.id);
+            foreach (var answerHistory in answerHistories)
+            {
+                bool wasCorrect = answerHistory.wasCorrect;
+                if (wasCorrect)
+                    isCorrectCount++;
+                else
+                    isFalseCount++;
+
+                notAnsweredCount--;
+            }
+        }
+       
+        sliderConfig.SetValue(isCorrectCount, isFalseCount, notAnsweredCount);
+        sliderConfig.SetLabel(catalogue.sessionCount.ToString());
     }
 }

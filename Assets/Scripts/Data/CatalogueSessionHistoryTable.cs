@@ -13,14 +13,18 @@ public class CatalogueSessionHistoryTable
         this.dbConnection = dbConnection;
     }
 
-    public void AddCatalogueSessionHistory(int catalogueId, int timeSpent)
+    public int AddCatalogueSessionHistory(int catalogueId, int timeSpent, bool isCompleted)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (CatalogueId, SessionDate, TimeSpent) VALUES(@CatalogueId, @SessionDate, @TimeSpent)";
+        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (CatalogueId, SessionDate, TimeSpent, IsCompleted) VALUES(@CatalogueId, @SessionDate, @TimeSpent, @IsCompleted)";
         dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
         dbcmd.Parameters.Add(new SqliteParameter("@SessionDate", DateTime.Now));
         dbcmd.Parameters.Add(new SqliteParameter("@TimeSpent", timeSpent));
+        dbcmd.Parameters.Add(new SqliteParameter("@IsCompleted", isCompleted));
         dbcmd.ExecuteNonQuery();
+
+        dbcmd.CommandText = "SELECT last_insert_rowid()";
+        int newSessionId = Convert.ToInt32(dbcmd.ExecuteScalar());
 
         // check number of history entries for catalgoue
         dbcmd.CommandText = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId";
@@ -33,13 +37,45 @@ public class CatalogueSessionHistoryTable
             dbcmd.CommandText = "DELETE FROM " + TABLE_NAME + " WHERE Id IN (SELECT Id FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId ORDER BY SessionDate ASC LIMIT 1)";
             dbcmd.ExecuteNonQuery();
         }
+        return newSessionId;
+    }
+
+    public void UpdateCatalogueSessionHistory(int sessionId, int timeSpent, bool isCompleted)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET TimeSpent = @TimeSpent, IsCompleted = @IsCompleted WHERE Id = @SessionId";
+        dbcmd.Parameters.Add(new SqliteParameter("@TimeSpent", timeSpent));
+        dbcmd.Parameters.Add(new SqliteParameter("@IsCompleted", isCompleted));
+        dbcmd.Parameters.Add(new SqliteParameter("@SessionId", sessionId));
+
+        dbcmd.ExecuteNonQuery();
+    }
+
+    public CatalogueSessionHistory FindCatalogueSessionHistoryById(int sessionId)
+    {
+        CatalogueSessionHistory catalogueSessionHistory = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE Id = @Id LIMIT 1";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", sessionId));
+
+        IDataReader reader = dbcmd.ExecuteReader();
+        while (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            int catalogueId = Convert.ToInt32(reader["CatalogueId"]);
+            int timeSpent = Convert.ToInt32(reader["TimeSpent"]);
+            DateTime sessionDate = (DateTime)reader["SessionDate"];
+            bool isCompleted = (bool)reader["IsCompleted"];
+            catalogueSessionHistory = new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted);
+        }
+        return catalogueSessionHistory;
     }
 
     public List<CatalogueSessionHistory> FindCatalogueSessionHistoryByCatalogueId(int catalogueId)
     {
         List<CatalogueSessionHistory> catalogueSessionHistories = new List<CatalogueSessionHistory>();
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId";
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId ORDER BY SessionDate DESC";
         dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
 
         IDataReader reader = dbcmd.ExecuteReader();
@@ -48,8 +84,28 @@ public class CatalogueSessionHistoryTable
             int id = Convert.ToInt32(reader["Id"]);
             int timeSpent = Convert.ToInt32(reader["TimeSpent"]);
             DateTime sessionDate = (DateTime)reader["SessionDate"];
-            catalogueSessionHistories.Add(new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent));
+            bool isCompleted = (bool)reader["IsCompleted"];
+            catalogueSessionHistories.Add(new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted));
         }
         return catalogueSessionHistories;
+    }
+
+    public CatalogueSessionHistory FindLatestCatalogueSessionHistoryByCatalogueId(int catalogueId)
+    {
+        CatalogueSessionHistory catalogueSessionHistory = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE CatalogueId = @CatalogueId ORDER BY SessionDate DESC LIMIT 1";
+        dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
+
+        IDataReader reader = dbcmd.ExecuteReader();
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            int timeSpent = Convert.ToInt32(reader["TimeSpent"]);
+            DateTime sessionDate = (DateTime)reader["SessionDate"];
+            bool isCompleted = (bool)reader["IsCompleted"];
+            catalogueSessionHistory = new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted);
+        }
+        return catalogueSessionHistory;
     }
 }
