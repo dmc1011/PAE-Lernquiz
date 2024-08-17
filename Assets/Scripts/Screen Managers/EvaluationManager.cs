@@ -32,6 +32,7 @@ public class EvaluationManager : MonoBehaviour
                 break;
             case Global.GameMode.LinearQuiz:
             case Global.GameMode.RandomQuiz:
+            case Global.GameMode.PracticeBook:
                 LoadResults(DataManager.QuestionResults);
                 break;
             default:

@@ -40,20 +40,7 @@ public class LinearQuizManager : MonoBehaviour
         startTime = DateTime.Now;
         subSessionStartTime = DateTime.Now;
 
-        int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
-        if (currentQuestionIndex != -1) 
-            nextQuestionIndex = currentQuestionIndex;
-
-        if (nextQuestionIndex == 0) {
-            // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
-            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
-            currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
-        }  
-        else {
-            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
-            currentSessionId = currentSession.id;
-        }
-        
+        SetEntryPoint();
 
         // Display the first question
         DisplayNextQuestion();
@@ -150,6 +137,26 @@ public class LinearQuizManager : MonoBehaviour
         }
 
         catalogueSessionHistoryTable.UpdateCatalogueSessionHistory(currentSessionId, currentSessionHistory.timeSpent + secondsSpent, sessionCompleted);
+    }
+
+    private void SetEntryPoint()
+    {
+
+        int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
+        if (currentQuestionIndex != -1)
+            nextQuestionIndex = currentQuestionIndex;
+
+        if (nextQuestionIndex == 0)
+        {
+            // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
+            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
+            currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
+        }
+        else
+        {
+            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
+            currentSessionId = currentSession.id;
+        }
     }
 }
 
