@@ -45,9 +45,7 @@ public class HomeManager : MonoBehaviour
         }
 
         // load chosen catalogue into global data
-        List<Catalogue> allCatalogues = catalogueTable.FindAllCatalogues();
-        int randomIndex = UnityEngine.Random.Range(0, allCatalogues.Count);
-        Catalogue randomCatalogue = allCatalogues[randomIndex];
+        Catalogue randomCatalogue = catalogueTable.FindRandomCatalogue();
         Global.CurrentDailyTask.catalogueIndex = randomCatalogue.id;
         Global.CurrentDailyTask.catalogue = randomCatalogue;
         PlayerPrefs.SetInt("DailyTaskCatalogueId", Global.CurrentDailyTask.catalogueIndex);

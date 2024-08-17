@@ -73,9 +73,10 @@ public class CatalogueTable
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
+            int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogues.Add(new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories));
+            catalogues.Add(new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, questions, sessionHistories));
         }
         return catalogues;
     }
@@ -97,9 +98,10 @@ public class CatalogueTable
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
+            int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, questions, sessionHistories);
         }
         return catalogue;
     }
@@ -121,9 +123,10 @@ public class CatalogueTable
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
+            int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(catalogueId);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, questions, sessionHistories);
         }
         return catalogue;
     }
@@ -151,13 +154,15 @@ public class CatalogueTable
             UPDATE " + TABLE_NAME + @"
             SET Name = @Name,
                 CurrentQuestionId = @CurrentQuestionId,
-                TotalTimeSpent = @TotalTimeSpent
+                TotalTimeSpent = @TotalTimeSpent,
+                SessionCount = @SessionCount
             WHERE Id = @Id;
         ";
         dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogue.id));
         dbcmd.Parameters.Add(new SqliteParameter("@Name", catalogue.name));
         dbcmd.Parameters.Add(new SqliteParameter("@CurrentQuestionId", catalogue.currentQuestionId == -1 ? DBNull.Value : catalogue.currentQuestionId));
         dbcmd.Parameters.Add(new SqliteParameter("@TotalTimeSpent", catalogue.totalTimeSpent));
+        dbcmd.Parameters.Add(new SqliteParameter("@SessionCount", catalogue.sessionCount));
         dbcmd.ExecuteNonQuery();
     }
 
@@ -243,9 +248,10 @@ public class CatalogueTable
                                     ? -1
                                     : reader.GetInt32(currentQuestionIdIndex);
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
+            int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, questions, sessionHistories);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, questions, sessionHistories);
         }
         return catalogue;
     }

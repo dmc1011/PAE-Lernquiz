@@ -46,8 +46,8 @@ public class SQLiteSetup : MonoBehaviour
         }
 
         // TODO: delete as soon as editor is implemented
-        // AddCatalogueFromJson("Catalogue/0.json");
-        // AddCatalogueFromJson("Catalogue/1.json");
+        //AddCatalogueFromJson("Catalogue/0.json");
+        //AddCatalogueFromJson("Catalogue/1.json");
 
     }
 
@@ -68,6 +68,7 @@ public class SQLiteSetup : MonoBehaviour
                 Name TEXT,
                 CurrentQuestionId INTEGER,
                 TotalTimeSpent INTEGER DEFAULT 0,
+                SessionCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CurrentQuestionId) REFERENCES Question(Id)
             );
             CREATE TABLE IF NOT EXISTS Question (
@@ -90,13 +91,16 @@ public class SQLiteSetup : MonoBehaviour
                 QuestionId INTEGER,
                 AnswerDate DATETIME,
                 WasCorrect BOOLEAN,
-                FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE
+                SessionId INTEGER,
+                FOREIGN KEY(QuestionId) REFERENCES Question(Id) ON DELETE CASCADE,
+                FOREIGN KEY(SessionId) REFERENCES CatalogueSessionHistory(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS CatalogueSessionHistory (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 CatalogueId INTEGER,
                 SessionDate DATETIME,
                 TimeSpent INTEGER,
+                IsCompleted BOOL,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
         ";
