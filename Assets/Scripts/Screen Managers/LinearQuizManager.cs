@@ -118,7 +118,6 @@ public class LinearQuizManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        UpdateSessionHistory();
         SaveTimeSpent();
     }
 
@@ -145,7 +144,7 @@ public class LinearQuizManager : MonoBehaviour
 
         if (sessionCompleted)
         {
-            currentCatalogue.sessionCount = currentCatalogue.sessionCount + 1;
+            currentCatalogue.sessionCount++;
             catalogueTable.UpdateCatalogue(currentCatalogue);
         }
 
