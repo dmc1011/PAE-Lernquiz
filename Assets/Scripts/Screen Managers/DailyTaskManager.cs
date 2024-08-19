@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static DataManager;
+using static Global;
 
 public class DailyTaskManager : MonoBehaviour
 {
@@ -56,7 +57,8 @@ public class DailyTaskManager : MonoBehaviour
         if (questionCount == questionLimit - 1)
             nextButtonLabel.text = "Beenden";
 
-        Fragenummer.text = "Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
+        int questionIndex = CurrentDailyTask.catalogue.questions.FindIndex(q => q == nextQuestion);
+        Fragenummer.text = "Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + (questionIndex + 1);
         nextButton.interactable = false;
         questionCount += 1; // questionCount will be 0 when first question is displayed
 
