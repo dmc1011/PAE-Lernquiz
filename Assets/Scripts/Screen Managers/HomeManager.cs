@@ -38,7 +38,7 @@ public class HomeManager : MonoBehaviour
 
         // MS: This is just here to demonstrate how to use the prefab!
         var a = Instantiate(achievement, parentForRendering);
-        a.SetData("gold", "Du Bist Super", "Starte den Home-Screen und sei eine tolle Person :)");
+        a.SetData(AchievementPopup.Grade.Gold, "Du Bist Super", "Starte den Home-Screen und sei eine tolle Person :)");
         a.Fire();
 
     }

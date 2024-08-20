@@ -9,12 +9,18 @@ public class AchievementPopup : MonoBehaviour
     [SerializeField] private Image bronze;
     [SerializeField] private Image silver;
     [SerializeField] private Image gold;
+    [SerializeField] private RectTransform iconContainer;
     [SerializeField] private TextMeshProUGUI title_element;
     [SerializeField] private TextMeshProUGUI text_element;
 
     enum AnimationMode
     {
         Start, Wait, End, Idle
+    }
+
+    public enum Grade
+    {
+        Bronze, Silver, Gold
     }
 
     AnimationMode animationMode = AnimationMode.Idle;
@@ -56,9 +62,35 @@ public class AchievementPopup : MonoBehaviour
 
                 case AnimationMode.Wait:
                     {
+                        float t = 1 - current_animation_position / animation_time[1];
+                        float t4 = t * 4;
+                        float t10 = t * 10;
+
+                        if (t10 < 1)
+                        {
+                            // MS: This is the half way between linear and sqrt.
+                            // -> cannot use linear because it looks bad
+                            // -> cannot use sqrt because of the "jump" for t << 1
+                            float t_nonlinear = Mathf.Lerp(t10, Mathf.Pow(t10, 0.5f), Mathf.Pow(t10, 0.5f));
+                            iconContainer.rotation = Quaternion.Euler(0, 0, (360.0f / 5.0f) * t_nonlinear);
+                        } else
+                        {
+                            iconContainer.rotation = Quaternion.Euler(0, 0, (360.0f / 5.0f));
+                        }
+
+                        if(t4 < 1)
+                        {
+                            float size = 1 + 0.05f * Mathf.Sin(t4 * Mathf.PI);
+                            iconContainer.localScale = new(size, size, size);
+                        } else
+                        {
+                            iconContainer.localScale = new(1, 1, 1);
+                        }
+
                         current_animation_position -= Time.deltaTime;
                         if (current_animation_position <= 0)
                         {
+                            iconContainer.rotation = Quaternion.Euler(0, 0, 0);
                             current_animation_position = animation_time[2];
                             animationMode = AnimationMode.End;
                         }
@@ -90,11 +122,11 @@ public class AchievementPopup : MonoBehaviour
         animationMode = AnimationMode.Start;
     }
 
-    public void SetData(string grade, string title, string text)
+    public void SetData(Grade achievementGrade, string title, string text)
     {
-        bronze.gameObject.SetActive(grade == "bronze");
-        silver.gameObject.SetActive(grade == "silver");
-        gold.gameObject.SetActive(grade == "gold");
+        bronze.gameObject.SetActive(achievementGrade == Grade.Bronze);
+        silver.gameObject.SetActive(achievementGrade == Grade.Silver);
+        gold.gameObject.SetActive(achievementGrade == Grade.Gold);
         title_element.text = title;
         text_element.text = text;
     }
