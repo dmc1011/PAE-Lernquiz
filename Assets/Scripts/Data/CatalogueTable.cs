@@ -75,9 +75,11 @@ public class CatalogueTable
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             int errorFreeSessionCount = Convert.ToInt32(reader["ErrorFreeSessionCount"]);
+            int completedRandomQuizCount = Convert.ToInt32(reader["CompletedRandomQuizCount"]);
+            int errorFreeRandomQuizCount = Convert.ToInt32(reader["ErrorFreeRandomQuizCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogues.Add(new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, questions, sessionHistories));
+            catalogues.Add(new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, completedRandomQuizCount, errorFreeRandomQuizCount, questions, sessionHistories));
         }
         return catalogues;
     }
@@ -101,9 +103,11 @@ public class CatalogueTable
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             int errorFreeSessionCount = Convert.ToInt32(reader["ErrorFreeSessionCount"]);
+            int completedRandomQuizCount = Convert.ToInt32(reader["CompletedRandomQuizCount"]);
+            int errorFreeRandomQuizCount = Convert.ToInt32(reader["ErrorFreeRandomQuizCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, questions, sessionHistories);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, completedRandomQuizCount, errorFreeRandomQuizCount, questions, sessionHistories);
         }
         return catalogue;
     }
@@ -127,9 +131,11 @@ public class CatalogueTable
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             int errorFreeSessionCount = Convert.ToInt32(reader["ErrorFreeSessionCount"]);
+            int completedRandomQuizCount = Convert.ToInt32(reader["CompletedRandomQuizCount"]);
+            int errorFreeRandomQuizCount = Convert.ToInt32(reader["ErrorFreeRandomQuizCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(catalogueId);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, questions, sessionHistories);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, completedRandomQuizCount, errorFreeRandomQuizCount, questions, sessionHistories);
         }
         return catalogue;
     }
@@ -159,7 +165,9 @@ public class CatalogueTable
                 CurrentQuestionId = @CurrentQuestionId,
                 TotalTimeSpent = @TotalTimeSpent,
                 SessionCount = @SessionCount,
-                ErrorFreeSessionCount = @ErrorFreeSessionCount
+                ErrorFreeSessionCount = @ErrorFreeSessionCount,
+                CompletedRandomQuizCount = @CompletedRandomQuizCount,
+                ErrorFreeRandomQuizCount = @ErrorFreeRandomQuizCount
             WHERE Id = @Id;
         ";
         dbcmd.Parameters.Add(new SqliteParameter("@Id", catalogue.id));
@@ -168,6 +176,8 @@ public class CatalogueTable
         dbcmd.Parameters.Add(new SqliteParameter("@TotalTimeSpent", catalogue.totalTimeSpent));
         dbcmd.Parameters.Add(new SqliteParameter("@SessionCount", catalogue.sessionCount));
         dbcmd.Parameters.Add(new SqliteParameter("@ErrorFreeSessionCount", catalogue.errorFreeSessionCount));
+        dbcmd.Parameters.Add(new SqliteParameter("@CompletedRandomQuizCount", catalogue.completedRandomQuizCount));
+        dbcmd.Parameters.Add(new SqliteParameter("@ErrorFreeRandomQuizCount", catalogue.errorFreeRandomQuizCount));
         dbcmd.ExecuteNonQuery();
     }
 
@@ -256,9 +266,11 @@ public class CatalogueTable
             int totalTimeSpent = Convert.ToInt32(reader["TotalTimeSpent"]);
             int sessionCount = Convert.ToInt32(reader["SessionCount"]);
             int errorFreeSessionCount = Convert.ToInt32(reader["ErrorFreeSessionCount"]);
+            int completedRandomQuizCount = Convert.ToInt32(reader["CompletedRandomQuizCount"]);
+            int errorFreeRandomQuizCount = Convert.ToInt32(reader["ErrorFreeRandomQuizCount"]);
             List<Question> questions = FindQuestionsByCatalogueId(id);
             List<CatalogueSessionHistory> sessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(id);
-            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, questions, sessionHistories);
+            catalogue = new Catalogue(id, name, currentQuestionId, totalTimeSpent, sessionCount, errorFreeSessionCount, completedRandomQuizCount, errorFreeRandomQuizCount, questions, sessionHistories);
         }
         return catalogue;
     }

@@ -8,14 +8,14 @@ public class AchievementTable
     private const string TABLE_NAME = "Achievement";
     private IDbConnection dbConnection;
 
-    private QuestionTable questionTable;
     private CatalogueTable catalogueTable;
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
+    private DailyTaskHistoryTable dailyTaskHistoryTable;
 
-    public AchievementTable(IDbConnection dbConnection, QuestionTable questionTable, CatalogueTable catalogueTable, CatalogueSessionHistoryTable catalogueSessionHistoryTable)
+    public AchievementTable(IDbConnection dbConnection, DailyTaskHistoryTable dailyTaskHistoryTable, CatalogueTable catalogueTable, CatalogueSessionHistoryTable catalogueSessionHistoryTable)
     {
         this.dbConnection = dbConnection;
-        this.questionTable = questionTable;
+        this.dailyTaskHistoryTable = dailyTaskHistoryTable;
         this.catalogueTable = catalogueTable;
         this.catalogueSessionHistoryTable = catalogueSessionHistoryTable;
     }
@@ -125,6 +125,36 @@ public class AchievementTable
             case "Hartnäckig  Gold":
                 return CheckTotalQuestionCountAchievement(10000);
 
+            // Daylies 
+            case "Daylies  Bronze":
+                return GetConsecutiveCompletedDailyTasks(5);
+
+            case "Daylies  Silber":
+                return GetConsecutiveCompletedDailyTasks(15);
+
+            case "Daylies  Gold":
+                return GetConsecutiveCompletedDailyTasks(30);
+
+            // Randomat  
+            case "Randomat Bronze":
+                return CheckRandomatAchievement(10);
+
+            case "Randomat Silber":
+                return CheckRandomatAchievement(50);
+
+            case "Randomat Gold":
+                return CheckRandomatAchievement(100);
+
+            // Random Flawless  
+            case "Random Flawless Bronze":
+                return CheckRandomFlawlessAchievement(10);
+
+            case "Random Flawless Silber":
+                return CheckRandomFlawlessAchievement(25);
+
+            case "Random Flawless Gold":
+                return CheckRandomFlawlessAchievement(50);
+
 
             default:
                 return false;
@@ -224,4 +254,66 @@ public class AchievementTable
 
         return count >= requiredCount;
     }
+
+    public bool GetConsecutiveCompletedDailyTasks(int requiredDays)
+    {
+        List<DailyTaskHistory> dailyTaskEntries = dailyTaskHistoryTable.FindAllDailyTaskEntries();
+        int consecutiveDays = 0;
+
+        DateTime? previousDate = null;
+
+        foreach (DailyTaskHistory entry in dailyTaskEntries)
+        {
+            if (entry.taskCompleted)
+            {
+                DateTime currentDate = entry.taskDate;
+
+                if (previousDate == null)
+                {
+                    previousDate = currentDate;
+                    consecutiveDays = 1;
+                }
+                else
+                {
+                    if (previousDate.Value.AddDays(-1) == currentDate)
+                    {
+                        consecutiveDays++;
+                        previousDate = currentDate;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        return consecutiveDays >= requiredDays;
+    }
+
+    private bool CheckRandomatAchievement(int requiredCount)
+    {
+        List<Catalogue> allCatalogues = catalogueTable.FindAllCatalogues();
+        int completedRandomCount = 0;
+
+        foreach (Catalogue catalogue in allCatalogues)
+        {
+            completedRandomCount += catalogue.completedRandomQuizCount;
+        }
+
+        return completedRandomCount >= requiredCount;
+    }
+
+    private bool CheckRandomFlawlessAchievement(int requiredCount)
+    {
+        List<Catalogue> allCatalogues = catalogueTable.FindAllCatalogues();
+        int errorFreeRandomQuizCount = 0;
+
+        foreach (Catalogue catalogue in allCatalogues)
+        {
+            errorFreeRandomQuizCount += catalogue.errorFreeRandomQuizCount;
+        }
+
+        return errorFreeRandomQuizCount >= requiredCount;
+    }
+
 }

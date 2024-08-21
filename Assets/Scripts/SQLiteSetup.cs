@@ -19,6 +19,7 @@ public class SQLiteSetup : MonoBehaviour
     public AnswerHistoryTable answerHistoryTable { get; private set; }
     public CatalogueSessionHistoryTable catalogueSessionHistoryTable { get; private set; }
     public AchievementTable achievementTable { get; private set; }
+    public DailyTaskHistoryTable dailyTaskHistoryTable { get; private set; }
 
     void Awake()
     {
@@ -42,13 +43,15 @@ public class SQLiteSetup : MonoBehaviour
             answerTable = new AnswerTable(dbConnection);
             catalogueSessionHistoryTable = new CatalogueSessionHistoryTable(dbConnection);
             catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable, answerHistoryTable, catalogueSessionHistoryTable);
-            achievementTable = new AchievementTable(dbConnection, questionTable, catalogueTable, catalogueSessionHistoryTable);
+            dailyTaskHistoryTable = new DailyTaskHistoryTable(dbConnection);
+            achievementTable = new AchievementTable(dbConnection, dailyTaskHistoryTable, catalogueTable, catalogueSessionHistoryTable);
+
+            AddInitialAchievementsIfNeeded();
         }
         else
         {
             Destroy(gameObject);
         }
-        AddInitialAchievementsIfNeeded();
     }
 
     private void CreateTables()
@@ -62,6 +65,8 @@ public class SQLiteSetup : MonoBehaviour
                 TotalTimeSpent INTEGER DEFAULT 0,
                 SessionCount INTEGER DEFAULT 0,
                 ErrorFreeSessionCount INTEGER DEFAULT 0,
+                CompletedRandomQuizCount INTEGER DEFAULT 0,
+                ErrorFreeRandomQuizCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CurrentQuestionId) REFERENCES Question(Id)
             );
             CREATE TABLE IF NOT EXISTS Question (
@@ -105,6 +110,12 @@ public class SQLiteSetup : MonoBehaviour
                 IsAchieved BOOLEAN DEFAULT FALSE,
                 AchievedAt DATETIME
             );
+            CREATE TABLE IF NOT EXISTS DailyTaskHistory (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                TaskDate DATE NOT NULL UNIQUE,
+                CorrectAnswersCount INTEGER DEFAULT 0,
+                TaskCompleted BOOLEAN DEFAULT FALSE
+            );
         ";
         dbCommand.ExecuteNonQuery();
     }
@@ -121,7 +132,7 @@ public class SQLiteSetup : MonoBehaviour
     private void AddInitialAchievementsIfNeeded()
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "SELECT COUNT(*) FROM Achievement;";
+        dbcmd.CommandText = "SELECT COUNT(*) FROM Achievement";
         int achievementCount = Convert.ToInt32(dbcmd.ExecuteScalar());
 
         if (achievementCount == 0)
@@ -134,6 +145,7 @@ public class SQLiteSetup : MonoBehaviour
     {
         List<Achievement> achievements = new()
         {
+            // die description sollten wir wahrscheinlich zu dem Text ‰ndern, den wir dem Nutzer anzeigen wollen
             new Achievement("Flawless Bronze", "Zum ersten Mal einen Katalog ohne Fehler abschlieﬂen", false, DateTime.Now),
             new Achievement("Flawless Silber", "Einen Katalog 5 mal ohne Fehler abschlieﬂen", false, DateTime.Now),
             new Achievement("Flawless Gold", "Einen Katalog 10 mal ohne Fehler abschlieﬂen", false, DateTime.Now),
