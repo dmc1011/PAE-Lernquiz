@@ -20,10 +20,27 @@ public static class DataManager
     public struct QuestionResult
     {
         public string questionText;
-        public string answerText;
+        public List<string> answerTexts;
+        public string selectedAnswerText;
         // TODO: add questionImage
         // TODO: add answerImage
         public bool isCorrect;
+
+        public QuestionResult(int questionIndex, int answerIndex, Catalogue catalogue)
+        {
+            isCorrect = answerIndex == 0;
+            Question question = catalogue.questions[questionIndex];
+            Answer answer = question.answers[answerIndex];
+            List<string> allAnswerTexts = new() {
+                question.answers[0].text,
+                question.answers[1].text,
+                question.answers[2].text,
+                question.answers[3].text
+            };
+            questionText = question.text;
+            answerTexts = allAnswerTexts;
+            selectedAnswerText = answer.text;
+        }
     }
 
 
@@ -39,20 +56,8 @@ public static class DataManager
 
     public static void AddAnswer(int questionIndex, int answerIndex, Catalogue catalogue)
     {
-        bool isCorrect = answerIndex == 0;
-        Question question = catalogue.questions[questionIndex];
-        Answer answer = question.answers[answerIndex];
-
-        QuestionResults.Add(new QuestionResult
-        {
-            questionText = question.text,
-            answerText = answer.text,
-            // TODO: questionImage = question.image
-            // TODO: answerImage = answer.image
-            isCorrect = isCorrect
-        });
+        QuestionResults.Add(new QuestionResult(questionIndex, answerIndex, catalogue));
     }
-
 
     public static void ClearResults()
     {

@@ -39,13 +39,15 @@ public class HomeManager : MonoBehaviour
         // show evaluation if daily task has already been completed
         if (IsDailyTaskCompleted())
         {
-            LoadDailyTaskScene("DailyTaskEvaluation");
+            Global.CurrentQuestionRound.gameMode = Global.GameMode.DailyTask;
+            LoadDailyTaskScene("Evaluation");
             return;
         }
 
         // load chosen catalogue into global data
-        Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(1, catalogueCount + 1);
-        Global.CurrentDailyTask.catalogue = catalogueTable.FindCatalogueById(Global.CurrentDailyTask.catalogueIndex);
+        Catalogue randomCatalogue = catalogueTable.FindRandomCatalogue();
+        Global.CurrentDailyTask.catalogueIndex = randomCatalogue.id;
+        Global.CurrentDailyTask.catalogue = randomCatalogue;
         PlayerPrefs.SetInt("DailyTaskCatalogueId", Global.CurrentDailyTask.catalogueIndex);
         PlayerPrefs.Save();
 

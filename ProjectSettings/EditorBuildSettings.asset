@@ -50,6 +50,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Statistics.unity
     guid: a913416fee644634ebd6ee3ebf07e10f
+  - enabled: 1
+    path: Assets/Scenes/Achievements.unity
+    guid: 8a4c7f9a0ca160e428901ed314382512
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 6504cfa3fec3beb42bae8d6899d62479, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: a389421d061b56840a93f53e44e4c185, type: 2}

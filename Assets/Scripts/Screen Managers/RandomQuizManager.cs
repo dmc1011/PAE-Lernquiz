@@ -21,6 +21,9 @@ public class RandomQuizManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.SetString("evaluationFor", "RandomQuiz");
+        PlayerPrefs.Save();
+
         DataManager.ClearResults();
 
         if (SceneManager.GetActiveScene().name != "RandomQuiz")
@@ -61,7 +64,7 @@ public class RandomQuizManager : MonoBehaviour
         if (questionCount == questionLimit - 1)
             nextButtonLabel.text = "Beenden";
 
-        Fragenummer.text = "Random Quiz, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
+        Fragenummer.text = "Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
         nextButton.interactable = false;
         questionCount += 1; // questionCount will be 0 when first Question is displayed
 

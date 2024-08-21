@@ -1,7 +1,5 @@
 using System.Linq;
-using System.Runtime.CompilerServices;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Global;
@@ -20,7 +18,6 @@ public class CatalogueButtonHandler : MonoBehaviour
         if (bg != null)
         {
             float timeNeeded = bg.TriggerEndSequence();
-            print(bg);
             Invoke(nameof(LoadSceneInternal), timeNeeded);
         }
         else
@@ -67,7 +64,7 @@ public class CatalogueButtonHandler : MonoBehaviour
     {
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
 
-        // invalid catalogue index
+        // invalid catalogue name
         if (!NewGameManager.catalogues.Any(catalogue => catalogue.name == catalogueName))
         {
             print($"ERROR [NewGameManager.cs.StartLinearRoundClickedEvent()]: There is no catalogue called '{catalogueName}'");
@@ -86,7 +83,7 @@ public class CatalogueButtonHandler : MonoBehaviour
     {
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
 
-        // check if chosen catalogue index is out of bounds
+        // invalid catalogue name
         if (!NewGameManager.catalogues.Any(catalogue => catalogue.name == catalogueName))
         {
             print($"ERROR [NewGameManager.cs.StartRandomRoundClickedEvent()]: There is no catalogue called '{catalogueName}'");
@@ -114,6 +111,26 @@ public class CatalogueButtonHandler : MonoBehaviour
     // start statistics
     private void ShowStatistics()
     {
+        string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        if (catalogueName == "Daily Task")
+        {
+            StatisticManager.isDailyTaskStatistic = true;
+            LoadScene("Statistics");
+            return;
+        }
+
+        // invalid catalogue name
+        if (!NewGameManager.catalogues.Any(catalogue => catalogue.name == catalogueName))
+        {
+            print($"ERROR [NewGameManager.cs.StartLinearRoundClickedEvent()]: There is no catalogue called '{catalogueName}'");
+            return;
+        }
+
+        // start statistics
+        StatisticManager.isDailyTaskStatistic = false;
+        CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
+
         LoadScene("Statistics");
     }
 }
