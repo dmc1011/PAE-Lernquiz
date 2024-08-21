@@ -18,6 +18,8 @@ public class RandomQuizManager : MonoBehaviour
     private int questionLimit;
     private Catalogue currentCatalogue;
     private int nextQuestionIndex;
+    private CatalogueTable catalogueTable;
+    private bool errorFreeRound;
 
     void Start()
     {
@@ -39,6 +41,8 @@ public class RandomQuizManager : MonoBehaviour
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         questionLimit = Global.RandomQuizSize;
         nextButton.interactable = false;
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        errorFreeRound = true;
         
         // Display first question
         DisplayNextQuestion();
@@ -78,6 +82,7 @@ public class RandomQuizManager : MonoBehaviour
 
     public void LoadNextScene()
     {
+        UpdateRandomQuizCountsForCatalogue();
         nextButtonNavigation.LoadScene("Evaluation");
     }
 
@@ -99,12 +104,22 @@ public class RandomQuizManager : MonoBehaviour
                 {
                     // in contrast to LinearQuizManager nextQuestionIndex is not update at this point and still valid
                     int questionIndex = nextQuestionIndex;
+                    errorFreeRound = errorFreeRound && (int)button == 0;
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
                     nextButton.interactable = true;
                 }
                 break;
         }
 
+    }
+
+    private void UpdateRandomQuizCountsForCatalogue()
+    {
+        currentCatalogue.completedRandomQuizCount++;
+        if (errorFreeRound)
+            currentCatalogue.errorFreeRandomQuizCount++;
+
+        catalogueTable.UpdateCatalogue(currentCatalogue);
     }
 
 }

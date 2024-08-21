@@ -22,6 +22,7 @@ public class QuizAreaManager : MonoBehaviour
     private AnswerHistoryTable answerHistoryTable;
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private QuestionTable questionTable;
+    private DailyTaskHistoryTable dailyTaskHistoryTable;
     private List<TextMeshProUGUI> answerButtonLabels = new();
     private List<RectTransform> answerButtonTransforms = new();
     private List<Image> answerButtonCorrectImages = new();
@@ -41,6 +42,7 @@ public class QuizAreaManager : MonoBehaviour
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
         questionTable = SQLiteSetup.Instance.questionTable;
         catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
+        dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
 
         // Get components for questionButton
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -173,9 +175,12 @@ public class QuizAreaManager : MonoBehaviour
         bool wasCorrect = currentlyActiveButton == ButtonID.A;
         if (wasCorrect)
         {
-            question.correctAnsweredCount += 1;
-            questionTable.UpdateQuestion(question);
+            question.correctAnsweredCount++;
+            dailyTaskHistoryTable.IncrementCorrectAnsweredCount();
         }
+        question.totalAnsweredCount++;
+        questionTable.UpdateQuestion(question);
+
         string currentScene = SceneManager.GetActiveScene().name;
         if (currentScene.Equals("LinearQuiz"))
         {

@@ -40,13 +40,14 @@ public class CatalogueSessionHistoryTable
         return newSessionId;
     }
 
-    public void UpdateCatalogueSessionHistory(int sessionId, int timeSpent, bool isCompleted)
+    public void UpdateCatalogueSessionHistory(int sessionId, int timeSpent, bool isCompleted, bool sessionIsErrorFree)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET TimeSpent = @TimeSpent, IsCompleted = @IsCompleted WHERE Id = @SessionId";
+        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET TimeSpent = @TimeSpent, IsCompleted = @IsCompleted, IsErrorFree = @IsErrorFree WHERE Id = @SessionId";
         dbcmd.Parameters.Add(new SqliteParameter("@TimeSpent", timeSpent));
         dbcmd.Parameters.Add(new SqliteParameter("@IsCompleted", isCompleted));
         dbcmd.Parameters.Add(new SqliteParameter("@SessionId", sessionId));
+        dbcmd.Parameters.Add(new SqliteParameter("@IsErrorFree", sessionIsErrorFree));
 
         dbcmd.ExecuteNonQuery();
     }
@@ -66,7 +67,8 @@ public class CatalogueSessionHistoryTable
             int timeSpent = Convert.ToInt32(reader["TimeSpent"]);
             DateTime sessionDate = (DateTime)reader["SessionDate"];
             bool isCompleted = (bool)reader["IsCompleted"];
-            catalogueSessionHistory = new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted);
+            bool isErrorFree = (bool)reader["IsErrorFree"];
+            catalogueSessionHistory = new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted, isErrorFree);
         }
         return catalogueSessionHistory;
     }
@@ -85,7 +87,8 @@ public class CatalogueSessionHistoryTable
             int timeSpent = Convert.ToInt32(reader["TimeSpent"]);
             DateTime sessionDate = (DateTime)reader["SessionDate"];
             bool isCompleted = (bool)reader["IsCompleted"];
-            catalogueSessionHistories.Add(new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted));
+            bool isErrorFree = (bool)reader["IsErrorFree"];
+            catalogueSessionHistories.Add(new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted, isErrorFree));
         }
         return catalogueSessionHistories;
     }
@@ -104,8 +107,22 @@ public class CatalogueSessionHistoryTable
             int timeSpent = Convert.ToInt32(reader["TimeSpent"]);
             DateTime sessionDate = (DateTime)reader["SessionDate"];
             bool isCompleted = (bool)reader["IsCompleted"];
-            catalogueSessionHistory = new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted);
+            bool isErrorFree = (bool)reader["IsErrorFree"];
+            catalogueSessionHistory = new CatalogueSessionHistory(id, catalogueId, sessionDate, timeSpent, isCompleted, isErrorFree);
         }
         return catalogueSessionHistory;
+    }
+
+    public int FindTimeSpentInCompletedSessionsToday()
+    {
+        int timeSpent = 0;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT SUM(TimeSpent) FROM " + TABLE_NAME + " WHERE IsCompleted = TRUE AND DATE(SessionDate) = DATE('now')";
+
+        object result = dbcmd.ExecuteScalar();
+        if (result != DBNull.Value)
+            timeSpent = Convert.ToInt32(result);
+        
+        return timeSpent;
     }
 }
