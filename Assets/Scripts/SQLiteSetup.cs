@@ -42,13 +42,13 @@ public class SQLiteSetup : MonoBehaviour
             answerTable = new AnswerTable(dbConnection);
             catalogueSessionHistoryTable = new CatalogueSessionHistoryTable(dbConnection);
             catalogueTable = new CatalogueTable(dbConnection, questionTable, answerTable, answerHistoryTable, catalogueSessionHistoryTable);
-            achievementTable = new AchievementTable(dbConnection);
+            achievementTable = new AchievementTable(dbConnection, questionTable, catalogueTable, catalogueSessionHistoryTable);
         }
         else
         {
             Destroy(gameObject);
         }
-        AddInitialAchievements();
+        AddInitialAchievementsIfNeeded();
     }
 
     private void CreateTables()
@@ -61,6 +61,7 @@ public class SQLiteSetup : MonoBehaviour
                 CurrentQuestionId INTEGER,
                 TotalTimeSpent INTEGER DEFAULT 0,
                 SessionCount INTEGER DEFAULT 0,
+                ErrorFreeSessionCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CurrentQuestionId) REFERENCES Question(Id)
             );
             CREATE TABLE IF NOT EXISTS Question (
@@ -69,6 +70,7 @@ public class SQLiteSetup : MonoBehaviour
                 Text TEXT,
                 Name TEXT,
                 CorrectAnsweredCount INTEGER DEFAULT 0,
+                TotalAnsweredCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS Answer (
@@ -92,14 +94,15 @@ public class SQLiteSetup : MonoBehaviour
                 CatalogueId INTEGER,
                 SessionDate DATETIME,
                 TimeSpent INTEGER,
-                IsCompleted BOOL,
+                IsCompleted BOOLEAN,
+                IsErrorFree BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
             CREATE TABLE IF NOT EXISTS Achievement (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Name TEXT NOT NULL UNIQUE,
                 Description TEXT NOT NULL,
-                IsAchieved BOOL DEFAULT FALSE,
+                IsAchieved BOOLEAN DEFAULT FALSE,
                 AchievedAt DATETIME
             );
         ";
@@ -112,6 +115,18 @@ public class SQLiteSetup : MonoBehaviour
         {
             dbConnection.Close();
 
+        }
+    }
+
+    private void AddInitialAchievementsIfNeeded()
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT COUNT(*) FROM Achievement;";
+        int achievementCount = Convert.ToInt32(dbcmd.ExecuteScalar());
+
+        if (achievementCount == 0)
+        {
+            AddInitialAchievements();
         }
     }
 

@@ -172,10 +172,11 @@ public class QuizAreaManager : MonoBehaviour
 
         bool wasCorrect = currentlyActiveButton == ButtonID.A;
         if (wasCorrect)
-        {
-            question.correctAnsweredCount += 1;
-            questionTable.UpdateQuestion(question);
-        }
+            question.correctAnsweredCount++;
+
+        question.totalAnsweredCount++;
+        questionTable.UpdateQuestion(question);
+
         string currentScene = SceneManager.GetActiveScene().name;
         if (currentScene.Equals("LinearQuiz"))
         {
