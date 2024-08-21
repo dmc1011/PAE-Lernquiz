@@ -10,6 +10,10 @@ public class HomeManager : MonoBehaviour
     [SerializeField] private Button startDailyTask;
     [SerializeField] private Background background;
 
+    // MS: This is just here to demonstrate how to use the prefab!
+    [SerializeField] private AchievementPopup achievement;
+    [SerializeField] private Transform parentForRendering;
+
     private string targetScene;
     private int catalogueCount;
     CatalogueTable catalogueTable;
@@ -31,6 +35,12 @@ public class HomeManager : MonoBehaviour
             ResetDailyTask();
             Debug.Log("Daily Task reset");
         }
+
+        // MS: This is just here to demonstrate how to use the prefab!
+        var a = Instantiate(achievement, parentForRendering);
+        a.SetData(AchievementPopup.Grade.Gold, "Du Bist Super", "Starte den Home-Screen und sei eine tolle Person :)");
+        a.Fire();
+
     }
 
 
