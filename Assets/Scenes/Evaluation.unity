@@ -128,11 +128,23 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1574602046}
+    m_TransformParent: {fileID: 1776627022}
     m_Modifications:
     - target: {fileID: 665121069022380294, guid: f854456269739b04dbcee5646eccac88, type: 3}
       propertyPath: m_Name
       value: SideMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3066850419041008323, guid: f854456269739b04dbcee5646eccac88, type: 3}
+      propertyPath: sideMenuHandleInner
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3066850419041008323, guid: f854456269739b04dbcee5646eccac88, type: 3}
+      propertyPath: sideMenuGearIconCollider
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3066850419041008323, guid: f854456269739b04dbcee5646eccac88, type: 3}
+      propertyPath: sideMenuGearIconTransform
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4100521828848790344, guid: f854456269739b04dbcee5646eccac88, type: 3}
       propertyPath: m_Pivot.x
@@ -1107,7 +1119,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1776627022}
-  - {fileID: 70823238}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1239,6 +1250,7 @@ RectTransform:
   - {fileID: 943308773}
   - {fileID: 113472188}
   - {fileID: 67590191}
+  - {fileID: 70823238}
   m_Father: {fileID: 1574602046}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
