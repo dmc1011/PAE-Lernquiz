@@ -456,7 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollTransform: {fileID: 1969086849}
-  achievement: {fileID: 2728125251266399678, guid: 5d4e907d594d9dc4f935485456e3097b, type: 3}
+  achievementPopUp: {fileID: 2728125251266399678, guid: 5d4e907d594d9dc4f935485456e3097b, type: 3}
 --- !u!1001 &1428952170
 PrefabInstance:
   m_ObjectHideFlags: 0

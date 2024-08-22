@@ -5,52 +5,22 @@ public class AchievementsScreen : MonoBehaviour
 {
 
     [SerializeField] private Transform scrollTransform;
-    [SerializeField] private AchievementPopup achievement;
+    [SerializeField] private AchievementPopup achievementPopUp;
+    private AchievementTable achievementTable;
+    List<Achievement> achievements = new();
 
     void Start()
     {
-        List<string> names = new List<string>
-        {
-            "I Bims 1 Achievement",
-            "AFK",
-            "John Johnsons John",
-            "Beispiel nummer drei",
-            "Du bist super",
-            "Level 3",
-            "5 Minuten der Stille",
-            "Pubertär",
-            "Maschine",
-            "Spätaufsteher"
-        };
+        achievementTable = SQLiteSetup.Instance.achievementTable;
+        achievements = achievementTable.FindAllAchievements();
 
-        List<string> texts = new List<string>
+        foreach (Achievement achievement in achievements)
         {
-            "Du hast alles gegeben. Weiter so",
-            "Das Spiel war 20 Minuten länger online als du",
-            "Frag nicht warum. Es ist die Wahrheit",
-            "Das ist kein Beispiel, sondern mein Ernst!",
-            "Alles ist relativ, auch die Anzahl richtiger Antworten",
-            "Hier könnte Ihre Werbung stehen.",
-            "Misinterpretation ausgeschlossen. Nein, witklich.",
-            "Beherrsche mehrere verbotene Techniken, auch den verbotenen Kick!",
-            "Legenden besagen, man solle schlafende Monster nicht wecken"
-        };
-
-        List<AchievementPopup.Grade> grades = new List<AchievementPopup.Grade>
-        {
-            AchievementPopup.Grade.None,
-            AchievementPopup.Grade.Bronze,
-            AchievementPopup.Grade.Silver,
-            AchievementPopup.Grade.Gold,
-        };
-
-        for (int i = 0; i < 50; i++)
-        {
-            AchievementPopup entry = Instantiate(achievement, scrollTransform);
+            AchievementPopup entry = Instantiate(achievementPopUp, scrollTransform);
             entry.SetData(
-                grades[Random.Range(0, grades.Count)],
-                names[Random.Range(0, names.Count)],
-                texts[Random.Range(0, texts.Count)]
+                AchievementPopup.Grade.None,
+                achievement.name + " " + achievement.grade,
+                achievement.description
             );
         }
     }

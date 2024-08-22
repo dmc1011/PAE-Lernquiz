@@ -105,10 +105,13 @@ public class SQLiteSetup : MonoBehaviour
             );
             CREATE TABLE IF NOT EXISTS Achievement (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Name TEXT NOT NULL UNIQUE,
+                Name TEXT NOT NULL,
+                Grade TEXT NOT NULL DEFAULT 'None',
                 Description TEXT NOT NULL,
+                PopupText TEXT NOT NULL,
                 IsAchieved BOOLEAN DEFAULT FALSE,
-                AchievedAt DATETIME
+                AchievedAt DATETIME,
+                UNIQUE(Name, Grade)
             );
             CREATE TABLE IF NOT EXISTS DailyTaskHistory (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -146,54 +149,69 @@ public class SQLiteSetup : MonoBehaviour
         List<Achievement> achievements = new()
         {
             // die description sollten wir wahrscheinlich zu dem Text ‰ndern, den wir dem Nutzer anzeigen wollen
-            new Achievement("Flawless Bronze", "Zum ersten Mal einen Katalog ohne Fehler abschlieﬂen", false, DateTime.Now),
-            new Achievement("Flawless Silber", "Einen Katalog 5 mal ohne Fehler abschlieﬂen", false, DateTime.Now),
-            new Achievement("Flawless Gold", "Einen Katalog 10 mal ohne Fehler abschlieﬂen", false, DateTime.Now),
-            new Achievement("Multitalent Bronze", "5 Kataloge ohne Fehler abschlieﬂen", false, DateTime.Now),
-            new Achievement("Multitalent Silber", "10 Kataloge ohne Fehler abschlieﬂen", false, DateTime.Now),
-            new Achievement("Multitalent Gold", "25 Kataloge ohne Fehler abschlieﬂen", false, DateTime.Now),
-            new Achievement("Besserwisser Bronze", "50 Fragen richtig beantwortet", false, DateTime.Now),
-            new Achievement("Besserwisser Silber", "500 Fragen richtig beantwortet", false, DateTime.Now),
-            new Achievement("Besserwisser Gold", "1000 Fragen richtig beantwortet", false, DateTime.Now),
-            new Achievement("Streak Bronze", "10 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Streak Silber", "25 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Streak Gold", "50 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Daylies Bronze", "10 mal alle Daylies abgeschlossen", false, DateTime.Now),
-            new Achievement("Daylies Silber", "25 mal alle Daylies abgeschlossen", false, DateTime.Now),
-            new Achievement("Daylies Gold", "50 mal alle Daylies abgeschlossen", false, DateTime.Now),
-            new Achievement("Level Bronze", "Level 10 erreicht", false, DateTime.Now),
-            new Achievement("Level Silber", "Level 25 erreicht", false, DateTime.Now),
-            new Achievement("Level Gold", "Level 50 erreicht", false, DateTime.Now),
-            new Achievement("Ersteller Bronze", "1 Katalog erstellt", false, DateTime.Now),
-            new Achievement("Ersteller Silber", "5 Kataloge erstellt", false, DateTime.Now),
-            new Achievement("Ersteller Gold", "10 Kataloge erstellt", false, DateTime.Now),
-            new Achievement("Vernetzt Bronze", "1 Katalog exportiert", false, DateTime.Now),
-            new Achievement("Vernetzt Silber", "5 Kataloge exportiert", false, DateTime.Now),
-            new Achievement("Vernetzt Gold", "10 Kataloge exportiert", false, DateTime.Now),
-            new Achievement("Randomat Bronze", "10 Random Quiz Runden abgeschlossen", false, DateTime.Now),
-            new Achievement("Randomat Silber", "50 Random Quiz Runden abgeschlossen", false, DateTime.Now),
-            new Achievement("Randomat Gold", "100 Random Quiz Runden abgeschlossen", false, DateTime.Now),
-            new Achievement("Importeur Bronze", "1 Katalog importiert", false, DateTime.Now),
-            new Achievement("Importeur Silber", "5 Kataloge importiert", false, DateTime.Now),
-            new Achievement("Importeur Gold", "10 Kataloge importiert", false, DateTime.Now),
-            new Achievement("Hartn‰ckig Bronze", "1000 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Hartn‰ckig Silber", "5000 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Hartn‰ckig Gold", "10000 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Fokus Bronze", "In einem Katalog 30 Minuten verbracht", false, DateTime.Now),
-            new Achievement("Fokus Silber", "In einem Katalog 60 Minuten verbracht", false, DateTime.Now),
-            new Achievement("Fokus Gold", "In einem Katalog 120 Minuten verbracht", false, DateTime.Now),
-            new Achievement("Zeitmanagement Bronze", "300 Minuten in Katalogen verbracht", false, DateTime.Now),
-            new Achievement("Zeitmanagement Silber", "600 Minuten in Katalogen verbracht", false, DateTime.Now),
-            new Achievement("Zeitmanagement Gold", "1200 Minuten in Katalogen verbracht", false, DateTime.Now),
-            new Achievement("Random Flawless Bronze", "10 Random Quiz Runden ohne Fehler abgeschlossen", false, DateTime.Now),
-            new Achievement("Random Flawless Silber", "25 Random Quiz Runden ohne Fehler abgeschlossen", false, DateTime.Now),
-            new Achievement("Random Flawless Gold", "50 Random Quiz Runden ohne Fehler abgeschlossen", false, DateTime.Now),
-            new Achievement("Intensiv Bronze", "15 Minuten an einem Tag in Katalogen verbracht", false, DateTime.Now),
-            new Achievement("Intensiv Silber", "30 Minuten an einem Tag in Katalogen verbracht", false, DateTime.Now),
-            new Achievement("Intensiv Gold", "60 Minuten an einem Tag in Katalogen verbracht", false, DateTime.Now),
-            new Achievement("Fleiﬂig Bronze", "25 Durchl‰ufe abgeschlossen", false, DateTime.Now),
-            new Achievement("Fleiﬂig Silber", "50 Durchl‰ufe abgeschlossen", false, DateTime.Now),
-            new Achievement("Fleiﬂig Gold", "100 Durchl‰ufe abgeschlossen", false, DateTime.Now)
+            new Achievement("Flawless", AchievementPopup.Grade.Bronze, "Schlieﬂe zum ersten Mal einen gesamten Katalog ohne einen einzigen Fehler ab", "Du hast zum ersten Mal einen Katalog ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Flawless", AchievementPopup.Grade.Silver, "Meistere einen Katalog f¸nfmal in Folge ohne Fehler", "Du hast einen Katalog f¸nfmal ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Flawless", AchievementPopup.Grade.Gold, "Erreiche Perfektion, indem du einen Katalog zehnmal hintereinander fehlerfrei abschlieﬂt", "Du hast einen Katalog zehnmal ohne Fehler abgeschlossen!", false, null),
+           
+            new Achievement("Multitalent", AchievementPopup.Grade.Bronze, "Beweise deine Vielseitigkeit, indem du f¸nf verschiedene Kataloge ohne Fehler meisterst", "Du hast f¸nf Katalog-Durchl‰ufe ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Multitalent", AchievementPopup.Grade.Silver, "Zeige deine umfassende Expertise, indem du zehn verschiedene Kataloge fehlerfrei abschlieﬂt", "Du hast zehn Katalog-Durchl‰ufe ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Multitalent", AchievementPopup.Grade.Gold, "Demonstriere dein Kˆnnen, indem du 25 verschiedene Kataloge ohne einen einzigen Fehler meisterst", "Du hast 25 Katalog-Durchl‰ufe ohne Fehler abgeschlossen!", false, null),
+
+            new Achievement("Besserwisser", AchievementPopup.Grade.Bronze, "Beantworte 50 Fragen korrekt und zeige, dass du auf dem richtigen Weg bist", "Du hast 50 Fragen richtig beantwortet!", false, null),
+            new Achievement("Besserwisser", AchievementPopup.Grade.Silver, "Beweise dein Wissen mit 500 richtig beantworteten Fragen", "Du hast 500 Fragen richtig beantwortet!", false, null),
+            new Achievement("Besserwisser", AchievementPopup.Grade.Gold, "Zeige deine herausragenden Kenntnisse, indem du 1000 Fragen korrekt beantwortest", "Du hast 1000 Fragen richtig beantwortet!", false, null),
+
+            // new Achievement("Streak", AchievementPopup.Grade.Bronze, "10 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
+            // new Achievement("Streak", AchievementPopup.Grade.Silver, "25 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
+            // new Achievement("Streak", AchievementPopup.Grade.Gold, "50 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
+
+            new Achievement("Daylies", AchievementPopup.Grade.Bronze, "Schlieﬂe f¸nfmal den Daily Task erfolgreich ab", "Du hast den Daily Task f¸nfmal abgeschlossen!", false, null),
+            new Achievement("Daylies", AchievementPopup.Grade.Silver, "Erreiche das Ziel, indem du f¸nfzehnmal den Daily Task meisterst", "Du hast den Daily Task f¸nfzehnmal abgeschlossen!", false, null),
+            new Achievement("Daylies", AchievementPopup.Grade.Gold, "Zeige Ausdauer, indem du dreiﬂigmal den Daily Task erfolgreich abschlieﬂt", "Du hast den Daily Task dreiﬂigmal abgeschlossen!", false, null),
+
+            // new Achievement("Level", AchievementPopup.Grade.Bronze, "Level 10 erreicht", false, DateTime.Now),
+            // new Achievement("Level", AchievementPopup.Grade.Silver, "Level 25 erreicht", false, DateTime.Now),
+            // new Achievement("Level", AchievementPopup.Grade.Gold, "Level 50 erreicht", false, DateTime.Now),
+
+            // new Achievement("Ersteller", AchievementPopup.Grade.Bronze, "1 Katalog erstellt", false, DateTime.Now),
+            // new Achievement("Ersteller", AchievementPopup.Grade.Silver, "5 Kataloge erstellt", false, DateTime.Now),
+            // new Achievement("Ersteller", AchievementPopup.Grade.Gold, "10 Kataloge erstellt", false, DateTime.Now),
+
+            // new Achievement("Vernetzt", AchievementPopup.Grade.Bronze, "1 Katalog exportiert", false, DateTime.Now),
+            // new Achievement("Vernetzt", AchievementPopup.Grade.Silver, "5 Kataloge exportiert", false, DateTime.Now),
+            // new Achievement("Vernetzt", AchievementPopup.Grade.Gold, "10 Kataloge exportiert", false, DateTime.Now),
+
+            new Achievement("Randomat", AchievementPopup.Grade.Bronze, "Schlieﬂe zehn Random Quiz Runden erfolgreich ab", "Du hast zehn Random Quiz Runden abgeschlossen!", false, null),
+            new Achievement("Randomat", AchievementPopup.Grade.Silver, "Beweise deine Flexibilit‰t, indem du f¸nfzig Random Quiz Runden meisterst", "Du hast 50 Random Quiz Runden abgeschlossen!", false, null),
+            new Achievement("Randomat", AchievementPopup.Grade.Gold, "Zeige deine Ausdauer, indem du hundert Random Quiz Runden erfolgreich abschlieﬂt", "DU hast 100 Random Quiz Runden abgeschlossen!", false, null),
+
+            // new Achievement("Importeur", AchievementPopup.Grade.Bronze, "1 Katalog importiert", false, DateTime.Now),
+            // new Achievement("Importeur", AchievementPopup.Grade.Silver, "5 Kataloge importiert", false, DateTime.Now),
+            // new Achievement("Importeur", AchievementPopup.Grade.Gold, "10 Kataloge importiert", false, DateTime.Now),
+
+            new Achievement("Hartn‰ckig", AchievementPopup.Grade.Bronze, "Beantworte insgesamt 1000 Fragen", "Du hast 1000 Fragen beantwortet!", false, null),
+            new Achievement("Hartn‰ckig", AchievementPopup.Grade.Silver, "Beantworte insgesamt 5000 Fragen", "Du hast 5000 Fragen beantwortet!", false, null),
+            new Achievement("Hartn‰ckig", AchievementPopup.Grade.Gold, "Beantworte insgesamt 10000 Fragen", "Du hast 10000 Fragen beantwortet!", false, null),
+
+            new Achievement("Fokus", AchievementPopup.Grade.Bronze, "Verbringe 30 Minuten in einem einzigen Katalog", "Du hast 30 Minuten in einem Katalog verbracht!", false, null),
+            new Achievement("Fokus", AchievementPopup.Grade.Silver, "Verbringe 60 Minuten in einem einzigen Katalog", "Du hast 60 Minuten in einem Katalog verbracht!", false, null),
+            new Achievement("Fokus", AchievementPopup.Grade.Gold, "Verbringe 120 Minuten in einem einzigen Katalog", "Du hast 120 Minuten in einem Katalog verbracht!", false, null),
+
+            new Achievement("Zeitmanagement", AchievementPopup.Grade.Bronze, "Verbringe insgesamt 300 Minuten in Katalogen", "Du hast insgesamt 300 Minuten in Katalogen verbracht!", false, null),
+            new Achievement("Zeitmanagement", AchievementPopup.Grade.Silver, "Verbringe insgesamt 600 Minuten in Katalogen", "Du hast insgesamt 600 Minuten in Katalogen verbracht!", false, null),
+            new Achievement("Zeitmanagement", AchievementPopup.Grade.Gold, "Verbringe insgesamt 1200 Minuten in Katalogen", "Du hast insgesamt 1200 Minuten in Katalogen verbracht!", false, null),
+
+            new Achievement("Random Flawless", AchievementPopup.Grade.Bronze, "Schlieﬂe zehn Random Quiz Runden ohne Fehler ab", "Du hast zehn Random Quiz Runden ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Random Flawless", AchievementPopup.Grade.Silver, "Schlieﬂe 25 Random Quiz Runden ohne Fehler ab", "Du hast 25 Random Quiz Runden ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Random Flawless", AchievementPopup.Grade.Gold, "Schlieﬂe 50 Random Quiz Runden ohne Fehler ab", "Du hast 50 Random Quiz Runden ohne Fehler abgeschlossen!", false, null),
+
+            new Achievement("Intensiv", AchievementPopup.Grade.Bronze, "Verbringe 15 Minuten an einem Tag in Katalogen", "Du hast 15 Minuten an einem Tag in Katalogen verbracht!", false, null),
+            new Achievement("Intensiv", AchievementPopup.Grade.Silver, "Verbringe 30 Minuten an einem Tag in Katalogen", "Du hast 30 Minuten an einem Tag in Katalogen verbracht!", false, null),
+            new Achievement("Intensiv", AchievementPopup.Grade.Gold, "Verbringe 60 Minuten an einem Tag in Katalogen", "Du hast 60 Minuten an einem Tag in Katalogen verbracht!", false, null),
+
+            new Achievement("Fleiﬂig", AchievementPopup.Grade.Bronze, "Schlieﬂe 25 Quiz-Durchl‰ufe ab", "Du hast 25 Quiz-Durchl‰ufe abgeschlossen!", false, null),
+            new Achievement("Fleiﬂig", AchievementPopup.Grade.Silver, "Schlieﬂe 50 Quiz-Durchl‰ufe ab", "Du hast 25 Quiz-Durchl‰ufe abgeschlossen!", false, null),
+            new Achievement("Fleiﬂig", AchievementPopup.Grade.Gold, "Schlieﬂe 100 Quiz-Durchl‰ufe ab", "Du hast 25 Quiz-Durchl‰ufe abgeschlossen!", false, null)
         };
 
         foreach (Achievement achievement in achievements)

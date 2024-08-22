@@ -24,10 +24,12 @@ public class AchievementTable
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
 
-        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name, Description, IsAchieved) VALUES (@Name, @Description, @IsAchieved)";
+        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name, Description, IsAchieved, PopupText, Grade) VALUES (@Name, @Description, @IsAchieved, @PopupText, @Grade)";
         dbcmd.Parameters.Add(new SqliteParameter("@Name", achievement.name));
         dbcmd.Parameters.Add(new SqliteParameter("@Description", achievement.description));
         dbcmd.Parameters.Add(new SqliteParameter("@IsAchieved", achievement.isAchieved));
+        dbcmd.Parameters.Add(new SqliteParameter("@PopupText", achievement.popupText));
+        dbcmd.Parameters.Add(new SqliteParameter("@Grade", achievement.grade.ToString()));
         dbcmd.ExecuteNonQuery();
     }
 
@@ -39,6 +41,29 @@ public class AchievementTable
         dbcmd.Parameters.Add(new SqliteParameter("@IsAchieved", achievement.isAchieved));
         dbcmd.Parameters.Add(new SqliteParameter("@AchievedAt", DateTime.Now));
         dbcmd.ExecuteNonQuery();
+    }
+
+    public List<Achievement> FindAllAchievements()
+    {
+        List<Achievement> achievements = new List<Achievement>();
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM Achievement order by Name";
+        IDataReader reader = dbcmd.ExecuteReader();
+        while (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            string name = reader["Name"].ToString();
+            string description = reader["Description"].ToString();
+            string popUpText = reader["PopupText"].ToString();
+            bool isAchieved = (bool)reader["IsAchieved"];
+            DateTime? achievedAt = reader["AchievedAt"] != DBNull.Value ? (DateTime?)reader["AchievedAt"] : null;
+            AchievementPopup.Grade grade = (AchievementPopup.Grade)Enum.Parse(typeof(AchievementPopup.Grade), reader["Grade"].ToString());
+            Achievement achievement = new Achievement(name, grade, description, popUpText, isAchieved, achievedAt);
+            achievement.id = id;
+            achievements.Add(achievement);
+
+        }
+        return achievements;
     }
 
     public bool CheckAchievementCondition(string achievementName, Catalogue catalogue = null)
