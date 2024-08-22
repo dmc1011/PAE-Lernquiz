@@ -20,6 +20,8 @@ public class DailyTaskManager : MonoBehaviour
     private Catalogue currentCatalogue;
     private int nextQuestionIndex;
 
+    private DailyTaskHistoryTable dailyTaskHistoryTable;
+
     void Start()
     {
         PlayerPrefs.SetString("evaluationFor", "DailyTask");
@@ -32,6 +34,9 @@ public class DailyTaskManager : MonoBehaviour
         currentCatalogue = Global.CurrentDailyTask.catalogue;
         questionLimit = Global.CurrentDailyTask.questionLimit;
         nextButton.interactable = false;
+
+        dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
+        dailyTaskHistoryTable.AddDailyTaskHistory();
         
         // Display first question
         DisplayNextQuestion();

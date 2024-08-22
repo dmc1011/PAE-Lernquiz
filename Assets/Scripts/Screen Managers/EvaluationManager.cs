@@ -16,16 +16,19 @@ public class EvaluationManager : MonoBehaviour
     private List<DataManager.QuestionResult> questionResults = new();
     //private string evaluationFor;
     private Global.GameMode gameMode;
+    private DailyTaskHistoryTable dailyTaskHistoryTable;
 
     void Start()
     {
         //evaluationFor = PlayerPrefs.GetString("evaluationFor");
         gameMode = Global.CurrentQuestionRound.gameMode;
         Debug.Log(gameMode);
+        dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
 
         switch (gameMode) {
             case Global.GameMode.DailyTask:
                 NewGameButton.SetActive(false);
+                dailyTaskHistoryTable.SetTodaysTaskToCompleted();
                 PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
                 PlayerPrefs.Save();
                 LoadResults(GetDailyTaskResults());
