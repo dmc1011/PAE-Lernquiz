@@ -123,7 +123,6 @@ public class LinearQuizManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        UpdateSessionHistory();
         SaveTimeSpent();
     }
 
