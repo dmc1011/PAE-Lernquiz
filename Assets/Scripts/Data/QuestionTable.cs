@@ -28,10 +28,11 @@ public class QuestionTable
     public void UpdateQuestion(Question question)
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET CorrectAnsweredCount = @CorrectAnsweredCount, EnabledForPractice = @EnabledForPractice WHERE Id = @Id";
+        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET CorrectAnsweredCount = @CorrectAnsweredCount, EnabledForPractice = @EnabledForPractice, TotalAnsweredCount = @TotalAnsweredCount WHERE Id = @Id";
         dbcmd.Parameters.Add(new SqliteParameter("@Id", question.id));
         dbcmd.Parameters.Add(new SqliteParameter("@CorrectAnsweredCount", question.correctAnsweredCount));
         dbcmd.Parameters.Add(new SqliteParameter("@EnabledForPractice", question.enabledForPractice));
+        dbcmd.Parameters.Add(new SqliteParameter("@TotalAnsweredCount", question.totalAnsweredCount));
         dbcmd.ExecuteNonQuery();
     }
 }

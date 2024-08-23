@@ -21,6 +21,7 @@ public class LinearQuizManager : MonoBehaviour
     private DateTime startTime;
     private DateTime subSessionStartTime;
     private int currentSessionId;
+    private bool sessionIsErrorFree;
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +58,7 @@ public class LinearQuizManager : MonoBehaviour
             UpdateSessionHistory();
             int newSessionId = catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false);
             currentSessionId = newSessionId;
+            sessionIsErrorFree = true;
             subSessionStartTime = DateTime.Now;
         }
 
@@ -91,6 +93,7 @@ public class LinearQuizManager : MonoBehaviour
                 {
                     int questionIndex = nextQuestionIndex - 1;
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
+                    sessionIsErrorFree = sessionIsErrorFree && (int)button == 0;
                     nextButton.interactable = true;
                 }
                 break;
@@ -105,7 +108,6 @@ public class LinearQuizManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        UpdateSessionHistory();
         SaveTimeSpent();
     }
 
@@ -132,11 +134,14 @@ public class LinearQuizManager : MonoBehaviour
 
         if (sessionCompleted)
         {
-            currentCatalogue.sessionCount = currentCatalogue.sessionCount + 1;
+            currentCatalogue.sessionCount++;
+            if (sessionIsErrorFree)
+                currentCatalogue.errorFreeSessionCount++;
+
             catalogueTable.UpdateCatalogue(currentCatalogue);
         }
 
-        catalogueSessionHistoryTable.UpdateCatalogueSessionHistory(currentSessionId, currentSessionHistory.timeSpent + secondsSpent, sessionCompleted);
+        catalogueSessionHistoryTable.UpdateCatalogueSessionHistory(currentSessionId, currentSessionHistory.timeSpent + secondsSpent, sessionCompleted, sessionIsErrorFree);
     }
 
     private void SetEntryPoint()
@@ -146,16 +151,17 @@ public class LinearQuizManager : MonoBehaviour
         if (currentQuestionIndex != -1)
             nextQuestionIndex = currentQuestionIndex;
 
+        CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
         if (nextQuestionIndex == 0)
         {
             // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
-            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
             currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
+            sessionIsErrorFree = (currentSession == null || currentSession.isCompleted) ? true : currentSession.isErrorFree;
         }
         else
         {
-            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
             currentSessionId = currentSession.id;
+            sessionIsErrorFree = currentSession.isErrorFree;
         }
     }
 }
