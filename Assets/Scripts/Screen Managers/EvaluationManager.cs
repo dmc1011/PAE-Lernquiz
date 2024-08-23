@@ -11,6 +11,7 @@ public class EvaluationManager : MonoBehaviour
     [SerializeField] private Transform scrollTransform;
     [SerializeField] private SideMenu sideMenu;
     [SerializeField] private QuizAreaManager quizAreaManager;
+    [SerializeField] private AchievementManager achievementManager;
 
     private List<EvaluationButton> evaluationButtons = new();
     private List<DataManager.QuestionResult> questionResults = new();
@@ -32,10 +33,27 @@ public class EvaluationManager : MonoBehaviour
                 PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
                 PlayerPrefs.Save();
                 LoadResults(GetDailyTaskResults());
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Daylies");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
                 break;
             case Global.GameMode.LinearQuiz:
+                LoadResults(DataManager.QuestionResults);
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fleiﬂig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fokus", Global.CurrentQuestionRound.catalogue);
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Zeitmanagement");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Intensiv");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Flawless", Global.CurrentQuestionRound.catalogue);
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Multitalent");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
+                break;
             case Global.GameMode.RandomQuiz:
                 LoadResults(DataManager.QuestionResults);
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Randomat");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Random Flawless");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
                 break;
             default:
                 print("ERROR: EvaluationManager - Invalid Game Mode for evaluation.");

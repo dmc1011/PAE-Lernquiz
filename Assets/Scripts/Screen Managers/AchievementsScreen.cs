@@ -18,7 +18,7 @@ public class AchievementsScreen : MonoBehaviour
         {
             AchievementPopup entry = Instantiate(achievementPopUp, scrollTransform);
             entry.SetData(
-                AchievementPopup.Grade.None,
+                achievement.isAchieved ? achievement.grade : AchievementPopup.Grade.None,
                 achievement.name + " " + achievement.grade,
                 achievement.description
             );

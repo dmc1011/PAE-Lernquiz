@@ -106,7 +106,7 @@ public class SQLiteSetup : MonoBehaviour
             CREATE TABLE IF NOT EXISTS Achievement (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Name TEXT NOT NULL,
-                Grade TEXT NOT NULL DEFAULT 'None',
+                Grade TEXT NOT NULL,
                 Description TEXT NOT NULL,
                 PopupText TEXT NOT NULL,
                 IsAchieved BOOLEAN DEFAULT FALSE,
@@ -150,12 +150,12 @@ public class SQLiteSetup : MonoBehaviour
         {
             // die description sollten wir wahrscheinlich zu dem Text ändern, den wir dem Nutzer anzeigen wollen
             new Achievement("Flawless", AchievementPopup.Grade.Bronze, "Schließe zum ersten Mal einen gesamten Katalog ohne einen einzigen Fehler ab", "Du hast zum ersten Mal einen Katalog ohne Fehler abgeschlossen!", false, null),
-            new Achievement("Flawless", AchievementPopup.Grade.Silver, "Meistere einen Katalog fünfmal in Folge ohne Fehler", "Du hast einen Katalog fünfmal ohne Fehler abgeschlossen!", false, null),
-            new Achievement("Flawless", AchievementPopup.Grade.Gold, "Erreiche Perfektion, indem du einen Katalog zehnmal hintereinander fehlerfrei abschließt", "Du hast einen Katalog zehnmal ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Flawless", AchievementPopup.Grade.Silver, "Meistere einen Katalog fünfmal ohne Fehler", "Du hast einen Katalog fünfmal ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Flawless", AchievementPopup.Grade.Gold, "Erreiche Perfektion, indem du einen Katalog zehnmal fehlerfrei abschließt", "Du hast einen Katalog zehnmal ohne Fehler abgeschlossen!", false, null),
            
-            new Achievement("Multitalent", AchievementPopup.Grade.Bronze, "Beweise deine Vielseitigkeit, indem du fünf verschiedene Kataloge ohne Fehler meisterst", "Du hast fünf Katalog-Durchläufe ohne Fehler abgeschlossen!", false, null),
-            new Achievement("Multitalent", AchievementPopup.Grade.Silver, "Zeige deine umfassende Expertise, indem du zehn verschiedene Kataloge fehlerfrei abschließt", "Du hast zehn Katalog-Durchläufe ohne Fehler abgeschlossen!", false, null),
-            new Achievement("Multitalent", AchievementPopup.Grade.Gold, "Demonstriere dein Können, indem du 25 verschiedene Kataloge ohne einen einzigen Fehler meisterst", "Du hast 25 Katalog-Durchläufe ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Multitalent", AchievementPopup.Grade.Bronze, "Beweise deine Vielseitigkeit, indem du fünf Katalog-Durchläufe ohne Fehler meisterst", "Du hast fünf Katalog-Durchläufe ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Multitalent", AchievementPopup.Grade.Silver, "Zeige deine umfassende Expertise, indem du zehn Katalog-Durchläufe fehlerfrei abschließt", "Du hast zehn Katalog-Durchläufe ohne Fehler abgeschlossen!", false, null),
+            new Achievement("Multitalent", AchievementPopup.Grade.Gold, "Demonstriere dein Können, indem du 25 Katalog-Durchläufe ohne einen einzigen Fehler meisterst", "Du hast 25 Katalog-Durchläufe ohne Fehler abgeschlossen!", false, null),
 
             new Achievement("Besserwisser", AchievementPopup.Grade.Bronze, "Beantworte 50 Fragen korrekt und zeige, dass du auf dem richtigen Weg bist", "Du hast 50 Fragen richtig beantwortet!", false, null),
             new Achievement("Besserwisser", AchievementPopup.Grade.Silver, "Beweise dein Wissen mit 500 richtig beantworteten Fragen", "Du hast 500 Fragen richtig beantwortet!", false, null),

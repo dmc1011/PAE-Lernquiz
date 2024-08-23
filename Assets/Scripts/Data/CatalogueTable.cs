@@ -281,9 +281,9 @@ public class CatalogueTable
 
         IDbCommand dbcmd = dbConnection.CreateCommand();
         dbcmd.CommandText = @"
-            SELECT COUNT(*) AS CorrectAnsweredQuestionsCount
+            SELECT SUM(CorrectAnsweredCount)
             FROM Question
-            WHERE CatalogueId = @CatalogueId AND CorrectAnsweredCount > 0;
+            WHERE CatalogueId = @CatalogueId;
         ";
         dbcmd.Parameters.Add(new SqliteParameter("@CatalogueId", catalogueId));
 
