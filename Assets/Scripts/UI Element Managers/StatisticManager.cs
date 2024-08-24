@@ -11,19 +11,38 @@ public class StatisticManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI catalogueNameDisplay;
     [SerializeField] private TextMeshProUGUI catalogueLevelDisplay;
     [SerializeField] private TextMeshProUGUI timeValuesDisplay;
+    [SerializeField] private TextMeshProUGUI averageValuesDisplay;
     [SerializeField] private BarConfig barConfig;
+    [SerializeField] private Transform scrollTransform;
+    [SerializeField] private GameObject catalogueName;
+    [SerializeField] private GameObject barProgress;
+    [SerializeField] private GameObject timeStatistic;
+    [SerializeField] private GameObject averageAnswers;
+
+    public static bool isDailyTaskStatistic;
 
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private AnswerHistoryTable answerHistoryTable;
+    private CatalogueTable catalogueTable;
     private List<CatalogueSessionHistory> catalogueSessionHistories;
     private Catalogue currentCatalogue;
+
+    // average statistics
+    private int correctAnswersCount = 0;
+    private float averageAnswersCount = 0.0f;
+
+    //time statistics
     private int currentRunDuration = 0;
     private int averageRunDuration = 0;
     private int totalDuration = 0;
     private string totalDurationUnit = "";
     private string currentRunDurationUnit = "";
     private string averageRunDurationUnit = "";
-    public static bool isDailyTaskStatistic;
+
+    // current session
+    int isCorrectCount = 0;
+    int isFalseCount = 0;
+    int notAnsweredCount;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +50,9 @@ public class StatisticManager : MonoBehaviour
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
+
+        notAnsweredCount = currentCatalogue.questions.Count;
 
         if (isDailyTaskStatistic)
         {
@@ -40,20 +62,16 @@ public class StatisticManager : MonoBehaviour
         else 
         {
             dailyTaskStatisticPanel.gameObject.SetActive(false);
+            catalogueName.transform.SetParent(scrollTransform);
+            barProgress.transform.SetParent(scrollTransform);
+            averageAnswers.transform.SetParent(scrollTransform);
+            timeStatistic.transform.SetParent(scrollTransform);
             catalogueNameDisplay.text = Global.CurrentQuestionRound.catalogue.name;
             catalogueLevelDisplay.text = "Stufe " + Global.CurrentQuestionRound.catalogue.sessionCount.ToString();
 
             catalogueSessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
             SetStatistics();
-            //to do: set catalogue level as text
-            timeValuesDisplay.text = $"{currentRunDuration}{currentRunDurationUnit}\n\n{averageRunDuration}{averageRunDurationUnit}\n\n{totalDuration}{totalDurationUnit}";
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private string GetUnit(int seconds)
@@ -62,6 +80,34 @@ public class StatisticManager : MonoBehaviour
     }
 
     private void SetStatistics()
+    {
+        CurrentSessionStatistic();
+        TimeStatistics();
+        AverageCorrectAnswersInCatalogue();
+    }
+
+    private void CurrentSessionStatistic()
+    {
+        if (catalogueSessionHistories.Count > 0)
+        {
+            CatalogueSessionHistory session = catalogueSessionHistories[0];
+            List<AnswerHistory> answerHistories = answerHistoryTable.FindAnswerHistoryBySessionId(session.id);
+            foreach (var answerHistory in answerHistories)
+            {
+                bool wasCorrect = answerHistory.wasCorrect;
+                if (wasCorrect)
+                    isCorrectCount++;
+                else
+                    isFalseCount++;
+
+                notAnsweredCount--;
+            }
+        }
+
+        barConfig.SetValue(isCorrectCount, isFalseCount, notAnsweredCount);
+    }
+
+    private void TimeStatistics()
     {
         if (catalogueSessionHistories.Count > 0)
         {
@@ -78,25 +124,28 @@ public class StatisticManager : MonoBehaviour
         currentRunDurationUnit = GetUnit(currentRunDuration);
         averageRunDurationUnit = GetUnit(averageRunDuration);
 
-        int isCorrectCount = 0;
-        int isFalseCount = 0;
-        int notAnsweredCount = currentCatalogue.questions.Count;
-        if (catalogueSessionHistories.Count > 0)
-        {
-            CatalogueSessionHistory session = catalogueSessionHistories[0];
-            List<AnswerHistory> answerHistories = answerHistoryTable.FindAnswerHistoryBySessionId(session.id);
-            foreach (var answerHistory in answerHistories)
-            {
-                bool wasCorrect = answerHistory.wasCorrect;
-                if (wasCorrect)
-                    isCorrectCount++;
-                else
-                    isFalseCount++;
+        timeValuesDisplay.text = $"{currentRunDuration}{currentRunDurationUnit}\n\n{averageRunDuration}{averageRunDurationUnit}\n\n{totalDuration}{totalDurationUnit}";
+    }
 
-                notAnsweredCount--;
-            }
+    private void AverageCorrectAnswersInCatalogue()
+    {
+        int totalAnswers = 0;
+
+        List<Question> questions = catalogueTable.FindQuestionsByCatalogueId(currentCatalogue.id);
+
+        foreach (var question in questions)
+        {
+            correctAnswersCount += question.correctAnsweredCount;
+            totalAnswers += question.totalAnsweredCount;
+
+            Debug.Log(totalAnswers);
+            Debug.Log(correctAnswersCount);
+            Debug.Log((float)correctAnswersCount / (float)totalAnswers);
+
+            if (totalAnswers > 0)
+                averageAnswersCount = (float)correctAnswersCount / (float)totalAnswers * 100;
         }
-        
-        barConfig.SetValue(isCorrectCount, isFalseCount, notAnsweredCount);
+
+        averageValuesDisplay.text = $"{correctAnswersCount}\n\n{(int)averageAnswersCount}%";
     }
 }
