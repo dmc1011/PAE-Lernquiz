@@ -148,7 +148,6 @@ public class SQLiteSetup : MonoBehaviour
     {
         List<Achievement> achievements = new()
         {
-            // die description sollten wir wahrscheinlich zu dem Text ändern, den wir dem Nutzer anzeigen wollen
             new Achievement("Flawless", AchievementPopup.Grade.Bronze, "Schließe zum ersten Mal einen gesamten Katalog ohne einen einzigen Fehler ab", "Du hast zum ersten Mal einen Katalog ohne Fehler abgeschlossen!", false, null),
             new Achievement("Flawless", AchievementPopup.Grade.Silver, "Meistere einen Katalog fünfmal ohne Fehler", "Du hast einen Katalog fünfmal ohne Fehler abgeschlossen!", false, null),
             new Achievement("Flawless", AchievementPopup.Grade.Gold, "Erreiche Perfektion, indem du einen Katalog zehnmal fehlerfrei abschließt", "Du hast einen Katalog zehnmal ohne Fehler abgeschlossen!", false, null),
@@ -161,33 +160,13 @@ public class SQLiteSetup : MonoBehaviour
             new Achievement("Besserwisser", AchievementPopup.Grade.Silver, "Beweise dein Wissen mit 500 richtig beantworteten Fragen", "Du hast 500 Fragen richtig beantwortet!", false, null),
             new Achievement("Besserwisser", AchievementPopup.Grade.Gold, "Zeige deine herausragenden Kenntnisse, indem du 1000 Fragen korrekt beantwortest", "Du hast 1000 Fragen richtig beantwortet!", false, null),
 
-            // new Achievement("Streak", AchievementPopup.Grade.Bronze, "10 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
-            // new Achievement("Streak", AchievementPopup.Grade.Silver, "25 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
-            // new Achievement("Streak", AchievementPopup.Grade.Gold, "50 Tage in Folge 5 Fragen beantwortet", false, DateTime.Now),
-
             new Achievement("Daylies", AchievementPopup.Grade.Bronze, "Schließe fünfmal den Daily Task erfolgreich ab", "Du hast den Daily Task fünfmal abgeschlossen!", false, null),
             new Achievement("Daylies", AchievementPopup.Grade.Silver, "Erreiche das Ziel, indem du fünfzehnmal den Daily Task meisterst", "Du hast den Daily Task fünfzehnmal abgeschlossen!", false, null),
             new Achievement("Daylies", AchievementPopup.Grade.Gold, "Zeige Ausdauer, indem du dreißigmal den Daily Task erfolgreich abschließt", "Du hast den Daily Task dreißigmal abgeschlossen!", false, null),
 
-            // new Achievement("Level", AchievementPopup.Grade.Bronze, "Level 10 erreicht", false, DateTime.Now),
-            // new Achievement("Level", AchievementPopup.Grade.Silver, "Level 25 erreicht", false, DateTime.Now),
-            // new Achievement("Level", AchievementPopup.Grade.Gold, "Level 50 erreicht", false, DateTime.Now),
-
-            // new Achievement("Ersteller", AchievementPopup.Grade.Bronze, "1 Katalog erstellt", false, DateTime.Now),
-            // new Achievement("Ersteller", AchievementPopup.Grade.Silver, "5 Kataloge erstellt", false, DateTime.Now),
-            // new Achievement("Ersteller", AchievementPopup.Grade.Gold, "10 Kataloge erstellt", false, DateTime.Now),
-
-            // new Achievement("Vernetzt", AchievementPopup.Grade.Bronze, "1 Katalog exportiert", false, DateTime.Now),
-            // new Achievement("Vernetzt", AchievementPopup.Grade.Silver, "5 Kataloge exportiert", false, DateTime.Now),
-            // new Achievement("Vernetzt", AchievementPopup.Grade.Gold, "10 Kataloge exportiert", false, DateTime.Now),
-
             new Achievement("Randomat", AchievementPopup.Grade.Bronze, "Schließe zehn Random Quiz Runden erfolgreich ab", "Du hast zehn Random Quiz Runden abgeschlossen!", false, null),
             new Achievement("Randomat", AchievementPopup.Grade.Silver, "Beweise deine Flexibilität, indem du fünfzig Random Quiz Runden meisterst", "Du hast 50 Random Quiz Runden abgeschlossen!", false, null),
             new Achievement("Randomat", AchievementPopup.Grade.Gold, "Zeige deine Ausdauer, indem du hundert Random Quiz Runden erfolgreich abschließt", "DU hast 100 Random Quiz Runden abgeschlossen!", false, null),
-
-            // new Achievement("Importeur", AchievementPopup.Grade.Bronze, "1 Katalog importiert", false, DateTime.Now),
-            // new Achievement("Importeur", AchievementPopup.Grade.Silver, "5 Kataloge importiert", false, DateTime.Now),
-            // new Achievement("Importeur", AchievementPopup.Grade.Gold, "10 Kataloge importiert", false, DateTime.Now),
 
             new Achievement("Hartnäckig", AchievementPopup.Grade.Bronze, "Beantworte insgesamt 1000 Fragen", "Du hast 1000 Fragen beantwortet!", false, null),
             new Achievement("Hartnäckig", AchievementPopup.Grade.Silver, "Beantworte insgesamt 5000 Fragen", "Du hast 5000 Fragen beantwortet!", false, null),
