@@ -141,10 +141,6 @@ public class StatisticManager : MonoBehaviour
             correctAnswersCount += question.correctAnsweredCount;
             totalAnswers += question.totalAnsweredCount;
 
-            Debug.Log(totalAnswers);
-            Debug.Log(correctAnswersCount);
-            Debug.Log((float)correctAnswersCount / (float)totalAnswers);
-
             if (totalAnswers > 0)
                 averageAnswersCount = (float)correctAnswersCount / (float)totalAnswers * 100;
         }
