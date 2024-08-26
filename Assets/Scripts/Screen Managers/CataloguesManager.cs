@@ -147,7 +147,7 @@ public class CataloguesManager : MonoBehaviour
                     newQuestionCounter++;
             }
 
-            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), "", 0, 0, -1, answers, new List<AnswerHistory>());
+            Question newQuestion = new(-1, "Frage" + (newQuestionCounter + 1).ToString(), "", 0, 0, -1, false, answers, new List<AnswerHistory>());
             questionIndexAfterReset = questionSelection.value;
 
             if (currentCatalogue == Global.tmpCatalogue)
@@ -429,7 +429,7 @@ public class CataloguesManager : MonoBehaviour
 
         if (currentCatalogue == Global.tmpCatalogue)
         {
-            // trivial löschen. Es gibt ja keine IDs
+            // trivial lï¿½schen. Es gibt ja keine IDs
             Global.tmpCatalogue.questions.Remove(currentQuestion);
             currentCatalogue = Global.tmpCatalogue;
         }
@@ -589,7 +589,7 @@ public class CataloguesManager : MonoBehaviour
     private IEnumerator OpenFileBrowserAndLoadCatalogue()
     {
         FileBrowser.SetFilters(false, ".json");
-        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Wähle einen Katalog", "Öffnen");
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Wï¿½hle einen Katalog", "ï¿½ffnen");
 
         if (FileBrowser.Success)
             OnFilesSelected(FileBrowser.Result);
@@ -627,7 +627,7 @@ public class CataloguesManager : MonoBehaviour
     private IEnumerator OpenFileBrowserAndSaveCatalogue()
     {
         FileBrowser.SetFilters(false, ".json");
-        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Wähle einen Speicherort", "Speichern");
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Wï¿½hle einen Speicherort", "Speichern");
 
         if (FileBrowser.Success)
             SaveCatalogue(FileBrowser.Result);

@@ -53,6 +53,9 @@ public class CatalogueButtonHandler : MonoBehaviour
             case Global.GameMode.Statistics:
                 ShowStatistics();
                 break;
+            case Global.GameMode.PracticeBook:
+                StartPracticeBookClickedEvent();
+                break;
             default:
                 break;
         }
@@ -132,5 +135,23 @@ public class CatalogueButtonHandler : MonoBehaviour
         CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
 
         LoadScene("Statistics");
+    }
+
+    // start practice book
+    private void StartPracticeBookClickedEvent()
+    {
+        string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        // invalid catalogue name
+        if (!NewGameManager.catalogues.Any(catalogue => catalogue.name == catalogueName))
+        {
+            print($"ERROR [NewGameManager.cs.StartPracticeBookClickedEvent()]: There is no catalogue called '{catalogueName}'");
+            return;
+        }
+
+        // start quiz round
+        Global.CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
+        Global.InsideQuestionRound = true;
+        LoadScene("PractiseBook");
     }
 }

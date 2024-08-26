@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,6 +56,13 @@ public class NewGameManager : MonoBehaviour
 
         for (int i = 0; i < catalogueCount; i++)
         {
+            if (Global.CurrentQuestionRound.gameMode == Global.GameMode.PracticeBook)
+            {
+                List<Question> questions = catalogues[i].questions;
+                bool catalogueContainsPracticeQuestions = questions.Any(questions => questions.enabledForPractice);
+                if (!catalogueContainsPracticeQuestions)
+                    continue;
+            }
             GameObject catalogueButton = Instantiate(catalogueButtonPrefab, buttonContainer);
             SliderConfig sliderConfig = catalogueButton.GetComponentInChildren<SliderConfig>();
 

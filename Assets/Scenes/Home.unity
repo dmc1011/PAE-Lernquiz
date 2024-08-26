@@ -1071,6 +1071,22 @@ PrefabInstance:
       value: "\xDCbungsbuch"
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1767197248}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadPracticeBookSelection
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HomeManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: PractiseBook
       objectReference: {fileID: 0}
