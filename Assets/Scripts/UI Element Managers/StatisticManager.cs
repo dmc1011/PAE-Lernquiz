@@ -35,9 +35,9 @@ public class StatisticManager : MonoBehaviour
     private int currentRunDuration = 0;
     private int averageRunDuration = 0;
     private int totalDuration = 0;
-    private string totalDurationUnit = "";
-    private string currentRunDurationUnit = "";
-    private string averageRunDurationUnit = "";
+    private string formattedTotalDuration = "";
+    private string formattedCurrentRunDuration = "";
+    private string formattedAverageRunDuration = "";
 
     // current session
     int isCorrectCount = 0;
@@ -74,9 +74,13 @@ public class StatisticManager : MonoBehaviour
         }
     }
 
-    private string GetUnit(int seconds)
+    private string GetFormattedTimeInHMS(int timeInSeconds)
     {
-        return seconds > 60 ? " Minuten" : " Sekunden";
+        int hours = timeInSeconds / 3600;
+        int minutes = (timeInSeconds % 3600) / 60;
+        int seconds = timeInSeconds % 60;
+
+        return $"{hours}h {minutes}min {seconds}s";
     }
 
     private void SetStatistics()
@@ -112,19 +116,18 @@ public class StatisticManager : MonoBehaviour
         if (catalogueSessionHistories.Count > 0)
         {
             currentRunDuration = catalogueSessionHistories[0].timeSpent;
-            currentRunDuration = currentRunDuration > 60 ? currentRunDuration / 60 : currentRunDuration;
 
             int totalDurationSum = catalogueSessionHistories.Sum(history => history.timeSpent);
             averageRunDuration = totalDurationSum / catalogueSessionHistories.Count;
-            averageRunDuration = averageRunDuration > 60 ? averageRunDuration / 60 : averageRunDuration;
         }
 
-        totalDuration = currentCatalogue.totalTimeSpent > 60 ? currentCatalogue.totalTimeSpent / 60 : currentCatalogue.totalTimeSpent;
-        totalDurationUnit = GetUnit(currentCatalogue.totalTimeSpent);
-        currentRunDurationUnit = GetUnit(currentRunDuration);
-        averageRunDurationUnit = GetUnit(averageRunDuration);
+        totalDuration = currentCatalogue.totalTimeSpent;
 
-        timeValuesDisplay.text = $"{currentRunDuration}{currentRunDurationUnit}\n\n{averageRunDuration}{averageRunDurationUnit}\n\n{totalDuration}{totalDurationUnit}";
+        formattedTotalDuration = GetFormattedTimeInHMS(currentCatalogue.totalTimeSpent);
+        formattedCurrentRunDuration = GetFormattedTimeInHMS(currentRunDuration);
+        formattedAverageRunDuration = GetFormattedTimeInHMS(averageRunDuration);
+
+        timeValuesDisplay.text = $"{formattedCurrentRunDuration}\n\n{formattedAverageRunDuration}\n\n{formattedTotalDuration}";
     }
 
     private void AverageCorrectAnswersInCatalogue()
