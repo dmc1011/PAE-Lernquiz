@@ -7,6 +7,12 @@ using UnityEngine.UI;
 
 public class CatalogueButtonHandler : MonoBehaviour
 {
+    public enum EditorAction
+    {
+        Add,
+        Edit
+    }
+
     [SerializeField] private Button catalogueButton;
     [SerializeField] private Background bg = null;
     private string targetScene = "";
@@ -52,6 +58,9 @@ public class CatalogueButtonHandler : MonoBehaviour
                 break;
             case Global.GameMode.Statistics:
                 ShowStatistics();
+                break;
+            case Global.GameMode.Editor:
+                StartEditor();
                 break;
             default:
                 break;
@@ -132,5 +141,25 @@ public class CatalogueButtonHandler : MonoBehaviour
         CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
 
         LoadScene("Statistics");
+    }
+
+
+    // start editor
+    private void StartEditor()
+    {
+        string catalogueName = this.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        if (catalogueName == "Katalog hinzufügen" && Global.SetTmpCatalogue(null))
+        {
+            EditorManager.isNewCatalogue = true;
+            LoadScene("Catalogues");
+            return;
+        }
+
+        if (Global.SetTmpCatalogue(catalogueName))
+        {
+            EditorManager.isNewCatalogue = false;
+            LoadScene("Catalogues");
+        }
     }
 }
