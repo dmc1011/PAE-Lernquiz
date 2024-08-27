@@ -25,6 +25,7 @@ public static class DataManager
         // TODO: add questionImage
         // TODO: add answerImage
         public bool isCorrect;
+        public int questionId;
 
         public QuestionResult(int questionIndex, int answerIndex, Catalogue catalogue)
         {
@@ -40,6 +41,7 @@ public static class DataManager
             questionText = question.text;
             answerTexts = allAnswerTexts;
             selectedAnswerText = answer.text;
+            questionId = question.id;
         }
     }
 
