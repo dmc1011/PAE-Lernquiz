@@ -1711,6 +1711,8 @@ MonoBehaviour:
   sideMenuHandleOuter: {fileID: 2013265180}
   colorInner: {r: 0.5647059, g: 0.007843138, b: 1, a: 1}
   colorOuter: {r: 0.19607843, g: 0, b: 0.34901962, a: 1}
+  headerBorder: {fileID: 2052182295}
+  hasHeaderBorder: 0
 --- !u!222 &1574602048
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1981,6 +1983,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2052182295 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9110188718112773478, guid: f854456269739b04dbcee5646eccac88, type: 3}
+  m_PrefabInstance: {fileID: 7924594859935907731}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2132208902 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6905309683878962850, guid: 55e7398811a427c439eb2030ace40468, type: 3}

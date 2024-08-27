@@ -13,6 +13,8 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
     [SerializeField] private Image sideMenuHandleOuter;
     [SerializeField] private Color colorInner;
     [SerializeField] private Color colorOuter;
+    [SerializeField] private GameObject headerBorder;
+    [SerializeField] private bool hasHeaderBorder;
 
     // Positioning
     private float width;
@@ -35,7 +37,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
     // For EvaluationScreens
     private bool isEvaluation = false;
     private bool isHelp = false;
-    private bool hasNoGearIcon = true;
+    private bool hasNoGearIcon = true; 
 
     void Start()
     {
@@ -48,6 +50,9 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
             isHelp = true;
         }
         hasNoGearIcon = (isHelp || isEvaluation);
+
+        if(!hasHeaderBorder)
+            headerBorder.SetActive(false);
 
 
         width = Screen.width;
