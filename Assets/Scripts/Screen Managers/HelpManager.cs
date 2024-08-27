@@ -6,7 +6,6 @@ using TMPro;
 
 public class HelpManager : MonoBehaviour
 {
-    [SerializeField] private Button[] questionButtons = new Button[20];
     [SerializeField] private SideMenu sideMenuPanel; 
     [SerializeField] private TMP_Text sideMenuText;
     [SerializeField] private TMP_Text sideMenuHeader;
