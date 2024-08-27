@@ -49,6 +49,7 @@ public class EvaluationManager : MonoBehaviour
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartnäckig");
                 break;
             case Global.GameMode.RandomQuiz:
+            case Global.GameMode.PracticeBook:
                 LoadResults(DataManager.QuestionResults);
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Randomat");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Random Flawless");

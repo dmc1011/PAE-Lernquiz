@@ -7,7 +7,8 @@ public static class Global
         LinearQuiz,
         RandomQuiz,
         DailyTask,
-        Statistics
+        Statistics,
+        PracticeBook
     }
 
     // player prefs keys for daily task
