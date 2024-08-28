@@ -135,6 +135,15 @@ public class HomeManager : MonoBehaviour
         StartSceneTransition();
     }
 
+
+    public void LoadEditorSelection()
+    {
+        targetScene = "NewGame";
+        Global.CurrentQuestionRound.gameMode = Global.GameMode.Editor;
+        StartSceneTransition();
+    }
+    
+    
     public void LoadPracticeBookSelection()
     {
         targetScene = "NewGame";

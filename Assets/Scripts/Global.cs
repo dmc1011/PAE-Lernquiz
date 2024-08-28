@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 public static class Global
 {
     // GameMode is used as context for catalogue selection: selecting a catalogue will trigger specific events and screen transition
@@ -8,6 +10,7 @@ public static class Global
         RandomQuiz,
         DailyTask,
         Statistics,
+        Editor,
         PracticeBook
     }
 
@@ -24,5 +27,20 @@ public static class Global
     public static DataManager.DailyTask CurrentDailyTask;
     public const int DailyTaskSize = 10;
     public static Catalogue tmpCatalogue = null;
+
+
+    // returns true if tmpCatalogue != null
+    public static bool SetTmpCatalogue (string catalogueName)
+    {
+        if (catalogueName == null)
+        {
+            tmpCatalogue = new Catalogue(0, "Neuer Fragenkatalog", 0, 0, 0, 0, 0, 0, new List<Question>(), new List<CatalogueSessionHistory>());
+            return true;
+        }
+
+        CatalogueTable catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        tmpCatalogue = catalogueTable.FindCatalogueByName(catalogueName);
+        return tmpCatalogue != null;
+    }
 }
 
