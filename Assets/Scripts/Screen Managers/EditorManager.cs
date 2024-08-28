@@ -12,12 +12,15 @@ using System;
 
 public class EditorManager : MonoBehaviour
 {
+    // Screen Elements: Options for adding new Catalogue
+    [SerializeField] private GameObject optionsAddCatalogue;
+
     // Screen Elements: Question Selection
     [SerializeField] private GameObject questionSelectionScrollView;
     [SerializeField] private TextMeshProUGUI CatalogueLabel;
     [SerializeField] private GameObject questionButtonPrefab;      // used for dynamically rendering question buttons
     [SerializeField] private Transform buttonContainer;            // 'content' element of scroll view
-    [SerializeField] private GameObject emergencyExitButton;       // used in case selected catalogue could not be loaded for editor // to do
+    [SerializeField] private GameObject emergencyReturnButton;     // used in case selected catalogue could not be loaded for editor // to do
 
     // Screen Elements: Question Editor
     [SerializeField] private GameObject questionEditor;
@@ -27,15 +30,9 @@ public class EditorManager : MonoBehaviour
 
     // Screen Elements: Text Input
     [SerializeField] private GameObject textInputView;
-    [SerializeField] private Button textInputAcceptButton;
-    [SerializeField] private Button textInputDeclineButton;
     [SerializeField] private TMP_InputField textInputField;
 
     [SerializeField] private Background bg = null;
-
-
-    [SerializeField] private Button[] editButtons = new Button[5]; // Not relevant in which order, this is used to show/hide the buttons when text input is active
-    [SerializeField] private Button addTmpCatalogueToDB;
 
 
     // Quiz Area Labels
@@ -49,9 +46,7 @@ public class EditorManager : MonoBehaviour
     private Question currentQuestion;
 
     // safety
-    private bool questionAddRecursionFailsafe = false; // This "should" never be needed... but. better safe than sorry.
     private bool invalidStart = true;
-
 
     // Editor Mode
     enum EDITOR_MODE { NONE, EDIT_QUESTION, ADD_QUESTION};
@@ -69,16 +64,8 @@ public class EditorManager : MonoBehaviour
     //private TEXT_INPUT textInputStatus = TEXT_INPUT.HIDDEN;
     private string currentTextInput = "";
 
-    // ???
-    private int questionIndexAfterReset = -1;
-    private int catalogueIndexAfterReset = -1;
-
     // Scene transition
     private string targetScene = "NewGame";
-
-    //TODO Delete
-    [SerializeField] private TMP_Dropdown catalogueSelection;
-    [SerializeField] private TMP_Dropdown questionSelection;
 
     
 
@@ -110,8 +97,6 @@ public class EditorManager : MonoBehaviour
             {
                 invalidStart = false;
             }
-
-            DisplayQuestionSelection();
         }
         catch
         {
@@ -123,13 +108,36 @@ public class EditorManager : MonoBehaviour
             questionEditor.gameObject.SetActive(false);
             textInputView.gameObject.SetActive(false);
             questionSelectionScrollView.gameObject.SetActive(false);
-            // emergencyExitButton.gameObject.SetActive(true);          // to do
+            emergencyReturnButton.gameObject.SetActive(true);
             return;
         }
 
-        // emergencyExitButton.gameObject.SetActive(false);     // to do
+        if (isNewCatalogue)
+        {
+            DisplayCreateCatalogueOptions();
+        }
+        else
+        {
+            DisplayQuestionSelection();
+        }
     }
 
+    public void CreateNewCatalogue()
+    {
+        catalogueTable.AddCatalogue(currentCatalogue);
+        currentCatalogue = catalogueTable.FindCatalogueByName(currentCatalogue.name);
+        DisplayQuestionSelection();
+    }
+
+    private void DisplayCreateCatalogueOptions()
+    {
+        textInputView.gameObject.SetActive(false);
+        questionSelectionScrollView.gameObject.SetActive(false);
+        questionEditor.gameObject.SetActive(false);
+        optionsAddCatalogue.gameObject.SetActive(true);
+        editorMode = EDITOR_MODE.NONE;
+        inputMode = INPUT_MODE.NONE;
+    }
 
     private void DisplayQuestionSelection()
     {
@@ -153,6 +161,7 @@ public class EditorManager : MonoBehaviour
             buttonLabel.text = currentCatalogue.questions[i].id.ToString(); // to do: .name
         }
 
+        optionsAddCatalogue.gameObject.SetActive(false);
         questionEditor.gameObject.SetActive(false);
         textInputView.gameObject.SetActive(false);
         questionSelectionScrollView.gameObject.SetActive(true);
@@ -163,6 +172,7 @@ public class EditorManager : MonoBehaviour
 
     private void DisplayQuestionEditor(EDITOR_MODE newMode)
     {
+        optionsAddCatalogue.gameObject.SetActive(false);
         textInputView.gameObject.SetActive(false);
         questionSelectionScrollView.gameObject.SetActive(false);
         questionEditor.gameObject.SetActive(true);
@@ -176,6 +186,7 @@ public class EditorManager : MonoBehaviour
         textInputField.placeholder.GetComponent<TextMeshProUGUI>().text = defaultText;
         textInputField.text = defaultText;
 
+        optionsAddCatalogue.gameObject.SetActive(false);
         questionSelectionScrollView.gameObject.SetActive(false);
         questionEditor.gameObject.SetActive(false);
         textInputView.gameObject.SetActive(true);
@@ -195,11 +206,20 @@ public class EditorManager : MonoBehaviour
 
     public void ReturnToCatalogueSelection()
     {
-        LoadScene();
+        LoadCatalogueSelection();
     }
 
     public void ReturnToQuestionSelection()
     {
+        Debug.Log("" + editorMode.ToString());
+        Debug.Log("" + currentTextInput);
+
+        if(editorMode == EDITOR_MODE.ADD_QUESTION && (currentTextInput == "" || currentQuestion.name == "Neue Frage"))
+        {
+            print("Bitte gib einen gültigen Fragennamen ein.");
+            return;
+        }
+
         StoreQuestion();
         DisplayQuestionSelection();
     }
@@ -215,13 +235,20 @@ public class EditorManager : MonoBehaviour
     {
         if (isNewCatalogue)
         {
+            if (catalogueTable.FindCatalogueByName(currentCatalogue.name) != null)
+            {
+                print("Katalogname existiert bereits in DB");
+                return;
+            }
+
             catalogueTable.AddCatalogue(currentCatalogue);
-        } else
+        } 
+        else
         {
             catalogueTable.UpdateCatalogue(currentCatalogue);
         }
 
-        LoadScene();
+        LoadCatalogueSelection();
     }
 
     private void StoreQuestion()
@@ -231,7 +258,9 @@ public class EditorManager : MonoBehaviour
             catalogueTable.AddQuestion(currentCatalogue.id, currentQuestion);
             catalogueTable.UpdateCatalogue(currentCatalogue);
             currentCatalogue = catalogueTable.FindCatalogueById(currentCatalogue.id);
-        } else
+        }
+
+        if (editorMode == EDITOR_MODE.EDIT_QUESTION)
         {
             catalogueTable.UpdateQuestionNameByID(currentQuestion.id, currentQuestion.name);
             catalogueTable.UpdateQuestionTextByID(currentQuestion.id, currentQuestion.text);
@@ -246,14 +275,22 @@ public class EditorManager : MonoBehaviour
     {
         TriggerSafetyModal();   // To do
 
+        if (isNewCatalogue)
+        {
+            LoadCatalogueSelection();
+            return;
+        }
+
         catalogueTable.DeleteCatalogueById(currentCatalogue.id);
         Global.SetTmpCatalogue(null);
 
-        LoadScene();
+        LoadCatalogueSelection();
     }
 
     public void AddNewQuestion()
     {
+        currentTextInput = "";
+
         List<Answer> answers = new List<Answer>();
         for (int i = 0; i < 4; i++)
         {
@@ -282,15 +319,16 @@ public class EditorManager : MonoBehaviour
 
     public void DeleteQuestion()
     {
-        print("EventQuestionDeleteButton");
-
-        TriggerSafetyModal();
-        currentCatalogue.questions.Remove(currentQuestion);
-        DisplayQuestionSelection();
-
         TriggerSafetyModal();   // To do
+
+        if (editorMode == EDITOR_MODE.ADD_QUESTION)
+        {
+            DisplayQuestionSelection();
+            return;
+        }
+
         currentCatalogue.questions.Remove(currentQuestion);
-        catalogueTable.DeleteQuestionById(currentQuestion.id);  // To do: notwendig?
+        catalogueTable.DeleteQuestionById(currentQuestion.id);
         DisplayQuestionSelection();
     }
 
@@ -346,7 +384,7 @@ public class EditorManager : MonoBehaviour
     }
 
 
-    private void LoadScene()
+    private void LoadCatalogueSelection()
     {
         if (bg != null)
         {
@@ -383,14 +421,24 @@ public class EditorManager : MonoBehaviour
             return;
         };
 
+        if (currentTextInput == "")
+        {
+            print("Bitte gib eine gültige Texteingabe ein.");
+        }
+
         switch (inputMode)
         {
             case INPUT_MODE.RENAME_CATALOGUE:
-                if (currentTextInput != currentCatalogue.name && catalogueTable.FindCatalogueByName(currentTextInput) != null)
+                if (currentCatalogue.name == currentTextInput)
+                {
+                    DisplayQuestionSelection();
+                    break;
+                }
+                if (catalogueTable.FindCatalogueByName(currentTextInput) != null)
                 {
                     print("ERROR: There already is a catalogue named \"" + currentTextInput + "\"");
                     TriggerUserAlert();
-                    return;
+                    break;
                 }
 
                 currentCatalogue.name = currentTextInput;
@@ -401,8 +449,10 @@ public class EditorManager : MonoBehaviour
                 if (currentTextInput == currentQuestion.name)
                 {
                     DisplayQuestionEditor(editorMode);
-                    return;
+                    break;
                 }
+
+                bool isValidQuestionName = true;
 
                 foreach (Question q in currentCatalogue.questions)
                 {
@@ -410,13 +460,18 @@ public class EditorManager : MonoBehaviour
                     {
                         print("ERROR: You shall not name two questions the same! " + q.name + " already exists.");
                         TriggerUserAlert();
-                        return;
+                        isValidQuestionName = false;
+                        break;
                     }
                 }
 
-                currentQuestion.name = currentTextInput;
-                SetQuestionEditor();
-                DisplayQuestionEditor(editorMode);
+                if (isValidQuestionName)
+                {
+                    currentQuestion.name = currentTextInput;
+                    SetQuestionEditor();
+                    DisplayQuestionEditor(editorMode);
+                }
+
                 break;
 
             case INPUT_MODE.EDIT_QUESTION_TEXT:
@@ -442,34 +497,9 @@ public class EditorManager : MonoBehaviour
             currentTextInput = textInput;
     }
 
-    private void UpdateCatalogueSelectionTextForCurrentCatalogue()
-    {
-        catalogueSelection.options[catalogueSelection.value].text = currentCatalogue.name;
-        catalogueSelection.captionText.text = currentCatalogue.name;
-    }
 
 
-
-
-
-    private void CatalogueSelectionUpdate()
-    {
-
-    }
-
-
-
-    public void QuestionSelectionChangedEvent()
-    {
-                int currentCatalogueId = currentCatalogue.id;
-                //catalogueTable.AddQuestion(currentCatalogueId, newQuestion);
-                currentCatalogue = catalogueTable.FindCatalogueById(currentCatalogueId);
-    }
-
-
-
-
-
+    // Import
 
     public void OnOpenFileBrowserImportButtonClicked()
     {
@@ -497,10 +527,9 @@ public class EditorManager : MonoBehaviour
 
         try
         {
-            Catalogue catalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(path));
+            currentCatalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(path));
             Debug.Log("Loaded Catalogue succesfully.");
-            catalogueTable.AddCatalogue(catalogue);
-            CatalogueSelectionUpdate();
+            DisplayQuestionSelection();
         }
         catch (Exception e)
         {
@@ -508,6 +537,9 @@ public class EditorManager : MonoBehaviour
             throw e;
         }
     }
+
+
+    // Export
 
     public void OnOpenFileBrowserExportButtonClicked()
     {
