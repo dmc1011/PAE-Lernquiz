@@ -20,7 +20,7 @@ public class EditorManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CatalogueLabel;
     [SerializeField] private GameObject questionButtonPrefab;      // used for dynamically rendering question buttons
     [SerializeField] private Transform buttonContainer;            // 'content' element of scroll view
-    [SerializeField] private GameObject emergencyReturnButton;     // used in case selected catalogue could not be loaded for editor // to do
+    [SerializeField] private GameObject emergencyReturnButton;     // used in case selected catalogue could not be loaded for editor
 
     // Screen Elements: Question Editor
     [SerializeField] private GameObject questionEditor;
@@ -158,7 +158,7 @@ public class EditorManager : MonoBehaviour
 
             // display question name on button
             TextMeshProUGUI buttonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
-            buttonLabel.text = currentCatalogue.questions[i].id.ToString(); // to do: .name
+            buttonLabel.text = currentCatalogue.questions[i].name;
         }
 
         optionsAddCatalogue.gameObject.SetActive(false);
@@ -297,7 +297,7 @@ public class EditorManager : MonoBehaviour
             answers.Add(new(-1, "Antwort " + (i + 1).ToString(), -1, i == 0));
         }
 
-        currentQuestion = new Question(-1, "Neuer Fragentext", "Neue Frage", 0, currentCatalogue.id, answers, new List<AnswerHistory>());
+        currentQuestion = new Question(-1, "Neuer Fragentext", "Neue Frage", 0, 0, currentCatalogue.id, false, answers, new List<AnswerHistory>());
 
         SetQuestionEditor();
         DisplayQuestionEditor(EDITOR_MODE.ADD_QUESTION);
@@ -306,7 +306,7 @@ public class EditorManager : MonoBehaviour
     
     public void EditQuestion(TextMeshProUGUI questionButtonLabel)
     {        
-        currentQuestion = currentCatalogue.questions.Find(question => question.id.ToString() == questionButtonLabel.text); // to do = .id zu .name
+        currentQuestion = currentCatalogue.questions.Find(question => question.name == questionButtonLabel.text);
 
         SetQuestionEditor();
         DisplayQuestionEditor(EDITOR_MODE.EDIT_QUESTION);
@@ -363,6 +363,9 @@ public class EditorManager : MonoBehaviour
                 break;
 
             case INPUT_MODE.EDIT_QUESTION_TEXT:
+                DisplayQuestionEditor(editorMode);
+                break;
+            case INPUT_MODE.EDIT_ANSWER: 
                 DisplayQuestionEditor(editorMode);
                 break;
             default: break;

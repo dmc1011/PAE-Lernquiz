@@ -34,7 +34,7 @@ public static class Global
     {
         if (catalogueName == null)
         {
-            tmpCatalogue = new Catalogue(0, "Neuer Fragenkatalog", 0, 0, new List<Question>(), new List<CatalogueSessionHistory>());
+            tmpCatalogue = new Catalogue(0, "Neuer Fragenkatalog", 0, 0, 0, 0, 0, 0, new List<Question>(), new List<CatalogueSessionHistory>());
             return true;
         }
 
