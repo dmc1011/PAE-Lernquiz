@@ -41,22 +41,7 @@ public class LinearQuizManager : MonoBehaviour
         startTime = DateTime.Now;
         subSessionStartTime = DateTime.Now;
 
-        int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
-        if (currentQuestionIndex != -1) 
-            nextQuestionIndex = currentQuestionIndex;
-
-        CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
-        if (nextQuestionIndex == 0)
-        {
-            // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
-            currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
-            sessionIsErrorFree = (currentSession == null || currentSession.isCompleted) ? true : currentSession.isErrorFree;
-        }
-        else
-        {
-            currentSessionId = currentSession.id;
-            sessionIsErrorFree = currentSession.isErrorFree;
-        }        
+        SetEntryPoint();
 
         // Display the first question
         DisplayNextQuestion();
@@ -157,6 +142,27 @@ public class LinearQuizManager : MonoBehaviour
         }
 
         catalogueSessionHistoryTable.UpdateCatalogueSessionHistory(currentSessionId, currentSessionHistory.timeSpent + secondsSpent, sessionCompleted, sessionIsErrorFree);
+    }
+
+    private void SetEntryPoint()
+    {
+
+        int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
+        if (currentQuestionIndex != -1)
+            nextQuestionIndex = currentQuestionIndex;
+
+        CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
+        if (nextQuestionIndex == 0)
+        {
+            // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
+            currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
+            sessionIsErrorFree = (currentSession == null || currentSession.isCompleted) ? true : currentSession.isErrorFree;
+        }
+        else
+        {
+            currentSessionId = currentSession.id;
+            sessionIsErrorFree = currentSession.isErrorFree;
+        }
     }
 }
 

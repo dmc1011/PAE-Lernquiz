@@ -75,6 +75,7 @@ public class SQLiteSetup : MonoBehaviour
                 Text TEXT,
                 Name TEXT,
                 CorrectAnsweredCount INTEGER DEFAULT 0,
+                EnabledForPractice BOOLEAN DEFAULT 0,
                 TotalAnsweredCount INTEGER DEFAULT 0,
                 FOREIGN KEY(CatalogueId) REFERENCES Catalogue(Id) ON DELETE CASCADE
             );
@@ -145,13 +146,13 @@ public class SQLiteSetup : MonoBehaviour
     {
         List<Achievement> achievements = new()
         {
-            // die description sollten wir wahrscheinlich zu dem Text ändern, den wir dem Nutzer anzeigen wollen
-            new Achievement("Flawless Bronze", "Zum ersten Mal einen Katalog ohne Fehler abschließen", false, DateTime.Now),
-            new Achievement("Flawless Silber", "Einen Katalog 5 mal ohne Fehler abschließen", false, DateTime.Now),
-            new Achievement("Flawless Gold", "Einen Katalog 10 mal ohne Fehler abschließen", false, DateTime.Now),
-            new Achievement("Multitalent Bronze", "5 Kataloge ohne Fehler abschließen", false, DateTime.Now),
-            new Achievement("Multitalent Silber", "10 Kataloge ohne Fehler abschließen", false, DateTime.Now),
-            new Achievement("Multitalent Gold", "25 Kataloge ohne Fehler abschließen", false, DateTime.Now),
+            // die description sollten wir wahrscheinlich zu dem Text ï¿½ndern, den wir dem Nutzer anzeigen wollen
+            new Achievement("Flawless Bronze", "Zum ersten Mal einen Katalog ohne Fehler abschlieï¿½en", false, DateTime.Now),
+            new Achievement("Flawless Silber", "Einen Katalog 5 mal ohne Fehler abschlieï¿½en", false, DateTime.Now),
+            new Achievement("Flawless Gold", "Einen Katalog 10 mal ohne Fehler abschlieï¿½en", false, DateTime.Now),
+            new Achievement("Multitalent Bronze", "5 Kataloge ohne Fehler abschlieï¿½en", false, DateTime.Now),
+            new Achievement("Multitalent Silber", "10 Kataloge ohne Fehler abschlieï¿½en", false, DateTime.Now),
+            new Achievement("Multitalent Gold", "25 Kataloge ohne Fehler abschlieï¿½en", false, DateTime.Now),
             new Achievement("Besserwisser Bronze", "50 Fragen richtig beantwortet", false, DateTime.Now),
             new Achievement("Besserwisser Silber", "500 Fragen richtig beantwortet", false, DateTime.Now),
             new Achievement("Besserwisser Gold", "1000 Fragen richtig beantwortet", false, DateTime.Now),
@@ -176,9 +177,9 @@ public class SQLiteSetup : MonoBehaviour
             new Achievement("Importeur Bronze", "1 Katalog importiert", false, DateTime.Now),
             new Achievement("Importeur Silber", "5 Kataloge importiert", false, DateTime.Now),
             new Achievement("Importeur Gold", "10 Kataloge importiert", false, DateTime.Now),
-            new Achievement("Hartnäckig Bronze", "1000 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Hartnäckig Silber", "5000 Fragen beantwortet", false, DateTime.Now),
-            new Achievement("Hartnäckig Gold", "10000 Fragen beantwortet", false, DateTime.Now),
+            new Achievement("Hartnï¿½ckig Bronze", "1000 Fragen beantwortet", false, DateTime.Now),
+            new Achievement("Hartnï¿½ckig Silber", "5000 Fragen beantwortet", false, DateTime.Now),
+            new Achievement("Hartnï¿½ckig Gold", "10000 Fragen beantwortet", false, DateTime.Now),
             new Achievement("Fokus Bronze", "In einem Katalog 30 Minuten verbracht", false, DateTime.Now),
             new Achievement("Fokus Silber", "In einem Katalog 60 Minuten verbracht", false, DateTime.Now),
             new Achievement("Fokus Gold", "In einem Katalog 120 Minuten verbracht", false, DateTime.Now),
@@ -191,9 +192,9 @@ public class SQLiteSetup : MonoBehaviour
             new Achievement("Intensiv Bronze", "15 Minuten an einem Tag in Katalogen verbracht", false, DateTime.Now),
             new Achievement("Intensiv Silber", "30 Minuten an einem Tag in Katalogen verbracht", false, DateTime.Now),
             new Achievement("Intensiv Gold", "60 Minuten an einem Tag in Katalogen verbracht", false, DateTime.Now),
-            new Achievement("Fleißig Bronze", "25 Durchläufe abgeschlossen", false, DateTime.Now),
-            new Achievement("Fleißig Silber", "50 Durchläufe abgeschlossen", false, DateTime.Now),
-            new Achievement("Fleißig Gold", "100 Durchläufe abgeschlossen", false, DateTime.Now)
+            new Achievement("Fleiï¿½ig Bronze", "25 Durchlï¿½ufe abgeschlossen", false, DateTime.Now),
+            new Achievement("Fleiï¿½ig Silber", "50 Durchlï¿½ufe abgeschlossen", false, DateTime.Now),
+            new Achievement("Fleiï¿½ig Gold", "100 Durchlï¿½ufe abgeschlossen", false, DateTime.Now)
         };
 
         foreach (Achievement achievement in achievements)
