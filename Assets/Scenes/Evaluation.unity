@@ -1147,6 +1147,7 @@ GameObject:
   - component: {fileID: 1767197246}
   - component: {fileID: 1767197245}
   - component: {fileID: 1767197248}
+  - component: {fileID: 1767197249}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1222,6 +1223,21 @@ MonoBehaviour:
   scrollTransform: {fileID: 1507544111}
   sideMenu: {fileID: 32766211}
   quizAreaManager: {fileID: 101788039}
+  achievementManager: {fileID: 1767197249}
+--- !u!114 &1767197249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767197244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 822ba09862f7ce54aaaa53345b552a96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  achievementPopup: {fileID: 2728125251266399678, guid: 5d4e907d594d9dc4f935485456e3097b, type: 3}
+  parentForRendering: {fileID: 1776627022}
 --- !u!1 &1776627021
 GameObject:
   m_ObjectHideFlags: 0
