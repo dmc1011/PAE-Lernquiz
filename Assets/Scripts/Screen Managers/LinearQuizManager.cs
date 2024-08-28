@@ -19,9 +19,9 @@ public class LinearQuizManager : MonoBehaviour
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private AnswerHistoryTable answerHistoryTable;
     private DateTime startTime;
-    private DateTime subSessionStartTime;
     private int currentSessionId;
     private bool sessionIsErrorFree;
+    private TextMeshProUGUI nextButtonLabel;
 
     // Start is called before the first frame update
     void Start()
@@ -34,12 +34,13 @@ public class LinearQuizManager : MonoBehaviour
         catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
 
+        nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
+
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         questions = currentCatalogue.questions;
         nextButton.interactable = false;
         startTime = DateTime.Now;
-        subSessionStartTime = DateTime.Now;
 
         SetEntryPoint();
 
@@ -53,13 +54,9 @@ public class LinearQuizManager : MonoBehaviour
     {
         if (nextQuestionIndex >= questions.Count)
         {
-            nextQuestionIndex = 0;
-
-            UpdateSessionHistory();
-            int newSessionId = catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false);
-            currentSessionId = newSessionId;
-            sessionIsErrorFree = true;
-            subSessionStartTime = DateTime.Now;
+            LoadNextScene();
+            SaveTimeSpent();
+            return;
         }
 
         Question nextQuestion = questions[nextQuestionIndex];
@@ -69,6 +66,9 @@ public class LinearQuizManager : MonoBehaviour
         quizAreaManager.ResetContents();
         quizAreaManager.RandomizePositions();
         quizAreaManager.SetContents(nextQuestion);
+
+        if (nextQuestionIndex == questions.Count - 1)
+            nextButtonLabel.text = "Beenden";
 
         Fragenummer.text = $"{currentCatalogue.name}\nFrage {nextQuestionIndex + 1}";
         nextButton.interactable = false;
@@ -125,7 +125,7 @@ public class LinearQuizManager : MonoBehaviour
 
     private void UpdateSessionHistory()
     {
-        TimeSpan duration = DateTime.Now - subSessionStartTime;
+        TimeSpan duration = DateTime.Now - startTime;
         int secondsSpent = (int)duration.TotalSeconds;
 
         CatalogueSessionHistory currentSessionHistory = catalogueSessionHistoryTable.FindCatalogueSessionHistoryById(currentSessionId);
@@ -147,8 +147,8 @@ public class LinearQuizManager : MonoBehaviour
     private void SetEntryPoint()
     {
 
-        int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
-        if (currentQuestionIndex != -1)
+        int currentQuestionIndex = questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
+        if (currentQuestionIndex != -1 && currentQuestionIndex != questions.Count-1)
             nextQuestionIndex = currentQuestionIndex;
 
         CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
