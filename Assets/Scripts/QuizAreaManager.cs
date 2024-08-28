@@ -93,9 +93,9 @@ public class QuizAreaManager : MonoBehaviour
 
     public void SetContents(DataManager.QuestionResult result)
     {
-        Question q = catalogueTable.FindQuestionById(result.questionId);
-        if (q != null)
-            isBookmarkSet = q.enabledForPractice;
+        question = catalogueTable.FindQuestionById(result.questionId);
+        if (question != null)
+            isBookmarkSet = question.enabledForPractice;
         else
             isBookmarkSet = false;
 
@@ -191,6 +191,11 @@ public class QuizAreaManager : MonoBehaviour
             question.correctAnsweredCount++;
             dailyTaskHistoryTable.IncrementCorrectAnsweredCount();
         }
+        else if(!isBookmarkSet)
+        {
+            SetBookmarkIcon();
+        }
+
         question.totalAnsweredCount++;
         questionTable.UpdateQuestion(question);
 

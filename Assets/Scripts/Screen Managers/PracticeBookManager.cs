@@ -13,6 +13,7 @@ public class PracticeBookManager : MonoBehaviour
     [SerializeField] private Button nextButton;
     [SerializeField] private ButtonNavigation nextButtonNavigation;
 
+    private TextMeshProUGUI nextButtonLabel;
     private Catalogue currentCatalogue;
     private List<Question> questions;
     private List<Question> allQuestions;
@@ -27,6 +28,8 @@ public class PracticeBookManager : MonoBehaviour
 
         DataManager.ClearResults();
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
+
+        nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
 
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
@@ -43,12 +46,18 @@ public class PracticeBookManager : MonoBehaviour
     public void DisplayNextQuestion()
     {
         if (nextQuestionIndex >= questions.Count)
-            nextQuestionIndex = 0;
+        {
+            LoadNextScene();
+            return;
+        }
 
         Question nextQuestion = questions[nextQuestionIndex];
         quizAreaManager.ResetContents();
         quizAreaManager.RandomizePositions();
         quizAreaManager.SetContents(nextQuestion);
+
+        if (nextQuestionIndex == questions.Count - 1)
+            nextButtonLabel.text = "Beenden";
 
         Fragenummer.text = $"{currentCatalogue.name}\nFrage {allQuestions.FindIndex(q => q == nextQuestion) + 1}";
         nextButton.interactable = false;
@@ -71,7 +80,7 @@ public class PracticeBookManager : MonoBehaviour
             case QuizAreaManager.ButtonID.C: // Currently it's all the same. I know.
             case QuizAreaManager.ButtonID.D: // This also filters any unwanted values of "button" if we add something in the future.
                 {
-                    int questionIndex = nextQuestionIndex - 1;
+                    int questionIndex = allQuestions.FindIndex(q => q == questions[nextQuestionIndex - 1]);
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
                     nextButton.interactable = true;
                 }
