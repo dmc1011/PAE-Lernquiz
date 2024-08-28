@@ -188,8 +188,8 @@ public class QuizAreaManager : MonoBehaviour
             answerHistoryTable.AddAnswerHistory(question.id, wasCorrect, currentSession.id);
         }
 
-        // MS: Ich wei� wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
-        // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das �ndern.
+        // MS: Ich weiß wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
+        // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das ändern.
         parentScreenManager.BroadcastMessage("EventButtonPressedCallback", currentlyActiveButton);
         
     }
