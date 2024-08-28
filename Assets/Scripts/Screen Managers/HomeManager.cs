@@ -10,6 +10,10 @@ public class HomeManager : MonoBehaviour
     [SerializeField] private Button startDailyTask;
     [SerializeField] private Background background;
 
+    // MS: This is just here to demonstrate how to use the prefab!
+    [SerializeField] private AchievementPopup achievement;
+    [SerializeField] private Transform parentForRendering;
+
     private string targetScene;
     private int catalogueCount;
     CatalogueTable catalogueTable;
@@ -31,6 +35,12 @@ public class HomeManager : MonoBehaviour
             ResetDailyTask();
             Debug.Log("Daily Task reset");
         }
+
+        // MS: This is just here to demonstrate how to use the prefab!
+        var a = Instantiate(achievement, parentForRendering);
+        a.SetData(AchievementPopup.Grade.Gold, "Du Bist Super", "Starte den Home-Screen und sei eine tolle Person :)");
+        a.Fire();
+
     }
 
 
@@ -39,13 +49,15 @@ public class HomeManager : MonoBehaviour
         // show evaluation if daily task has already been completed
         if (IsDailyTaskCompleted())
         {
-            LoadDailyTaskScene("DailyTaskEvaluation");
+            Global.CurrentQuestionRound.gameMode = Global.GameMode.DailyTask;
+            LoadDailyTaskScene("Evaluation");
             return;
         }
 
         // load chosen catalogue into global data
-        Global.CurrentDailyTask.catalogueIndex = UnityEngine.Random.Range(1, catalogueCount + 1);
-        Global.CurrentDailyTask.catalogue = catalogueTable.FindCatalogueById(Global.CurrentDailyTask.catalogueIndex);
+        Catalogue randomCatalogue = catalogueTable.FindRandomCatalogue();
+        Global.CurrentDailyTask.catalogueIndex = randomCatalogue.id;
+        Global.CurrentDailyTask.catalogue = randomCatalogue;
         PlayerPrefs.SetInt("DailyTaskCatalogueId", Global.CurrentDailyTask.catalogueIndex);
         PlayerPrefs.Save();
 
@@ -123,10 +135,19 @@ public class HomeManager : MonoBehaviour
         StartSceneTransition();
     }
 
+
     public void LoadEditorSelection()
     {
         targetScene = "NewGame";
         Global.CurrentQuestionRound.gameMode = Global.GameMode.Editor;
+        StartSceneTransition();
+    }
+    
+    
+    public void LoadPracticeBookSelection()
+    {
+        targetScene = "NewGame";
+        Global.CurrentQuestionRound.gameMode = Global.GameMode.PracticeBook;
         StartSceneTransition();
     }
 

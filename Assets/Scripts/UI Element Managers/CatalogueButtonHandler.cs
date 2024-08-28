@@ -62,6 +62,9 @@ public class CatalogueButtonHandler : MonoBehaviour
             case Global.GameMode.Editor:
                 StartEditor();
                 break;
+            case Global.GameMode.PracticeBook:
+                StartPracticeBookClickedEvent();
+                break;
             default:
                 break;
         }
@@ -142,14 +145,14 @@ public class CatalogueButtonHandler : MonoBehaviour
 
         LoadScene("Statistics");
     }
-
+    
 
     // start editor
     private void StartEditor()
     {
         string catalogueName = this.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
 
-        if (catalogueName == "Katalog hinzufügen" && Global.SetTmpCatalogue(null))
+        if (catalogueName == "Katalog hinzufÃ¼gen" && Global.SetTmpCatalogue(null))
         {
             EditorManager.isNewCatalogue = true;
             LoadScene("Catalogues");
@@ -161,5 +164,23 @@ public class CatalogueButtonHandler : MonoBehaviour
             EditorManager.isNewCatalogue = false;
             LoadScene("Catalogues");
         }
+    }
+
+    // start practice book
+    private void StartPracticeBookClickedEvent()
+    {
+        string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        // invalid catalogue name
+        if (!NewGameManager.catalogues.Any(catalogue => catalogue.name == catalogueName))
+        {
+            print($"ERROR [NewGameManager.cs.StartPracticeBookClickedEvent()]: There is no catalogue called '{catalogueName}'");
+            return;
+        }
+
+        // start quiz round
+        Global.CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
+        Global.InsideQuestionRound = true;
+        LoadScene("PractiseBook");
     }
 }

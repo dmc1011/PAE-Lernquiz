@@ -17,8 +17,11 @@ public class LinearQuizManager : MonoBehaviour
     private int nextQuestionIndex = 0;
     private CatalogueTable catalogueTable;
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
+    private AnswerHistoryTable answerHistoryTable;
     private DateTime startTime;
-    private DateTime sessionStartTime;
+    private DateTime subSessionStartTime;
+    private int currentSessionId;
+    private bool sessionIsErrorFree;
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +32,16 @@ public class LinearQuizManager : MonoBehaviour
         DataManager.ClearResults();
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
         catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
+        answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
 
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         questions = currentCatalogue.questions;
         nextButton.interactable = false;
         startTime = DateTime.Now;
-        sessionStartTime = DateTime.Now;
+        subSessionStartTime = DateTime.Now;
+
+        SetEntryPoint();
 
         // Display the first question
         DisplayNextQuestion();
@@ -48,11 +54,12 @@ public class LinearQuizManager : MonoBehaviour
         if (nextQuestionIndex >= questions.Count)
         {
             nextQuestionIndex = 0;
-            TimeSpan duration = DateTime.Now - sessionStartTime;
-            int secondsSpent = (int)duration.TotalSeconds;
 
-            catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, secondsSpent);
-            sessionStartTime = DateTime.Now;
+            UpdateSessionHistory();
+            int newSessionId = catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false);
+            currentSessionId = newSessionId;
+            sessionIsErrorFree = true;
+            subSessionStartTime = DateTime.Now;
         }
 
         Question nextQuestion = questions[nextQuestionIndex];
@@ -86,6 +93,7 @@ public class LinearQuizManager : MonoBehaviour
                 {
                     int questionIndex = nextQuestionIndex - 1;
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
+                    sessionIsErrorFree = sessionIsErrorFree && (int)button == 0;
                     nextButton.interactable = true;
                 }
                 break;
@@ -111,6 +119,50 @@ public class LinearQuizManager : MonoBehaviour
         // Update TotalTimeSpent in the current catalogue
         currentCatalogue.totalTimeSpent += secondsSpent;
         catalogueTable.UpdateCatalogue(currentCatalogue);
+
+        UpdateSessionHistory();
+    }
+
+    private void UpdateSessionHistory()
+    {
+        TimeSpan duration = DateTime.Now - subSessionStartTime;
+        int secondsSpent = (int)duration.TotalSeconds;
+
+        CatalogueSessionHistory currentSessionHistory = catalogueSessionHistoryTable.FindCatalogueSessionHistoryById(currentSessionId);
+        List<AnswerHistory> answerHistoriesForSession = answerHistoryTable.FindAnswerHistoryBySessionId(currentSessionId);
+        bool sessionCompleted = answerHistoriesForSession.Count == currentCatalogue.questions.Count;
+
+        if (sessionCompleted)
+        {
+            currentCatalogue.sessionCount++;
+            if (sessionIsErrorFree)
+                currentCatalogue.errorFreeSessionCount++;
+
+            catalogueTable.UpdateCatalogue(currentCatalogue);
+        }
+
+        catalogueSessionHistoryTable.UpdateCatalogueSessionHistory(currentSessionId, currentSessionHistory.timeSpent + secondsSpent, sessionCompleted, sessionIsErrorFree);
+    }
+
+    private void SetEntryPoint()
+    {
+
+        int currentQuestionIndex = currentCatalogue.questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
+        if (currentQuestionIndex != -1)
+            nextQuestionIndex = currentQuestionIndex;
+
+        CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
+        if (nextQuestionIndex == 0)
+        {
+            // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
+            currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
+            sessionIsErrorFree = (currentSession == null || currentSession.isCompleted) ? true : currentSession.isErrorFree;
+        }
+        else
+        {
+            currentSessionId = currentSession.id;
+            sessionIsErrorFree = currentSession.isErrorFree;
+        }
     }
 }
 

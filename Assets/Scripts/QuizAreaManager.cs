@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class QuizAreaManager : MonoBehaviour
 {
@@ -12,11 +13,16 @@ public class QuizAreaManager : MonoBehaviour
     [SerializeField] private MonoBehaviour parentScreenManager;
     [SerializeField] private Color correct;
     [SerializeField] private Color wrong;
-
+    [SerializeField] private GameObject bookmarkIcon;
+    [SerializeField] private Color bookmarkActiveColor = new Color(255, 222, 6, 255);
+    
+    private bool isBookmarkSet;
     private TextMeshProUGUI questionButtonLabel;
     private Question question;
     private AnswerHistoryTable answerHistoryTable;
+    private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private QuestionTable questionTable;
+    private DailyTaskHistoryTable dailyTaskHistoryTable;
     private List<TextMeshProUGUI> answerButtonLabels = new();
     private List<RectTransform> answerButtonTransforms = new();
     private List<Image> answerButtonCorrectImages = new();
@@ -35,6 +41,8 @@ public class QuizAreaManager : MonoBehaviour
     {
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
         questionTable = SQLiteSetup.Instance.questionTable;
+        catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
+        dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
 
         // Get components for questionButton
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -64,6 +72,8 @@ public class QuizAreaManager : MonoBehaviour
 
         // Get the default color of a question button
         defaultColorBlock = answerButtons[0].colors;
+
+        isBookmarkSet = false;
     }
 
     // Set the contents of all buttons
@@ -165,15 +175,45 @@ public class QuizAreaManager : MonoBehaviour
         bool wasCorrect = currentlyActiveButton == ButtonID.A;
         if (wasCorrect)
         {
-            question.correctAnsweredCount += 1;
-            questionTable.UpdateQuestion(question);
+            question.correctAnsweredCount++;
+            dailyTaskHistoryTable.IncrementCorrectAnsweredCount();
         }
-        answerHistoryTable.AddAnswerHistory(question.id, wasCorrect);
+        question.totalAnsweredCount++;
+        questionTable.UpdateQuestion(question);
 
-        // MS: Ich weiß wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
-        // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das ändern.
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene.Equals("LinearQuiz"))
+        {
+            CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(question.catalogueId);
+            answerHistoryTable.AddAnswerHistory(question.id, wasCorrect, currentSession.id);
+        }
+
+        // MS: Ich weiï¿½ wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
+        // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das ï¿½ndern.
         parentScreenManager.BroadcastMessage("EventButtonPressedCallback", currentlyActiveButton);
         
+    }
+
+    public void SetBookmarkIcon ()
+    {
+        Image img = bookmarkIcon.GetComponent<Image>();
+
+            if (!isBookmarkSet) 
+            {
+                isBookmarkSet = !isBookmarkSet;
+                img.color = bookmarkActiveColor;
+            } 
+            else 
+            {
+                isBookmarkSet = !isBookmarkSet;
+                img.color = Color.white;
+            }
+    }
+
+    public void SaveBookmark()
+    {
+        question.enabledForPractice = isBookmarkSet;
+        questionTable.UpdateQuestion(question);
     }
 
 }

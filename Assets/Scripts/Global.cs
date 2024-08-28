@@ -10,7 +10,8 @@ public static class Global
         RandomQuiz,
         DailyTask,
         Statistics,
-        Editor
+        Editor,
+        PracticeBook
     }
 
     // player prefs keys for daily task

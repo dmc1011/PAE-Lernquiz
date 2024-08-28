@@ -6,6 +6,7 @@ public class EvaluationManager : MonoBehaviour
 {
 
     [SerializeField] private EvaluationButton evaluationButtonPrefab;
+    [SerializeField] private GameObject NewGameButton;
     [SerializeField] private EvaluationStatistics evaluationStatistics;
     [SerializeField] private Transform scrollTransform;
     [SerializeField] private SideMenu sideMenu;
@@ -13,31 +14,37 @@ public class EvaluationManager : MonoBehaviour
 
     private List<EvaluationButton> evaluationButtons = new();
     private List<DataManager.QuestionResult> questionResults = new();
-    private string evaluationFor;
+    //private string evaluationFor;
+    private Global.GameMode gameMode;
+    private DailyTaskHistoryTable dailyTaskHistoryTable;
 
     void Start()
     {
-        evaluationFor = PlayerPrefs.GetString("evaluationFor");
+        //evaluationFor = PlayerPrefs.GetString("evaluationFor");
+        gameMode = Global.CurrentQuestionRound.gameMode;
+        Debug.Log(gameMode);
+        dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
 
-        if(evaluationFor.Equals("DailyTask"))
-        {
-            LoadResults(GetQuestionResultsFromDailyTask());
-        }
-        else if (evaluationFor.Equals("LinearQuiz"))
-        {
-            LoadResults(DataManager.QuestionResults);
-        }
-        else if (evaluationFor.Equals("RandomQuiz"))
-        {
-            LoadResults(DataManager.QuestionResults);
-        }
-        else
-        {
-            print("ERROR: Evaluation for " + evaluationFor + " unknwon.");
+        switch (gameMode) {
+            case Global.GameMode.DailyTask:
+                NewGameButton.SetActive(false);
+                dailyTaskHistoryTable.SetTodaysTaskToCompleted();
+                PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
+                PlayerPrefs.Save();
+                LoadResults(GetDailyTaskResults());
+                break;
+            case Global.GameMode.LinearQuiz:
+            case Global.GameMode.RandomQuiz:
+            case Global.GameMode.PracticeBook:
+                LoadResults(DataManager.QuestionResults);
+                break;
+            default:
+                print("ERROR: EvaluationManager - Invalid Game Mode for evaluation.");
+                break;
         }
     }
 
-    private List<DataManager.QuestionResult> GetQuestionResultsFromDailyTask()
+    private List<DataManager.QuestionResult> GetDailyTaskResults()
     {
         List<DataManager.QuestionResult> results = new();
         for (int count = 1; count <= Global.DailyTaskSize; count++)

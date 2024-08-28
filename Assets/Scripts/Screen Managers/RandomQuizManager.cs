@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static Global;
 
 
 public class RandomQuizManager : MonoBehaviour
@@ -18,6 +19,8 @@ public class RandomQuizManager : MonoBehaviour
     private int questionLimit;
     private Catalogue currentCatalogue;
     private int nextQuestionIndex;
+    private CatalogueTable catalogueTable;
+    private bool errorFreeRound;
 
     void Start()
     {
@@ -39,6 +42,8 @@ public class RandomQuizManager : MonoBehaviour
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         questionLimit = Global.RandomQuizSize;
         nextButton.interactable = false;
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        errorFreeRound = true;
         
         // Display first question
         DisplayNextQuestion();
@@ -64,7 +69,8 @@ public class RandomQuizManager : MonoBehaviour
         if (questionCount == questionLimit - 1)
             nextButtonLabel.text = "Beenden";
 
-        Fragenummer.text = "Random Quiz, Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + nextQuestion.id;
+        int questionIndex = CurrentQuestionRound.catalogue.questions.FindIndex(q => q == nextQuestion);
+        Fragenummer.text = "Frage " + (questionCount + 1) + "/" + questionLimit + "\n" + currentCatalogue.name + ", " + "Frage " + (questionIndex + 1);
         nextButton.interactable = false;
         questionCount += 1; // questionCount will be 0 when first Question is displayed
 
@@ -78,6 +84,7 @@ public class RandomQuizManager : MonoBehaviour
 
     public void LoadNextScene()
     {
+        UpdateRandomQuizCountsForCatalogue();
         nextButtonNavigation.LoadScene("Evaluation");
     }
 
@@ -99,12 +106,22 @@ public class RandomQuizManager : MonoBehaviour
                 {
                     // in contrast to LinearQuizManager nextQuestionIndex is not update at this point and still valid
                     int questionIndex = nextQuestionIndex;
+                    errorFreeRound = errorFreeRound && (int)button == 0;
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
                     nextButton.interactable = true;
                 }
                 break;
         }
 
+    }
+
+    private void UpdateRandomQuizCountsForCatalogue()
+    {
+        currentCatalogue.completedRandomQuizCount++;
+        if (errorFreeRound)
+            currentCatalogue.errorFreeRandomQuizCount++;
+
+        catalogueTable.UpdateCatalogue(currentCatalogue);
     }
 
 }
