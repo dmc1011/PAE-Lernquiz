@@ -135,6 +135,10 @@ PrefabInstance:
       value: SideMenu
       objectReference: {fileID: 0}
     - target: {fileID: 3066850419041008323, guid: f854456269739b04dbcee5646eccac88, type: 3}
+      propertyPath: headerBorder
+      value: 
+      objectReference: {fileID: 1717651582}
+    - target: {fileID: 3066850419041008323, guid: f854456269739b04dbcee5646eccac88, type: 3}
       propertyPath: sideMenuHandleInner
       value: 
       objectReference: {fileID: 0}
@@ -1126,6 +1130,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1717651582 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9110188718112773478, guid: f854456269739b04dbcee5646eccac88, type: 3}
+  m_PrefabInstance: {fileID: 32766210}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1767197244
 GameObject:
   m_ObjectHideFlags: 0
