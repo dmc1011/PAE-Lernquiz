@@ -64,7 +64,7 @@ public class CataloguesManager : MonoBehaviour
         try
         {
             catalogueTable = SQLiteSetup.Instance.catalogueTable;
-            invalidStart = false; // catalogue could be loaded -> all fine from here on out
+            invalidStart = false; // catalogue could be loaded -> all fine from here on
             SetContents();
         }
         catch
