@@ -8,7 +8,7 @@ public class EvaluationButton : MonoBehaviour
     [SerializeField] private GameObject colorDisplayWrong;
     [SerializeField] private GameObject colorDisplayCorrect;
     [SerializeField] private TextMeshProUGUI numberLabel;
-    [SerializeField] private TextMeshProUGUI textLabel;
+    [SerializeField] public TextMeshProUGUI textLabel;
 
     public void Set(int number, bool correct, string text)
     {

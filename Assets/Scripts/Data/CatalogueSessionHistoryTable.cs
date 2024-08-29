@@ -117,7 +117,7 @@ public class CatalogueSessionHistoryTable
     {
         int timeSpent = 0;
         IDbCommand dbcmd = dbConnection.CreateCommand();
-        dbcmd.CommandText = "SELECT SUM(TimeSpent) FROM " + TABLE_NAME + " WHERE IsCompleted = TRUE AND DATE(SessionDate) = DATE('now')";
+        dbcmd.CommandText = "SELECT SUM(TimeSpent) FROM " + TABLE_NAME + " WHERE DATE(SessionDate) = DATE('now')";
 
         object result = dbcmd.ExecuteScalar();
         if (result != DBNull.Value)

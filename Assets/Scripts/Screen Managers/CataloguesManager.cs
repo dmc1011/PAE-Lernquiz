@@ -64,7 +64,7 @@ public class CataloguesManager : MonoBehaviour
         try
         {
             catalogueTable = SQLiteSetup.Instance.catalogueTable;
-            invalidStart = false; // catalogue could be loaded -> all fine from here on out
+            invalidStart = false; // catalogue could be loaded -> all fine from here on
             SetContents();
         }
         catch
@@ -429,7 +429,7 @@ public class CataloguesManager : MonoBehaviour
 
         if (currentCatalogue == Global.tmpCatalogue)
         {
-            // trivial l�schen. Es gibt ja keine IDs
+            // trivial löschen. Es gibt ja keine IDs
             Global.tmpCatalogue.questions.Remove(currentQuestion);
             currentCatalogue = Global.tmpCatalogue;
         }
@@ -589,7 +589,7 @@ public class CataloguesManager : MonoBehaviour
     private IEnumerator OpenFileBrowserAndLoadCatalogue()
     {
         FileBrowser.SetFilters(false, ".json");
-        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "W�hle einen Katalog", "�ffnen");
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Wähle einen Katalog", "�ffnen");
 
         if (FileBrowser.Success)
             OnFilesSelected(FileBrowser.Result);
@@ -627,7 +627,7 @@ public class CataloguesManager : MonoBehaviour
     private IEnumerator OpenFileBrowserAndSaveCatalogue()
     {
         FileBrowser.SetFilters(false, ".json");
-        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "W�hle einen Speicherort", "Speichern");
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Wähle einen Speicherort", "Speichern");
 
         if (FileBrowser.Success)
             SaveCatalogue(FileBrowser.Result);

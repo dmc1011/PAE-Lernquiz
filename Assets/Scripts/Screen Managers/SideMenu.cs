@@ -13,6 +13,8 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
     [SerializeField] private Image sideMenuHandleOuter;
     [SerializeField] private Color colorInner;
     [SerializeField] private Color colorOuter;
+    [SerializeField] private GameObject headerBorder;
+    [SerializeField] private bool hasHeaderBorder;
 
     // Positioning
     private float width;
@@ -34,13 +36,25 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
 
     // For EvaluationScreens
     private bool isEvaluation = false;
+    private bool isHelp = false;
+    private bool hasNoGearIcon = true; 
 
     void Start()
     {
         if(SceneManager.GetActiveScene().name == "Evaluation")
         {
             isEvaluation = true;
-        }        
+        }
+        if(SceneManager.GetActiveScene().name == "Help")
+        {
+            isHelp = true;
+        }
+        hasNoGearIcon = (isHelp || isEvaluation);
+
+        if(!hasHeaderBorder)
+            headerBorder.SetActive(false);
+
+
         width = Screen.width;
         onScreenPosition = width * 0.5f;
         offScreenPosition = width * 1.5f;
@@ -100,7 +114,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!isEvaluation && sideMenuGearIconCollider.OverlapPoint(eventData.position))
+        if (!hasNoGearIcon && sideMenuGearIconCollider.OverlapPoint(eventData.position))
         {
             isGearIconPressed = true;
         }
@@ -140,7 +154,7 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
 
     private void Animations()
     {
-        if(isEvaluation) // There is no gear icon inside evaluations
+        if(hasNoGearIcon) // There is no gear icon inside evaluations
         {
             return;
         }
