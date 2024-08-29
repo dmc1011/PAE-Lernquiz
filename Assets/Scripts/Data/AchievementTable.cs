@@ -2,6 +2,7 @@ using Mono.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using UnityEngine;
 
 public class AchievementTable
 {
@@ -24,10 +25,12 @@ public class AchievementTable
     {
         IDbCommand dbcmd = dbConnection.CreateCommand();
 
-        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name, Description, IsAchieved) VALUES (@Name, @Description, @IsAchieved)";
+        dbcmd.CommandText = "INSERT INTO " + TABLE_NAME + " (Name, Description, IsAchieved, PopupText, Grade) VALUES (@Name, @Description, @IsAchieved, @PopupText, @Grade)";
         dbcmd.Parameters.Add(new SqliteParameter("@Name", achievement.name));
         dbcmd.Parameters.Add(new SqliteParameter("@Description", achievement.description));
         dbcmd.Parameters.Add(new SqliteParameter("@IsAchieved", achievement.isAchieved));
+        dbcmd.Parameters.Add(new SqliteParameter("@PopupText", achievement.popupText));
+        dbcmd.Parameters.Add(new SqliteParameter("@Grade", achievement.grade.ToString()));
         dbcmd.ExecuteNonQuery();
     }
 
@@ -41,15 +44,83 @@ public class AchievementTable
         dbcmd.ExecuteNonQuery();
     }
 
-    public bool CheckAchievementCondition(string achievementName, Catalogue catalogue = null)
+    public List<Achievement> FindAllAchievements()
     {
-        switch (achievementName)
+        List<Achievement> achievements = new List<Achievement>();
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = @"
+        SELECT * FROM Achievement 
+        ORDER BY Name,
+            CASE Grade
+                WHEN 'Bronze' THEN 1
+                WHEN 'Silver' THEN 2
+                WHEN 'Gold' THEN 3
+                ELSE 4
+            END";
+        IDataReader reader = dbcmd.ExecuteReader();
+        while (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            string name = reader["Name"].ToString();
+            string description = reader["Description"].ToString();
+            string popUpText = reader["PopupText"].ToString();
+            bool isAchieved = (bool)reader["IsAchieved"];
+            DateTime? achievedAt = reader["AchievedAt"] != DBNull.Value ? (DateTime?)reader["AchievedAt"] : null;
+            AchievementPopup.Grade grade = (AchievementPopup.Grade)Enum.Parse(typeof(AchievementPopup.Grade), reader["Grade"].ToString());
+            Achievement achievement = new Achievement(name, grade, description, popUpText, isAchieved, achievedAt);
+            achievement.id = id;
+            achievements.Add(achievement);
+
+        }
+        return achievements;
+    }
+
+    public Achievement FindAchievementByNameAndGrade(string name, AchievementPopup.Grade grade)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM " + TABLE_NAME + " WHERE Name = @Name AND Grade = @Grade";
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", name));
+        dbcmd.Parameters.Add(new SqliteParameter("@Grade", grade.ToString()));
+
+        IDataReader reader = dbcmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            string achievementName = reader["Name"].ToString();
+            string description = reader["Description"].ToString();
+            string popUpText = reader["PopupText"].ToString();
+            bool isAchieved = Convert.ToBoolean(reader["IsAchieved"]);
+            DateTime? achievedAt = reader["AchievedAt"] != DBNull.Value ? (DateTime?)reader["AchievedAt"] : null;
+
+            Achievement achievement = new Achievement(achievementName, grade, description, popUpText, isAchieved, achievedAt);
+            return achievement;
+        }
+        return null;
+    }
+
+    public void MarkAchievementAsAchieved(string achievementName, AchievementPopup.Grade grade)
+    {
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "UPDATE " + TABLE_NAME + " SET IsAchieved = 1, AchievedAt = @AchievedAt WHERE Name = @Name AND Grade = @Grade";
+
+        dbcmd.Parameters.Add(new SqliteParameter("@Name", achievementName));
+        dbcmd.Parameters.Add(new SqliteParameter("@Grade", grade.ToString()));
+        dbcmd.Parameters.Add(new SqliteParameter("@AchievedAt", DateTime.Now));
+
+        dbcmd.ExecuteNonQuery();
+    }
+
+    public bool CheckAchievementCondition(string achievementName, AchievementPopup.Grade grade, Catalogue catalogue = null)
+    {
+        Debug.Log(achievementName + " " + grade.ToString());
+        switch (achievementName + " " + grade.ToString())
         {
             // Besserwisser
             case "Besserwisser Bronze":
                 return CheckCorrectAnsweredQuestionCountAchievement(50);
 
-            case "Besserwisser Silber":
+            case "Besserwisser Silver":
                 return CheckCorrectAnsweredQuestionCountAchievement(500);
 
             case "Besserwisser Gold":
@@ -59,7 +130,7 @@ public class AchievementTable
             case "Fokus Bronze":
                 return CheckFocusAchievement(catalogue, 30);
 
-            case "Fokus Silber":
+            case "Fokus Silver":
                 return CheckFocusAchievement(catalogue, 60);
 
             case "Fokus Gold":
@@ -69,7 +140,7 @@ public class AchievementTable
             case "Zeitmanagement Bronze":
                 return CheckTimeManagementAchievement(300);
 
-            case "Zeitmanagement Silber":
+            case "Zeitmanagement Silver":
                 return CheckTimeManagementAchievement(600);
 
             case "Zeitmanagement Gold":
@@ -79,7 +150,7 @@ public class AchievementTable
             case "Fleißig Bronze":
                 return CheckCompletedSessionsAchievement(25);
 
-            case "Fleißig Silber":
+            case "Fleißig Silver":
                 return CheckCompletedSessionsAchievement(50);
 
             case "Fleißig Gold":
@@ -89,7 +160,7 @@ public class AchievementTable
             case "Flawless Bronze":
                 return CheckFlawlessAchievement(catalogue, 1);
 
-            case "Flawless Silber":
+            case "Flawless Silver":
                 return CheckFlawlessAchievement(catalogue, 5);
 
             case "Flawless Gold":
@@ -99,7 +170,7 @@ public class AchievementTable
             case "Multitalent Bronze":
                 return CheckMultitalentAchievement(5);
 
-            case "Multitalent Silber":
+            case "Multitalent Silver":
                 return CheckMultitalentAchievement(10);
 
             case "Multitalent Gold":
@@ -109,37 +180,37 @@ public class AchievementTable
             case "Intensiv Bronze":
                 return CheckIntensiveAchievement(15);
 
-            case "Intensiv Silber":
+            case "Intensiv Silver":
                 return CheckIntensiveAchievement(30);
 
             case "Intensiv Gold":
                 return CheckIntensiveAchievement(60);
 
             // Hartnäckig 
-            case "Hartnäckig  Bronze":
+            case "Hartnäckig Bronze":
                 return CheckTotalQuestionCountAchievement(1000);
 
-            case "Hartnäckig  Silber":
+            case "Hartnäckig Silver":
                 return CheckTotalQuestionCountAchievement(5000);
 
-            case "Hartnäckig  Gold":
+            case "Hartnäckig Gold":
                 return CheckTotalQuestionCountAchievement(10000);
 
             // Daylies 
-            case "Daylies  Bronze":
+            case "Daylies Bronze":
                 return GetConsecutiveCompletedDailyTasks(5);
 
-            case "Daylies  Silber":
+            case "Daylies Silver":
                 return GetConsecutiveCompletedDailyTasks(15);
 
-            case "Daylies  Gold":
+            case "Daylies Gold":
                 return GetConsecutiveCompletedDailyTasks(30);
 
             // Randomat  
             case "Randomat Bronze":
                 return CheckRandomatAchievement(10);
 
-            case "Randomat Silber":
+            case "Randomat Silver":
                 return CheckRandomatAchievement(50);
 
             case "Randomat Gold":
@@ -149,7 +220,7 @@ public class AchievementTable
             case "Random Flawless Bronze":
                 return CheckRandomFlawlessAchievement(10);
 
-            case "Random Flawless Silber":
+            case "Random Flawless Silver":
                 return CheckRandomFlawlessAchievement(25);
 
             case "Random Flawless Gold":
@@ -287,6 +358,7 @@ public class AchievementTable
                 }
             }
         }
+        Debug.Log(consecutiveDays);
         return consecutiveDays >= requiredDays;
     }
 

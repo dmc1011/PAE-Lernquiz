@@ -9,6 +9,7 @@ public class NewGameManager : MonoBehaviour
 {
     [SerializeField] private GameObject catalogueButtonPrefab;      // used for dynamically rendering catalogue buttons
     [SerializeField] private GameObject dailyTaskButtonPrefab;
+    [SerializeField] private GameObject addButton;
     [SerializeField] private Transform buttonContainer;             // 'content' element of scroll view
     [SerializeField] private Background bg = null;
 
@@ -52,6 +53,11 @@ public class NewGameManager : MonoBehaviour
 
             TextMeshProUGUI buttonLabel = catalogueButton.GetComponentInChildren<TextMeshProUGUI>();
             buttonLabel.text = "Daily Task";
+        }
+
+        if (Global.CurrentQuestionRound.gameMode == Global.GameMode.Editor)
+        {
+            addButton.gameObject.SetActive(true);
         }
 
         for (int i = 0; i < catalogueCount; i++)
