@@ -54,8 +54,8 @@ public class LinearQuizManager : MonoBehaviour
     {
         if (nextQuestionIndex >= questions.Count)
         {
-            LoadNextScene();
             SaveTimeSpent();
+            LoadNextScene();
             return;
         }
 
