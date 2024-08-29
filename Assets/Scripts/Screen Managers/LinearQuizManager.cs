@@ -60,8 +60,6 @@ public class LinearQuizManager : MonoBehaviour
         }
 
         Question nextQuestion = questions[nextQuestionIndex];
-        currentCatalogue.currentQuestionId = nextQuestion.id;
-        catalogueTable.UpdateCatalogue(currentCatalogue);
 
         quizAreaManager.ResetContents();
         quizAreaManager.RandomizePositions();
@@ -92,6 +90,14 @@ public class LinearQuizManager : MonoBehaviour
             case QuizAreaManager.ButtonID.D: // This also filters any unwanted values of "button" if we add something in the future.
                 {
                     int questionIndex = nextQuestionIndex - 1;
+
+                    if (nextQuestionIndex < questions.Count)
+                    {
+                        Question nextQuestion = questions[nextQuestionIndex];
+                        currentCatalogue.currentQuestionId = nextQuestion.id;
+                        catalogueTable.UpdateCatalogue(currentCatalogue);
+                    }
+
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
                     sessionIsErrorFree = sessionIsErrorFree && (int)button == 0;
                     nextButton.interactable = true;
@@ -135,6 +141,8 @@ public class LinearQuizManager : MonoBehaviour
         if (sessionCompleted)
         {
             currentCatalogue.sessionCount++;
+            // invalid question id --> field is set to null in db
+            currentCatalogue.currentQuestionId = -1;
             if (sessionIsErrorFree)
                 currentCatalogue.errorFreeSessionCount++;
 
@@ -148,7 +156,7 @@ public class LinearQuizManager : MonoBehaviour
     {
 
         int currentQuestionIndex = questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
-        if (currentQuestionIndex != -1 && currentQuestionIndex != questions.Count-1)
+        if (currentQuestionIndex != -1)
             nextQuestionIndex = currentQuestionIndex;
 
         CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
