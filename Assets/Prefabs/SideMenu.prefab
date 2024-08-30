@@ -94,12 +94,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sideMenuRectTransform: {fileID: 4100521828848790344}
   sideMenuGearIconTransform: {fileID: 2799722632643497522}
-  sideMenuGearIconCollider: {fileID: 5189901968712511325}
   sideMenuHandleInner: {fileID: 6062085889952824538}
-  sideMenuHandleOuter: {fileID: 0}
+  sideMenuHandleOuter: {fileID: 4760432369191979135}
+  sideMenuButton: {fileID: 5045148628506512073}
   colorInner: {r: 0, g: 0, b: 0, a: 0}
   colorOuter: {r: 0, g: 0, b: 0, a: 0}
-  headerBorder: {fileID: 0}
+  headerBorder: {fileID: 9110188718112773478}
   hasHeaderBorder: 0
 --- !u!1 &1371003698962942534
 GameObject:
@@ -264,7 +264,6 @@ GameObject:
   - component: {fileID: 8260961330606976884}
   - component: {fileID: 4350098993315269019}
   - component: {fileID: 5045148628506512073}
-  - component: {fileID: 5189901968712511325}
   m_Layer: 5
   m_Name: SideMenuIcon
   m_TagString: Untagged
@@ -336,7 +335,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7075583424285336659}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -373,41 +372,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!58 &5189901968712511325
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7075583424285336659}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 70
 --- !u!1 &8099402092403163381
 GameObject:
   m_ObjectHideFlags: 0

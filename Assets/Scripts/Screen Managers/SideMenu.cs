@@ -4,13 +4,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
-public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
+public class SideMenu : MonoBehaviour, IDragHandler
 {
     [SerializeField] private RectTransform sideMenuRectTransform;
     [SerializeField] private RectTransform sideMenuGearIconTransform;
-    [SerializeField] private CircleCollider2D sideMenuGearIconCollider;
     [SerializeField] private Image sideMenuHandleInner;
     [SerializeField] private Image sideMenuHandleOuter;
+    [SerializeField] private Button sideMenuButton;
     [SerializeField] private Color colorInner;
     [SerializeField] private Color colorOuter;
     [SerializeField] private GameObject headerBorder;
@@ -22,9 +22,10 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
     private float startingAnchoredPositionX;
     private float onScreenPosition;
     private float offScreenPosition;
+    private float dpiRatio;
     private bool isOnScreen = false;
     private bool isDragged = false;
-    private bool isGearIconPressed = false;
+    //private bool isGearIconPressed = false;
 
     // Animation
     private bool isInAnimation = false;
@@ -54,11 +55,15 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
         if(!hasHeaderBorder)
             headerBorder.SetActive(false);
 
-
-        width = Screen.width;
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        width = rectTransform.rect.width;
+        dpiRatio = width / Screen.width;
         onScreenPosition = width * 0.5f;
         offScreenPosition = width * 1.5f;
         sideMenuRectTransform.anchoredPosition = new Vector2(offScreenPosition, 0);
+
+        if(!hasNoGearIcon)
+            sideMenuButton.onClick.AddListener(delegate { ToggleMenu(); });
     }
 
     void Update()
@@ -104,32 +109,17 @@ public class SideMenu : MonoBehaviour, IDragHandler, IPointerDownHandler
         }
         else
         {
-            isGearIconPressed = false;
+            //isGearIconPressed = false;
             sideMenuRectTransform.anchoredPosition = new Vector2(
-                Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x), onScreenPosition, offScreenPosition),
+                Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x) * dpiRatio, onScreenPosition, offScreenPosition),
                 0);
             Animations();
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (!hasNoGearIcon && sideMenuGearIconCollider.OverlapPoint(eventData.position))
-        {
-            isGearIconPressed = true;
-        }
-        startPositionX = eventData.position.x;
-        startingAnchoredPositionX = sideMenuRectTransform.anchoredPosition.x;
-    }
-
     private void PointerUp()
     {
         isDragged = false;
-        if (isGearIconPressed)
-        {
-            ToggleMenu();
-            isGearIconPressed = false;
-        }
     }
 
     private void StartAnimation(bool shouldOpen, bool toggleUsed = false)

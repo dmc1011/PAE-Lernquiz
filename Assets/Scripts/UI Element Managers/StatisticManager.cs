@@ -56,12 +56,13 @@ public class StatisticManager : MonoBehaviour
 
         if (isDailyTaskStatistic)
         {
-            catalogueStatisticPanel.gameObject.SetActive(false);
-            dailyTaskStatisticPanel.gameObject.SetActive(true);
+            catalogueStatisticPanel.SetActive(false);
+            dailyTaskStatisticPanel.SetActive(true);
         }
         else 
         {
-            dailyTaskStatisticPanel.gameObject.SetActive(false);
+            dailyTaskStatisticPanel.SetActive(false);
+            catalogueStatisticPanel.SetActive(true);
             catalogueName.transform.SetParent(scrollTransform);
             barProgress.transform.SetParent(scrollTransform);
             averageAnswers.transform.SetParent(scrollTransform);

@@ -12,6 +12,7 @@ public class Background : MonoBehaviour
     [SerializeField] private Color accentColor1;
     [SerializeField] private Color accentColor2;
     [SerializeField] private Color accentColor3;
+    [SerializeField] private Transform parentTransform;
     private List<Hex> hexagonList = new();
     private List<SpriteRenderer> innerList = new();
     private List<LineRenderer> outerList = new();
@@ -23,6 +24,12 @@ public class Background : MonoBehaviour
     private float outwardsTimeMultiplier = 2.0f;
     private float time = 0;
     private int numHex = 0;
+    private int numHexX = 10;
+    private int numHexY = 9;
+
+    private float width = 0;
+    private float height = 0;
+    private float dpiRatio = 0;
 
     public bool SequenceIsRunning = false;
 
@@ -33,13 +40,31 @@ public class Background : MonoBehaviour
 
         background.color = new(accentColor3.r, accentColor3.g, accentColor3.b);
 
-        // Hexgrid
-        for (int y = 0; y < 9; y++)
         {
-            for (int x = 0; x < 7; x++)
+            Rect rect = transform.GetComponent<RectTransform>().rect;
+            width = rect.width;
+            height = rect.height;
+            dpiRatio = width / Screen.width;
+        }
+
+        // Hexgrid
+        for (int y = 0; y < numHexY; y++)
+        {
+            float fy = (y + 0.5f) / (float)numHexY * 2 - 1;
+
+            for (int x = 0; x < numHexX; x++)
             {
-                targetPositions.Add(new(0.95f * (x + ((y % 2 == 0) ? 0.5f : 0)) - 3 * 0.95f, 0.825f * (y - 3) - 3 * 0.825f));
+
+                float fx = x / (float)numHexX * 2 - 1;
+
+                targetPositions.Add(new(fx * dpiRatio, fy * dpiRatio));
+
+                //targetPositions.Add(new(
+                //    0.95f * (x + ((y % 2 == 0) ? 0.5f : 0)) - 3 * 0.95f, 
+                //    0.825f * (y - 3) - 3 * 0.825f)
+                //);
                 initialPositions.Add(new(RandomWithHole(-10.0f, 10.0f, 2.5f), Random.Range(5.0f, 10.0f)));
+
                 times.Add(Random.Range(0.75f, 1.5f));
                 if(inwards)
                     AddHex(new(initialPositions.Last().x, initialPositions.Last().y), Random.Range(-45.0f, 45.0f));
@@ -73,10 +98,10 @@ public class Background : MonoBehaviour
         return 1.5f / outwardsTimeMultiplier;
     }
 
-    private void AddHex(Vector3 position, float rotation, float size = 1)
+    private void AddHex(Vector3 position, float rotation)
     {
-        hexagonList.Add(Instantiate(hexagonObject, position, Quaternion.Euler(0, 0, rotation), transform));
-        hexagonList[0].transform.localScale = new Vector3(1, 1);
+        hexagonList.Add(Instantiate(hexagonObject, position, Quaternion.Euler(0, 0, rotation), parentTransform));
+        hexagonList.Last().transform.localScale = new Vector3(1.0f / numHexX, 1.0f / numHexX);
         innerList.Add(hexagonList.Last().GetComponentInChildren<SpriteRenderer>());
         outerList.Add(hexagonList.Last().GetComponentInChildren<LineRenderer>());
     }
