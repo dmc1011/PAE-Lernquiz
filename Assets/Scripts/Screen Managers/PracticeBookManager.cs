@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -9,9 +10,12 @@ public class PracticeBookManager : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI Fragenummer;
-    [SerializeField] private QuizAreaManager quizAreaManager;
     [SerializeField] private Button nextButton;
     [SerializeField] private ButtonNavigation nextButtonNavigation;
+    [SerializeField] private GameObject questionSelectionScrollView;
+    [SerializeField] private GameObject quizAreaContainer;
+    [SerializeField] private GameObject questionButtonPrefab;      // used for dynamically rendering question buttons
+    [SerializeField] private Transform buttonContainer;            // 'content' element of scroll view
 
     private TextMeshProUGUI nextButtonLabel;
     private Catalogue currentCatalogue;
@@ -19,26 +23,26 @@ public class PracticeBookManager : MonoBehaviour
     private List<Question> allQuestions;
     private int nextQuestionIndex = 0;
     private CatalogueTable catalogueTable;
+    private QuizAreaManager quizAreaManager;
 
     // Start is called before the first frame update
     void Start()
     {
         PlayerPrefs.SetString("evaluationFor", "PracticeBook");
         PlayerPrefs.Save();
-
         DataManager.ClearResults();
+
+        // Get current catalogue and flagged questions
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
-
-        nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
-
-        // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         allQuestions = currentCatalogue.questions;
         questions = allQuestions.Where(q => q.enabledForPractice).ToList();
-        nextButton.interactable = false;
 
-        // Display the first question
-        DisplayNextQuestion();
+        quizAreaContainer.SetActive(false);
+        nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
+        quizAreaManager = quizAreaContainer.GetComponentInChildren<QuizAreaManager>();
+
+        DisplayQuestionSelection();
     }
 
 
@@ -87,6 +91,57 @@ public class PracticeBookManager : MonoBehaviour
                 break;
         }
 
+    }
+
+    private void DisplayQuestionSelection()
+    {
+        if (buttonContainer.transform.childCount > 1)
+        {
+            for (int i = buttonContainer.transform.childCount - 1; i > 0; i--)
+            {
+                Destroy(buttonContainer.transform.GetChild(i).gameObject);
+            }
+        }
+
+        for (int i = 0; i < questions.Count; i++)
+        {
+            GameObject questionButton = Instantiate(questionButtonPrefab, buttonContainer);
+            questionButton.SetActive(true);
+
+            // display question name on button
+            TextMeshProUGUI buttonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
+            buttonLabel.text = questions[i].name;
+            if (buttonLabel.text == "" || buttonLabel.text == null)
+            {
+                buttonLabel.text = "Diese Frage hat noch keinen Namen. Das Quiz startet automatisch bei Frage 1";
+            }
+        }
+
+        questionSelectionScrollView.gameObject.SetActive(true);
+    }
+
+
+    // Ensures that QuizAreaManagers Start() method is fully executed before calling any other methods
+    private IEnumerator WaitAndDisplayFirstQuestion(TextMeshProUGUI questionButtonLabel)
+    {
+        nextButton.interactable = false;
+        questionSelectionScrollView.SetActive(false);
+        quizAreaContainer.SetActive(true);
+
+        Question selectedQuestion = currentCatalogue.questions.Find(question => question.name == questionButtonLabel.text);
+        if (selectedQuestion != null)
+        {
+            nextQuestionIndex = questions.FindIndex(q => q == selectedQuestion);
+            nextQuestionIndex = nextQuestionIndex == -1 ? 0 : nextQuestionIndex;
+        }
+        yield return null;
+
+        DisplayNextQuestion();
+    }
+
+    public void StartQuiz(TextMeshProUGUI questionButtonLabel) 
+    {
+        StartCoroutine(WaitAndDisplayFirstQuestion(questionButtonLabel));
     }
 
     public void LoadNextScene()
