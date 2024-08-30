@@ -1987,7 +1987,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
-      value: Neuen Katalog erstetellen
+      value: Neuen Katalog erstellen
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
