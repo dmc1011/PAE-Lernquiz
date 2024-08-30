@@ -62,7 +62,6 @@ public class StatisticManager : MonoBehaviour
         else 
         {
             dailyTaskStatisticPanel.SetActive(false);
-            catalogueStatisticPanel.SetActive(true);
             catalogueName.transform.SetParent(scrollTransform);
             barProgress.transform.SetParent(scrollTransform);
             averageAnswers.transform.SetParent(scrollTransform);
