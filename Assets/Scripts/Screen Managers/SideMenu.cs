@@ -15,6 +15,7 @@ public class SideMenu : MonoBehaviour, IDragHandler
     [SerializeField] private Color colorOuter;
     [SerializeField] private GameObject headerBorder;
     [SerializeField] private bool hasHeaderBorder;
+    [SerializeField] private RectTransform canvasRectTransform;
 
     // Positioning
     private float width;
@@ -55,11 +56,12 @@ public class SideMenu : MonoBehaviour, IDragHandler
         if(!hasHeaderBorder)
             headerBorder.SetActive(false);
 
-        RectTransform rectTransform = GetComponent<RectTransform>();
-        width = rectTransform.rect.width;
+ 
+        sideMenuRectTransform.sizeDelta = new(canvasRectTransform.sizeDelta.x, canvasRectTransform.sizeDelta.y);
+        width = canvasRectTransform.rect.width;
         dpiRatio = width / Screen.width;
-        onScreenPosition = width * 0.5f;
-        offScreenPosition = width * 1.5f;
+        onScreenPosition = -width; // Negativer Wert, da AnchorX = 0 und das Menu ist rechts auﬂerhalb.
+        offScreenPosition = onScreenPosition + width;
         sideMenuRectTransform.anchoredPosition = new Vector2(offScreenPosition, 0);
 
         if(!hasNoGearIcon)
@@ -109,7 +111,6 @@ public class SideMenu : MonoBehaviour, IDragHandler
         }
         else
         {
-            //isGearIconPressed = false;
             sideMenuRectTransform.anchoredPosition = new Vector2(
                 Mathf.Clamp(startingAnchoredPositionX - (startPositionX - eventData.position.x) * dpiRatio, onScreenPosition, offScreenPosition),
                 0);
@@ -134,8 +135,9 @@ public class SideMenu : MonoBehaviour, IDragHandler
         else
         {
             // Relative distance from the center ( 0 = exactly centered, 1 = exactly at start or end)
-            float distanceFromBorders = 2 * Mathf.Abs(startPositionForCurrentAnimation - width) / width;
-            currentAnimationTimeTarget = defaultAnimationTimeTarget * Mathf.Pow(1 - distanceFromBorders, 0.5f);
+            float distanceFromBorders = (width + startPositionForCurrentAnimation) / width - 0.5f;
+            distanceFromBorders = Mathf.Abs(Mathf.Abs(2 * distanceFromBorders) - 1);
+            currentAnimationTimeTarget = defaultAnimationTimeTarget * Mathf.Pow(distanceFromBorders, 0.5f);
         }
         currentAnimationTime = 0.0f;
         isInAnimation = true;
@@ -149,7 +151,7 @@ public class SideMenu : MonoBehaviour, IDragHandler
             return;
         }
 
-        float t = sideMenuRectTransform.anchoredPosition.x / (Mathf.Abs(onScreenPosition - offScreenPosition)) - 0.5f;
+        float t = (width + sideMenuRectTransform.anchoredPosition.x) / width;
         // Rotate Gear
         sideMenuGearIconTransform.rotation = Quaternion.Euler(0, 0, 360 * t);
 
@@ -160,7 +162,7 @@ public class SideMenu : MonoBehaviour, IDragHandler
 
     private bool isAfterHalfPoint()
     {
-        return sideMenuRectTransform.anchoredPosition.x < width;
+        return sideMenuRectTransform.anchoredPosition.x + width < width / 2;
     }
 
     public void ToggleMenu()

@@ -21,19 +21,21 @@ public class AchievementManager : MonoBehaviour
         foreach (AchievementPopup.Grade grade in grades)
         {
             Achievement achievement = achievementTable.FindAchievementByNameAndGrade(achievementName, grade);
+            achievement.isAchieved = true;
             if (!achievement.isAchieved)
             {
-                bool isAchieved = achievementTable.CheckAchievementCondition(achievementName, grade, catalogue);
+                //bool isAchieved = achievementTable.CheckAchievementCondition(achievementName, grade, catalogue);
 
-                if (isAchieved)
+                if (true)
                 {
-                    achievementTable.MarkAchievementAsAchieved(achievementName, grade);
+                    //achievementTable.MarkAchievementAsAchieved(achievementName, grade);
                     var a = Instantiate(achievementPopup, parentForRendering);
                     a.SetData(grade, achievement.name + " " + grade, achievement.popupText);
                     a.Fire();
                 }
 
-                break;
+                return;
+                //break;
             }
         }
     }
