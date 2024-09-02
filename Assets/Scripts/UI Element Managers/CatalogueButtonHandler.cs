@@ -14,7 +14,7 @@ public class CatalogueButtonHandler : MonoBehaviour
     }
 
     [SerializeField] private Button catalogueButton;
-    [SerializeField] private Background bg = null;
+    [SerializeField] private HexagonBackground bg = null;
     private string targetScene = "";
 
 
@@ -39,7 +39,7 @@ public class CatalogueButtonHandler : MonoBehaviour
     }
 
 
-    public void SetBackground(Background bg)
+    public void SetBackground(HexagonBackground bg)
     {
         this.bg = bg;
     }

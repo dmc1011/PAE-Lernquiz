@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
     [SerializeField] private Button startDailyTask;
-    [SerializeField] private Background background;
+    [SerializeField] private HexagonBackground background;
 
     private string targetScene;
     private int catalogueCount;
@@ -101,6 +101,29 @@ public class HomeManager : MonoBehaviour
         StartSceneTransition();
     }
 
+    public void LoadProfileScene()
+    {
+        targetScene = "Profile";
+        StartSceneTransition(false);
+    }
+
+    public void LoadAudioScene()
+    {
+        targetScene = "Audio";
+        StartSceneTransition(false);
+    }
+
+    public void LoadHelpScene()
+    {
+        targetScene = "Help";
+        StartSceneTransition(false);
+    }
+
+    public void LoadDataSecurityScene()
+    {
+        targetScene = "DataSecurity";
+        StartSceneTransition(false);
+    }
 
     public void LoadLinearGameSelection()
     {
@@ -130,7 +153,7 @@ public class HomeManager : MonoBehaviour
     {
         targetScene = "NewGame";
         Global.CurrentQuestionRound.gameMode = Global.GameMode.Editor;
-        StartSceneTransition();
+        StartSceneTransition(false);
     }
     
     
@@ -142,9 +165,9 @@ public class HomeManager : MonoBehaviour
     }
 
 
-    private void StartSceneTransition()
+    private void StartSceneTransition(bool useAnimation = true)
     {
-        if (background != null)
+        if (background != null && useAnimation)
         {
             float timeNeeded = background.TriggerEndSequence();
             Invoke(nameof(LoadSceneInternal), timeNeeded);

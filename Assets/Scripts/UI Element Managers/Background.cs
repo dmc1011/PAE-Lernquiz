@@ -45,19 +45,24 @@ public class Background : MonoBehaviour
             width = rect.width;
             height = rect.height;
             dpiRatio = width / Screen.width;
+            print(width);
+            print(height);
+            print(Screen.width / Screen.height);
+
         }
 
         // Hexgrid
         for (int y = 0; y < numHexY; y++)
         {
-            float fy = (y + 0.5f) / (float)numHexY * 2 - 1;
+            float fy = (y) / (float)numHexY;
 
-            for (int x = 0; x < numHexX; x++)
+            for (int x = 0; x < numHexX - ((y % 2 == 0) ? 1 : 0); x++)
             {
 
-                float fx = x / (float)numHexX * 2 - 1;
+                float fx = (x + (y % 2 == 0 ? 0.5f : 0.0f) - 0.5f) / ((float)numHexX - 2);
 
-                targetPositions.Add(new(fx * dpiRatio, fy * dpiRatio));
+                targetPositions.Add(new((fx - 0.5f) * numHexX / 2, (fy - 0.5f) * numHexY / 2));
+                print(fx);
 
                 //targetPositions.Add(new(
                 //    0.95f * (x + ((y % 2 == 0) ? 0.5f : 0)) - 3 * 0.95f, 
@@ -100,8 +105,8 @@ public class Background : MonoBehaviour
 
     private void AddHex(Vector3 position, float rotation)
     {
-        hexagonList.Add(Instantiate(hexagonObject, position, Quaternion.Euler(0, 0, rotation), parentTransform));
-        hexagonList.Last().transform.localScale = new Vector3(1.0f / numHexX, 1.0f / numHexX);
+        hexagonList.Add(Instantiate(hexagonObject, position, Quaternion.Euler(0, 0, 0), parentTransform));
+        hexagonList.Last().transform.localScale = new Vector3(1.0f / numHexX, 1.0f / numHexX * 0.5625f);
         innerList.Add(hexagonList.Last().GetComponentInChildren<SpriteRenderer>());
         outerList.Add(hexagonList.Last().GetComponentInChildren<LineRenderer>());
     }

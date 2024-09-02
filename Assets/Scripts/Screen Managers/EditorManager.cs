@@ -32,7 +32,7 @@ public class EditorManager : MonoBehaviour
     [SerializeField] private GameObject textInputView;
     [SerializeField] private TMP_InputField textInputField;
 
-    [SerializeField] private Background bg = null;
+    [SerializeField] private HexagonBackground bg = null;
 
 
     // Quiz Area Labels

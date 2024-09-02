@@ -11,7 +11,7 @@ public class NewGameManager : MonoBehaviour
     [SerializeField] private GameObject dailyTaskButtonPrefab;
     [SerializeField] private GameObject addButton;
     [SerializeField] private Transform buttonContainer;             // 'content' element of scroll view
-    [SerializeField] private Background bg = null;
+    [SerializeField] private HexagonBackground bg = null;
 
     [HideInInspector] public static CatalogueTable catalogueTable;
     [HideInInspector] public static int catalogueCount;
