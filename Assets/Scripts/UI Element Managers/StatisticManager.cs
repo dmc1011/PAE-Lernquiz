@@ -93,41 +93,23 @@ public class StatisticManager : MonoBehaviour
         List<DailyTaskHistory> dailyTaskHistory = dailyTaskHistoryTable.FindAllDailyTaskEntries();
         DateTime now = DateTime.Now;
 
-        switch (dailyTaskHistory.Count)
+        List<string> formattedDaily = new List<string>();
+
+        for (int i = 0; i < 5; i++)
         {
-            case 0:
-                return new List<string> {$"{now:dd.MM},0",$"{now.AddDays(-1):dd.MM},0",$"{now.AddDays(-2):dd.MM},0",$"{now.AddDays(-3):dd.MM},0",$"{now.AddDays(-4):dd.MM},0"};
-            default:
-                return new List<string> {$"{dailyTaskHistory[0].taskDate:dd.MM},{dailyTaskHistory[0].correctAnswersCount}",
-                                        $"{dailyTaskHistory[1].taskDate:dd.MM},{dailyTaskHistory[1].correctAnswersCount}",
-                                        $"{dailyTaskHistory[2].taskDate:dd.MM},{dailyTaskHistory[2].correctAnswersCount}",
-                                        $"{dailyTaskHistory[3].taskDate:dd.MM},{dailyTaskHistory[3].correctAnswersCount}",
-                                        $"{dailyTaskHistory[4].taskDate:dd.MM},{dailyTaskHistory[4].correctAnswersCount}"};
-            case 4:
-                return new List<string> {$"{dailyTaskHistory[0].taskDate:dd.MM},{dailyTaskHistory[0].correctAnswersCount}",
-                                        $"{dailyTaskHistory[1].taskDate:dd.MM},{dailyTaskHistory[1].correctAnswersCount}",
-                                        $"{dailyTaskHistory[2].taskDate:dd.MM},{dailyTaskHistory[2].correctAnswersCount}",
-                                        $"{dailyTaskHistory[3].taskDate:dd.MM},{dailyTaskHistory[3].correctAnswersCount}",
-                                        $"{now.AddDays(-4):dd.MM},0"};
-            case 3:
-                return new List<string> {$"{dailyTaskHistory[0].taskDate:dd.MM},{dailyTaskHistory[0].correctAnswersCount}",
-                                        $"{dailyTaskHistory[1].taskDate:dd.MM},{dailyTaskHistory[1].correctAnswersCount}",
-                                        $"{dailyTaskHistory[2].taskDate:dd.MM},{dailyTaskHistory[2].correctAnswersCount}",
-                                        $"{now.AddDays(-3):dd.MM},0",
-                                        $"{now.AddDays(-4):dd.MM},0"};
-            case 2:
-                return new List<string> {$"{dailyTaskHistory[0].taskDate:dd.MM},{dailyTaskHistory[0].correctAnswersCount}",
-                                        $"{dailyTaskHistory[1].taskDate:dd.MM},{dailyTaskHistory[1].correctAnswersCount}",
-                                        $"{now.AddDays(-2):dd.MM},0",
-                                        $"{now.AddDays(-3):dd.MM},0",
-                                        $"{now.AddDays(-4):dd.MM},0"};
-            case 1:
-                return new List<string> {$"{dailyTaskHistory[0].taskDate:dd.MM},{dailyTaskHistory[0].correctAnswersCount}",
-                                        $"{now.AddDays(-1):dd.MM},0",
-                                        $"{now.AddDays(-2):dd.MM},0",
-                                        $"{now.AddDays(-3):dd.MM},0",
-                                        $"{now.AddDays(-4):dd.MM},0"};
+            DailyTaskHistory task = FindTaskForDay(now.AddDays(-i), dailyTaskHistory);
+            if (task != null)
+                formattedDaily.Add($"{task.taskDate:dd.MM},{task.correctAnswersCount}");
+            else
+                formattedDaily.Add($"{now.AddDays(-i):dd.MM},0");
         }
+
+        return formattedDaily;
+    }
+
+    private DailyTaskHistory FindTaskForDay(DateTime date, List<DailyTaskHistory> dailyTaskHistory)
+    {
+        return dailyTaskHistory.Find(d => d.taskDate.ToString("yyyy-MM-dd") == date.ToString("yyyy-MM-dd"));
     }
 
     private string GetFormattedTimeInHMS(int timeInSeconds)
