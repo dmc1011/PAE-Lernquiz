@@ -17,7 +17,6 @@ public class PracticeBookManager : MonoBehaviour
     [SerializeField] private GameObject questionButtonPrefab;      // used for dynamically rendering question buttons
     [SerializeField] private Transform buttonContainer;            // 'content' element of scroll view
 
-    private TextMeshProUGUI nextButtonLabel;
     private Catalogue currentCatalogue;
     private List<Question> questions;
     private List<Question> allQuestions;
@@ -39,7 +38,6 @@ public class PracticeBookManager : MonoBehaviour
         questions = allQuestions.Where(q => q.enabledForPractice).ToList();
 
         quizAreaContainer.SetActive(false);
-        nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
         quizAreaManager = quizAreaContainer.GetComponentInChildren<QuizAreaManager>();
 
         DisplayQuestionSelection();
@@ -49,19 +47,10 @@ public class PracticeBookManager : MonoBehaviour
     // display question and answer text on the screen
     public void DisplayNextQuestion()
     {
-        if (nextQuestionIndex >= questions.Count)
-        {
-            LoadNextScene();
-            return;
-        }
-
         Question nextQuestion = questions[nextQuestionIndex];
         quizAreaManager.ResetContents();
         quizAreaManager.RandomizePositions();
         quizAreaManager.SetContents(nextQuestion);
-
-        if (nextQuestionIndex == questions.Count - 1)
-            nextButtonLabel.text = "Beenden";
 
         Fragenummer.text = $"{currentCatalogue.name}\nFrage {allQuestions.FindIndex(q => q == nextQuestion) + 1}";
         nextButton.interactable = false;
@@ -86,7 +75,9 @@ public class PracticeBookManager : MonoBehaviour
                 {
                     int questionIndex = allQuestions.FindIndex(q => q == questions[nextQuestionIndex - 1]);
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
-                    nextButton.interactable = true;
+
+                    if (nextQuestionIndex != questions.Count)
+                        nextButton.interactable = true;
                 }
                 break;
         }
