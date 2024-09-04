@@ -28,13 +28,18 @@ public class HexagonBackground : MonoBehaviour
     private float time = 0;
     private int numY = 0;
 
-
     public bool sequenceIsRunning = false;
 
     // Start is called before the first frame update
     void Start()
     {
         time = 0;
+
+        if(self.rect.width > self.rect.height) // widescreen
+        {
+            numX = Mathf.RoundToInt(numX * self.rect.width / self.rect.height);
+        }
+
         numY = Mathf.RoundToInt(numX * self.rect.height / self.rect.width);
 
         // Hexgrid
