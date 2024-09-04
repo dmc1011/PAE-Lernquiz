@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
+using Newtonsoft.Json;
+using System;
 
 public class StatisticManager : MonoBehaviour
 {
@@ -16,12 +19,14 @@ public class StatisticManager : MonoBehaviour
     [SerializeField] private Transform scrollTransform;
     [SerializeField] private GameObject catalogueName;
     [SerializeField] private GameObject barProgress;
+    [SerializeField] private GameObject lineGraph;
     [SerializeField] private GameObject timeStatistic;
     [SerializeField] private GameObject averageAnswers;
 
     public static bool isDailyTaskStatistic;
 
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
+    private DailyTaskHistoryTable dailyTaskHistoryTable;
     private AnswerHistoryTable answerHistoryTable;
     private CatalogueTable catalogueTable;
     private List<CatalogueSessionHistory> catalogueSessionHistories;
@@ -47,20 +52,24 @@ public class StatisticManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentCatalogue = Global.CurrentQuestionRound.catalogue;
-        catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
-        answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
-        catalogueTable = SQLiteSetup.Instance.catalogueTable;
-
-        notAnsweredCount = currentCatalogue.questions.Count;
-
         if (isDailyTaskStatistic)
         {
+            dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
+
             catalogueStatisticPanel.gameObject.SetActive(false);
             dailyTaskStatisticPanel.gameObject.SetActive(true);
+            
+            SetDaylyTaskStatistics();
         }
         else 
         {
+            currentCatalogue = Global.CurrentQuestionRound.catalogue;
+            catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
+            answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
+            catalogueTable = SQLiteSetup.Instance.catalogueTable;
+
+            notAnsweredCount = currentCatalogue.questions.Count;
+
             dailyTaskStatisticPanel.gameObject.SetActive(false);
             catalogueName.transform.SetParent(scrollTransform);
             barProgress.transform.SetParent(scrollTransform);
@@ -72,6 +81,35 @@ public class StatisticManager : MonoBehaviour
             catalogueSessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
             SetStatistics();
         }
+    }
+
+    private void SetDaylyTaskStatistics()
+    {
+        lineGraph.GetComponent<LineGraph>().SetGraph(GetFormattedDaily(), "Antworten", 0, 5, 0, 10);
+    }
+
+    private List<string> GetFormattedDaily()
+    {
+        List<DailyTaskHistory> dailyTaskHistory = dailyTaskHistoryTable.FindAllDailyTaskEntries();
+        DateTime now = DateTime.Now;
+
+        List<string> formattedDaily = new List<string>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            DailyTaskHistory task = FindTaskForDay(now.AddDays(-i), dailyTaskHistory);
+            if (task != null)
+                formattedDaily.Add($"{task.taskDate:dd.MM},{task.correctAnswersCount}");
+            else
+                formattedDaily.Add($"{now.AddDays(-i):dd.MM},0");
+        }
+
+        return formattedDaily;
+    }
+
+    private DailyTaskHistory FindTaskForDay(DateTime date, List<DailyTaskHistory> dailyTaskHistory)
+    {
+        return dailyTaskHistory.Find(d => d.taskDate.ToString("yyyy-MM-dd") == date.ToString("yyyy-MM-dd"));
     }
 
     private string GetFormattedTimeInHMS(int timeInSeconds)
