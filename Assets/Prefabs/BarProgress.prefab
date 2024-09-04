@@ -159,7 +159,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.47801146
+  m_Value: 0.43440485
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -532,8 +532,8 @@ MonoBehaviour:
   colorBackground: {r: 1, g: 1, b: 1, a: 1}
   colorBorder: {r: 0, g: 0, b: 0, a: 1}
   value1: 1
-  value2: 0.384
-  value3: 0.708
+  value2: 0.563
+  value3: 0.739
 --- !u!1 &7344266425355858501
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,7 +618,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.18355641
+  m_Value: 0.24456994
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -706,7 +706,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.33843213
+  m_Value: 0.3210252
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

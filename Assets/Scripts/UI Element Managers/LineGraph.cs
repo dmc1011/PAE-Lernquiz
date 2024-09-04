@@ -19,17 +19,8 @@ public class LineGraph : MonoBehaviour
 	// Use this for initialization
 	void Start () {
         series1Data = new List<string> {"21.08.,10","20.08.,6","19.08.,8","18.08.,2","17.08.,4"};
-		GameObject graphGO = emptyGraphPrefab;
-		graphGO.transform.SetParent(this.transform, false);
-		graph = graphGO.GetComponent<WMG_Axis_Graph>();
 
-		series1 = graph.addSeries();
-
-        graphGO.GetComponent<RectTransform>().sizeDelta = this.GetComponent<RectTransform>().sizeDelta;
-        graph.xAxis.AxisLabelSize = AxisLabelSize;
-        graph.yAxis.AxisLabelSize = AxisLabelSize;
-
-        SetGraph(series1Data, "Answers", 0, 5, 0, 10);
+        // SetGraph(series1Data, "Answers", 0, 5, 0, 10);
 	}
 
     void Awake()
@@ -49,6 +40,16 @@ public class LineGraph : MonoBehaviour
 
     public void SetGraph(List<String> dataList, string seriesName, int xMin, int xMax, int yMin, int yMax)
     {
+        GameObject graphGO = emptyGraphPrefab;
+		graphGO.transform.SetParent(this.transform, false);
+		graph = graphGO.GetComponent<WMG_Axis_Graph>();
+
+		series1 = graph.addSeries();
+
+        graphGO.GetComponent<RectTransform>().sizeDelta = this.GetComponent<RectTransform>().sizeDelta;
+        graph.xAxis.AxisLabelSize = AxisLabelSize;
+        graph.yAxis.AxisLabelSize = AxisLabelSize;
+        
         graph.xAxis.AxisMinValue = xMin;
         graph.yAxis.AxisMinValue = yMin;
         graph.xAxis.AxisMaxValue = xMax;
