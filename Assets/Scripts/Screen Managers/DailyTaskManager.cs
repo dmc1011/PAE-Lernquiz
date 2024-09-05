@@ -84,6 +84,7 @@ public class DailyTaskManager : MonoBehaviour
         PlayerPrefs.SetString($"dailyAnswerD{questionCount}", questionResult.answerTexts[3]);
         PlayerPrefs.SetString($"dailyAnswer{questionCount}", questionResult.selectedAnswerText);
         PlayerPrefs.SetInt($"dailyAnswerCorrect{questionCount}", questionResult.isCorrect ? 1 : 0);
+        PlayerPrefs.SetInt($"dailyQuestionId{questionCount}", questionResult.questionId);
         PlayerPrefs.Save();
     }
 

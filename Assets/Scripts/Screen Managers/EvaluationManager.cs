@@ -78,7 +78,8 @@ public class EvaluationManager : MonoBehaviour
                 isCorrect = PlayerPrefs.GetInt($"dailyAnswerCorrect{count}") == 1,
                 questionText = PlayerPrefs.GetString($"dailyQuestion{count}"),
                 selectedAnswerText = PlayerPrefs.GetString($"dailyAnswer{count}"),
-                answerTexts = allAnswerTexts
+                answerTexts = allAnswerTexts,
+                questionId = PlayerPrefs.GetInt($"dailyQuestionId{count}")
             };
             results.Add(result);
         }

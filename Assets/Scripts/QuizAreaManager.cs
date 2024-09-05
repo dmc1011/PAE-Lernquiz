@@ -22,6 +22,7 @@ public class QuizAreaManager : MonoBehaviour
     private AnswerHistoryTable answerHistoryTable;
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private QuestionTable questionTable;
+    private CatalogueTable catalogueTable;
     private DailyTaskHistoryTable dailyTaskHistoryTable;
     private List<TextMeshProUGUI> answerButtonLabels = new();
     private List<RectTransform> answerButtonTransforms = new();
@@ -43,6 +44,7 @@ public class QuizAreaManager : MonoBehaviour
         questionTable = SQLiteSetup.Instance.questionTable;
         catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
         dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
+        catalogueTable = SQLiteSetup.Instance.catalogueTable;
 
         // Get components for questionButton
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -83,10 +85,21 @@ public class QuizAreaManager : MonoBehaviour
         question = q;
         for (int i = 0; i < answerButtons.Length; i++)
             answerButtonLabels[i].text = q.answers[i].text;
+
+
+        isBookmarkSet = q.enabledForPractice;
+        SetInitialBookmarkIcon();
     }
 
     public void SetContents(DataManager.QuestionResult result)
     {
+        question = catalogueTable.FindQuestionById(result.questionId);
+        if (question != null)
+            isBookmarkSet = question.enabledForPractice;
+        else
+            isBookmarkSet = false;
+
+        SetInitialBookmarkIcon();
         showResultsOnly = true;
         ResetContents();
         questionButtonLabel.text = result.questionText;
@@ -178,6 +191,11 @@ public class QuizAreaManager : MonoBehaviour
             question.correctAnsweredCount++;
             dailyTaskHistoryTable.IncrementCorrectAnsweredCount();
         }
+        else if(!isBookmarkSet)
+        {
+            SetBookmarkIcon();
+        }
+
         question.totalAnsweredCount++;
         questionTable.UpdateQuestion(question);
 
@@ -208,6 +226,16 @@ public class QuizAreaManager : MonoBehaviour
                 isBookmarkSet = !isBookmarkSet;
                 img.color = Color.white;
             }
+    }
+
+    public void SetInitialBookmarkIcon()
+    {
+        Image img = bookmarkIcon.GetComponent<Image>();
+
+        if (isBookmarkSet)
+            img.color = bookmarkActiveColor;
+        else
+            img.color = Color.white;
     }
 
     public void SaveBookmark()
