@@ -76,7 +76,7 @@ public class StatisticManager : MonoBehaviour
             averageAnswers.transform.SetParent(scrollTransform);
             timeStatistic.transform.SetParent(scrollTransform);
             catalogueNameDisplay.text = Global.CurrentQuestionRound.catalogue.name;
-            catalogueLevelDisplay.text = "Stufe " + Global.CurrentQuestionRound.catalogue.sessionCount.ToString();
+            catalogueLevelDisplay.text = "Quiz-Runde: " + Global.CurrentQuestionRound.catalogue.sessionCount.ToString();
 
             catalogueSessionHistories = catalogueSessionHistoryTable.FindCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
             SetStatistics();

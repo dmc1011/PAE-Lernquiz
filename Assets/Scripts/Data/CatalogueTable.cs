@@ -232,6 +232,31 @@ public class CatalogueTable
         return questions;
     }
 
+    // needs to be moved to QuestionTable, but was not possible for the moment without bigger changes in SQLiteSetup
+    public Question FindQuestionById(int questionId)
+    {
+        Question question = null;
+        IDbCommand dbcmd = dbConnection.CreateCommand();
+        dbcmd.CommandText = "SELECT * FROM Question WHERE Id = @Id";
+        dbcmd.Parameters.Add(new SqliteParameter("@Id", questionId));
+
+        IDataReader reader = dbcmd.ExecuteReader();
+        if (reader.Read())
+        {
+            int id = Convert.ToInt32(reader["Id"]);
+            int catalogueId = Convert.ToInt32(reader["CatalogueId"]);
+            string text = reader["Text"].ToString();
+            string name = reader["Name"].ToString();
+            int correctAnsweredCount = Convert.ToInt32(reader["CorrectAnsweredCount"]);
+            bool enabledForPractice = (bool)reader["EnabledForPractice"];
+            int totalAnsweredCount = Convert.ToInt32(reader["TotalAnsweredCount"]);
+            List<Answer> answers = FindAnswersByQuestionId(id);
+            List<AnswerHistory> answerHistory = answerHistoryTable.FindAnswerHistoryByQuestionId(id);
+            question = new Question(id, text, name, correctAnsweredCount, totalAnsweredCount, catalogueId, enabledForPractice, answers, answerHistory);
+        }
+        return question;
+    }
+
     public List<Answer> FindAnswersByQuestionId(int questionId)
     {
         List<Answer> answers = new List<Answer>();

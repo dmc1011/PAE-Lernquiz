@@ -21,7 +21,6 @@ public class LinearQuizManager : MonoBehaviour
     private DateTime startTime;
     private int currentSessionId;
     private bool sessionIsErrorFree;
-    private TextMeshProUGUI nextButtonLabel;
 
     // Start is called before the first frame update
     void Start()
@@ -33,8 +32,6 @@ public class LinearQuizManager : MonoBehaviour
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
         catalogueSessionHistoryTable = SQLiteSetup.Instance.catalogueSessionHistoryTable;
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
-
-        nextButtonLabel = nextButton.GetComponentInChildren<TextMeshProUGUI>();
 
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
@@ -52,21 +49,11 @@ public class LinearQuizManager : MonoBehaviour
     // display question and answer text on the screen
     public void DisplayNextQuestion()
     {
-        if (nextQuestionIndex >= questions.Count)
-        {
-            SaveTimeSpent();
-            LoadNextScene();
-            return;
-        }
-
         Question nextQuestion = questions[nextQuestionIndex];
 
         quizAreaManager.ResetContents();
         quizAreaManager.RandomizePositions();
         quizAreaManager.SetContents(nextQuestion);
-
-        if (nextQuestionIndex == questions.Count - 1)
-            nextButtonLabel.text = "Beenden";
 
         Fragenummer.text = $"{currentCatalogue.name}\nFrage {nextQuestionIndex + 1}";
         nextButton.interactable = false;
@@ -100,7 +87,9 @@ public class LinearQuizManager : MonoBehaviour
 
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
                     sessionIsErrorFree = sessionIsErrorFree && (int)button == 0;
-                    nextButton.interactable = true;
+
+                    if (nextQuestionIndex != questions.Count)
+                        nextButton.interactable = true;
                 }
                 break;
         }
