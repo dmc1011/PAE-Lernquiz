@@ -2,6 +2,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class AchievementPopup : MonoBehaviour
 {
@@ -35,9 +36,10 @@ public class AchievementPopup : MonoBehaviour
 
     private void Start()
     {
-        onScreenPosition = new(0, Screen.height * 0.4f);
-        offScreenPositionLeft = new(-Screen.width, Screen.height * 0.4f);
-        offScreenPositionRight = new(Screen.width, Screen.height * 0.4f);
+        var reference_screen_height = 1920; // Added so the achievement is always in the same place relative to the UI-Box.
+        onScreenPosition = new(0, reference_screen_height * 0.5f - popupTransform.rect.height);
+        offScreenPositionLeft = new(-Screen.width - popupTransform.rect.width / 2, reference_screen_height * 0.5f - popupTransform.rect.height);
+        offScreenPositionRight = new(Screen.width + popupTransform.rect.width / 2, reference_screen_height * 0.5f - popupTransform.rect.height);
         popupTransform.anchoredPosition = offScreenPositionLeft;
         animationMode = AnimationMode.Idle;
     }
@@ -145,6 +147,15 @@ public class AchievementPopup : MonoBehaviour
         }
         title_element.text = title;
         text_element.text = text;
+    }
+
+    public void SetData(Achievement achievement)
+    {
+        SetData(
+            achievement.isAchieved ? achievement.grade : Grade.None,
+            achievement.name + " " + achievement.grade,
+            achievement.description
+        );
     }
 
 }
