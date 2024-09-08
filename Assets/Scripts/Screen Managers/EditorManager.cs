@@ -520,11 +520,16 @@ public class EditorManager : MonoBehaviour
 
     void OnFilesSelected(string[] filePaths)
     {
+        if (filePaths.Length == 0)
+        {
+            throw new FileNotFoundException($"{filePaths} size is Zero");
+        }
+
         string path = filePaths[0];
 
         if (path == null || path.Length == 0)
         {
-            throw new FileNotFoundException($"{path} does not exist!");
+            throw new FileNotFoundException($"{path} is empty!");
         }
 
         string customPath = Application.temporaryCachePath + "/" + FileBrowserHelpers.GetFilename(path);
@@ -567,6 +572,11 @@ public class EditorManager : MonoBehaviour
 
     void SaveCatalogue(string[] filePaths)
     {
+        if (filePaths.Length == 0)
+        {
+            throw new FileNotFoundException($"{filePaths} size is Zero");
+        }
+
         string path = filePaths[0];
 
         try
