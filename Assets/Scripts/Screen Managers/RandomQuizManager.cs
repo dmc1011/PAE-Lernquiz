@@ -41,6 +41,12 @@ public class RandomQuizManager : MonoBehaviour
         // Get current catalogue
         currentCatalogue = Global.CurrentQuestionRound.catalogue;
         questionLimit = Global.RandomQuizSize;
+
+        if(currentCatalogue.questions.Count < questionLimit)
+        {
+            questionLimit = currentCatalogue.questions.Count;
+        }
+
         nextButton.interactable = false;
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
         errorFreeRound = true;
@@ -52,6 +58,7 @@ public class RandomQuizManager : MonoBehaviour
 
     public void DisplayNextQuestion()
     {
+
         if (isQuizOver || questionCount >= questionLimit)
         {
             LoadNextScene();

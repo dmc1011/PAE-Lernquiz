@@ -32,7 +32,7 @@ public class EditorManager : MonoBehaviour
     [SerializeField] private GameObject textInputView;
     [SerializeField] private TMP_InputField textInputField;
 
-    [SerializeField] private Background bg = null;
+    [SerializeField] private HexagonBackground bg = null;
 
 
     // Quiz Area Labels
@@ -520,17 +520,29 @@ public class EditorManager : MonoBehaviour
 
     void OnFilesSelected(string[] filePaths)
     {
+        if (filePaths.Length == 0)
+        {
+            throw new FileNotFoundException($"{filePaths} size is Zero");
+        }
+
         string path = filePaths[0];
 
-        if (!File.Exists(path))
+        if (path == null || path.Length == 0)
         {
-            Debug.LogError($"Cannot load file at {path}");
-            throw new FileNotFoundException($"{path} does not exist!");
+            throw new FileNotFoundException($"{path} is empty!");
+        }
+
+        string customPath = Application.temporaryCachePath + "/" + FileBrowserHelpers.GetFilename(path);
+        FileBrowserHelpers.CopyFile(path, customPath);
+
+        if (!File.Exists(customPath))
+        {
+            throw new FileNotFoundException($"{customPath} does not exist!");
         }
 
         try
         {
-            currentCatalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(path));
+            currentCatalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(customPath));
             Debug.Log("Loaded Catalogue succesfully.");
             DisplayQuestionSelection();
         }
@@ -560,6 +572,11 @@ public class EditorManager : MonoBehaviour
 
     void SaveCatalogue(string[] filePaths)
     {
+        if (filePaths.Length == 0)
+        {
+            throw new FileNotFoundException($"{filePaths} size is Zero");
+        }
+
         string path = filePaths[0];
 
         try

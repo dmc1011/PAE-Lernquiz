@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AchievementsScreen : MonoBehaviour
 {
 
     [SerializeField] private Transform scrollTransform;
+    [SerializeField] private Transform canvasTransform;
+
     [SerializeField] private AchievementPopup achievementPopUp;
     private AchievementTable achievementTable;
     List<Achievement> achievements = new();
@@ -17,10 +20,13 @@ public class AchievementsScreen : MonoBehaviour
         foreach (Achievement achievement in achievements)
         {
             AchievementPopup entry = Instantiate(achievementPopUp, scrollTransform);
-            entry.SetData(
-                achievement.isAchieved ? achievement.grade : AchievementPopup.Grade.None,
-                achievement.name + " " + achievement.grade,
-                achievement.description
+            entry.SetData(achievement);
+            entry.GetComponent<Button>().onClick.AddListener(
+                delegate {
+                    AchievementPopup example = Instantiate(achievementPopUp, canvasTransform);
+                    example.SetData(achievement);
+                    example.Fire();
+                }
             );
         }
     }
@@ -29,4 +35,6 @@ public class AchievementsScreen : MonoBehaviour
     {
         
     }
+
+
 }

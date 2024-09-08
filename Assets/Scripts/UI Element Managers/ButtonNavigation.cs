@@ -7,15 +7,15 @@ using static Global;
 
 public class ButtonNavigation : MonoBehaviour
 {
-    [SerializeField] private Background bg = null;
+    [SerializeField] private HexagonBackground background = null;
     private string targetSceneName = "";
 
     public void LoadScene(string sceneName)
     {
         targetSceneName = sceneName;
-        if (bg != null)
+        if (background != null)
         {
-            float timeNeeded = bg.TriggerEndSequence();
+            float timeNeeded = background.TriggerEndSequence();
             Invoke(nameof(LoadSceneInternal), timeNeeded);
         }
         else
