@@ -522,15 +522,22 @@ public class EditorManager : MonoBehaviour
     {
         string path = filePaths[0];
 
-        if (!File.Exists(path))
+        if (path == null || path.Length == 0)
         {
-            Debug.LogError($"Cannot load file at {path}");
             throw new FileNotFoundException($"{path} does not exist!");
+        }
+
+        string customPath = Application.temporaryCachePath + "/" + FileBrowserHelpers.GetFilename(path);
+        FileBrowserHelpers.CopyFile(path, customPath);
+
+        if (!File.Exists(customPath))
+        {
+            throw new FileNotFoundException($"{customPath} does not exist!");
         }
 
         try
         {
-            currentCatalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(path));
+            currentCatalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(customPath));
             Debug.Log("Loaded Catalogue succesfully.");
             DisplayQuestionSelection();
         }
