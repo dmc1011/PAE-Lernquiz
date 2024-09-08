@@ -34,10 +34,12 @@ public class HexagonBackground : MonoBehaviour
     void Start()
     {
         time = 0;
+        bool widescreen = false;
 
         if(self.rect.width > self.rect.height) // widescreen
         {
             numX = Mathf.RoundToInt(numX * self.rect.width / self.rect.height);
+            widescreen = true;
         }
 
         numY = Mathf.RoundToInt(numX * self.rect.height / self.rect.width);
@@ -45,7 +47,7 @@ public class HexagonBackground : MonoBehaviour
         // Hexgrid
         for (int y = 0; y < numY; y++)
         {
-            float fy = (y) / (float)numX; // numX is correct here, because the width is used for scaling the rects.
+            float fy = (y) / (float)(numX + (widescreen? 0.5f : 0)); // numX is correct here, because the width is used for scaling the rects.
 
             for (int x = 0; x < numX - ((y % 2 == 0) ? 1 : 0); x++)
             {
