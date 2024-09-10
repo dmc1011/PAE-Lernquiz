@@ -38,7 +38,7 @@ public class QuizAreaManager : MonoBehaviour
     private bool showResultsOnly = false;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
         questionTable = SQLiteSetup.Instance.questionTable;
