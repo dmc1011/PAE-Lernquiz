@@ -58,11 +58,19 @@ public class EditorManager : MonoBehaviour
     private INPUT_MODE inputMode = INPUT_MODE.NONE;
     private int editAnswerIndex = -1;
 
-
     // text input status
     enum TEXT_INPUT { HIDDEN, VISIBLE, ACCEPT, DECLINE };
-    //private TEXT_INPUT textInputStatus = TEXT_INPUT.HIDDEN;
     private string currentTextInput = "";
+
+    // user alerts
+    [SerializeField] private GameObject alertPanel;
+    [SerializeField] private GameObject deleteQuestionAlert;
+    [SerializeField] private GameObject deleteCatalogueAlert;
+    [SerializeField] private GameObject duplicateQuestionAlert;
+    [SerializeField] private GameObject duplicateCatalogueAlert;
+    [SerializeField] private GameObject customAlert;
+    [SerializeField] private TextMeshProUGUI customAlertTitle;
+    [SerializeField] private TextMeshProUGUI customAlertMessage;
 
     // Scene transition
     private string targetScene = "NewGame";
@@ -109,6 +117,11 @@ public class EditorManager : MonoBehaviour
             textInputView.gameObject.SetActive(false);
             questionSelectionScrollView.gameObject.SetActive(false);
             emergencyReturnButton.gameObject.SetActive(true);
+
+            string alertTitle = "Warnung";
+            string alertMessage = "Etwas ist schiefgelaufen. Kehre zum vorherigen Bildschirm zurück.";
+            TriggerCustomAlert(alertTitle, alertMessage);
+
             return;
         }
 
@@ -124,7 +137,23 @@ public class EditorManager : MonoBehaviour
 
     public void CreateNewCatalogue()
     {
-        catalogueTable.AddCatalogue(currentCatalogue);
+        bool isCatalogueValid = false;
+        int i = 2;
+
+        while (!isCatalogueValid)
+        {
+            if (catalogueTable.FindCatalogueByName(currentCatalogue.name) == null)
+            {
+                isCatalogueValid = true;
+                catalogueTable.AddCatalogue(currentCatalogue);
+                break;
+            }
+            else
+            {
+                currentCatalogue.name = currentCatalogue.name + " " + i;
+            }
+        }
+        
         currentCatalogue = catalogueTable.FindCatalogueByName(currentCatalogue.name);
         DisplayQuestionSelection();
     }
@@ -211,12 +240,11 @@ public class EditorManager : MonoBehaviour
 
     public void ReturnToQuestionSelection()
     {
-        Debug.Log("" + editorMode.ToString());
-        Debug.Log("" + currentTextInput);
-
         if(editorMode == EDITOR_MODE.ADD_QUESTION && (currentTextInput == "" || currentQuestion.name == "Neue Frage"))
         {
-            print("Bitte gib einen gültigen Fragennamen ein.");
+            string alertTitle = "Information";
+            string alertMessage = "Der aktuelle Fragenname ist nicht gültig.\n\nBitte gib einen anderen Namen ein.";
+            TriggerCustomAlert(alertTitle, alertMessage);
             return;
         }
 
@@ -233,21 +261,7 @@ public class EditorManager : MonoBehaviour
 
     public void StoreCatalogue()
     {
-        if (isNewCatalogue)
-        {
-            if (catalogueTable.FindCatalogueByName(currentCatalogue.name) != null)
-            {
-                print("Katalogname existiert bereits in DB");
-                return;
-            }
-
-            catalogueTable.AddCatalogue(currentCatalogue);
-        } 
-        else
-        {
-            catalogueTable.UpdateCatalogue(currentCatalogue);
-        }
-
+        catalogueTable.UpdateCatalogue(currentCatalogue);
         LoadCatalogueSelection();
     }
 
@@ -273,14 +287,6 @@ public class EditorManager : MonoBehaviour
 
     public void DeleteCatalogue()
     {
-        TriggerSafetyModal();   // To do
-
-        if (isNewCatalogue)
-        {
-            LoadCatalogueSelection();
-            return;
-        }
-
         catalogueTable.DeleteCatalogueById(currentCatalogue.id);
         Global.SetTmpCatalogue(null);
 
@@ -319,8 +325,6 @@ public class EditorManager : MonoBehaviour
 
     public void DeleteQuestion()
     {
-        TriggerSafetyModal();   // To do
-
         if (editorMode == EDITOR_MODE.ADD_QUESTION)
         {
             DisplayQuestionSelection();
@@ -365,25 +369,37 @@ public class EditorManager : MonoBehaviour
             case INPUT_MODE.EDIT_QUESTION_TEXT:
                 DisplayQuestionEditor(editorMode);
                 break;
+
             case INPUT_MODE.EDIT_ANSWER: 
                 DisplayQuestionEditor(editorMode);
                 break;
+
             default: break;
         }
     }
 
-    private void TriggerSafetyModal()
+    public void TriggerAlert(GameObject alert)
     {
-        // To do
-        // case: delete catalogue
-        // case: delete question
-        // case: exit scene without saving (for each "BackButton" in Editor scene)
+        alertPanel.gameObject.SetActive(true);
+        alert.gameObject.SetActive(true);
     }
 
-    private void TriggerUserAlert()
+    private void TriggerCustomAlert(string title, string message)
     {
-        // to do
-        // input invalid
+        customAlertTitle.text = title;
+        customAlertMessage.text = message;
+        alertPanel.gameObject.SetActive(true);
+        customAlert.gameObject.SetActive(true);
+    }
+
+    public void CloseAlert()
+    {
+        alertPanel.gameObject.SetActive(false);
+        deleteCatalogueAlert.gameObject.SetActive(false);
+        deleteQuestionAlert.gameObject.SetActive(false);
+        duplicateCatalogueAlert.gameObject.SetActive(false);
+        duplicateQuestionAlert.gameObject.SetActive(false);
+        customAlert.gameObject.SetActive(false);
     }
 
 
@@ -409,8 +425,6 @@ public class EditorManager : MonoBehaviour
 
     private void VerifyTextInput()
     {
-        print("Verify text input for \"" + currentTextInput + "\"");
-
         if (inputMode == INPUT_MODE.NONE)
         {
             if (editorMode == EDITOR_MODE.NONE)
@@ -426,7 +440,9 @@ public class EditorManager : MonoBehaviour
 
         if (currentTextInput == "")
         {
-            print("Bitte gib eine gültige Texteingabe ein.");
+            string alertTitle = "Information";
+            string alertMessage = "Der aktuelle Fragenname ist nicht gültig.\n\nBitte gib einen anderen Namen ein.";
+            TriggerCustomAlert(alertTitle, alertMessage);
         }
 
         switch (inputMode)
@@ -439,8 +455,7 @@ public class EditorManager : MonoBehaviour
                 }
                 if (catalogueTable.FindCatalogueByName(currentTextInput) != null)
                 {
-                    print("ERROR: There already is a catalogue named \"" + currentTextInput + "\"");
-                    TriggerUserAlert();
+                    TriggerAlert(duplicateCatalogueAlert);
                     break;
                 }
 
@@ -461,8 +476,7 @@ public class EditorManager : MonoBehaviour
                 {
                     if (q.name == currentTextInput)
                     {
-                        print("ERROR: You shall not name two questions the same! " + q.name + " already exists.");
-                        TriggerUserAlert();
+                        TriggerAlert(duplicateQuestionAlert);
                         isValidQuestionName = false;
                         break;
                     }
@@ -543,8 +557,7 @@ public class EditorManager : MonoBehaviour
         try
         {
             currentCatalogue = JsonConvert.DeserializeObject<Catalogue>(File.ReadAllText(customPath));
-            Debug.Log("Loaded Catalogue succesfully.");
-            DisplayQuestionSelection();
+            CreateNewCatalogue();
         }
         catch (Exception e)
         {
