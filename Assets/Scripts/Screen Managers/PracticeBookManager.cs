@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PracticeBookManager : MonoBehaviour
@@ -16,6 +17,7 @@ public class PracticeBookManager : MonoBehaviour
     [SerializeField] private GameObject quizAreaContainer;
     [SerializeField] private GameObject questionButtonPrefab;      // used for dynamically rendering question buttons
     [SerializeField] private Transform buttonContainer;            // 'content' element of scroll view
+    [SerializeField] private HexagonBackground background;
 
     private Catalogue currentCatalogue;
     private List<Question> questions;
@@ -138,6 +140,25 @@ public class PracticeBookManager : MonoBehaviour
     public void LoadNextScene()
     {
         nextButtonNavigation.LoadScene("Evaluation");
+    }
+
+    public void LoadCatalogueSelection()
+    {
+        if (background != null)
+        {
+            float timeNeeded = background.TriggerEndSequence();
+            Invoke(nameof(LoadSceneInternal), timeNeeded);
+        }
+        else
+        {
+            LoadSceneInternal();
+        }
+    }
+
+
+    private void LoadSceneInternal()
+    {
+        SceneManager.LoadScene("NewGame");
     }
 }
 
