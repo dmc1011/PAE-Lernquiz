@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,9 @@ public class EvaluationManager : MonoBehaviour
     [SerializeField] private SideMenu sideMenu;
     [SerializeField] private QuizAreaManager quizAreaManager;
     [SerializeField] private AchievementManager achievementManager;
+    [SerializeField] private GameObject newLevelPopup;
+    [SerializeField] private TextMeshProUGUI popupMessage;
+    [SerializeField] private TextMeshProUGUI xpInfo;
 
     private List<EvaluationButton> evaluationButtons = new();
     private List<DataManager.QuestionResult> questionResults = new();
@@ -60,6 +64,17 @@ public class EvaluationManager : MonoBehaviour
                 print("ERROR: EvaluationManager - Invalid Game Mode for evaluation.");
                 break;
         }
+
+        if (gameMode == Global.GameMode.DailyTask && PlayerLevel.gainedXp == 0)
+        {
+            xpInfo.text = "";
+        } 
+        else
+        {
+            xpInfo.text = $"Du hast {PlayerLevel.gainedXp} XP verdient.";
+        }
+
+        PlayerLevel.AddPlayerXp(newLevelPopup, popupMessage);
     }
 
     private List<DataManager.QuestionResult> GetDailyTaskResults()

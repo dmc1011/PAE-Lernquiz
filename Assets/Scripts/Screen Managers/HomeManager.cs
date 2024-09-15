@@ -23,6 +23,8 @@ public class HomeManager : MonoBehaviour
         catalogues = catalogueTable.FindAllCatalogues();
         catalogueCount = catalogues.Count;
 
+        PlayerLevel.FetchData();
+
         currentDate = DateTime.Now.ToString("yyyy-MM-dd");
 
         // reset daily task
