@@ -47,6 +47,7 @@ public class DailyTaskManager : MonoBehaviour
         if (isQuizOver || questionCount >= questionLimit)
         {
             Global.CurrentDailyTask.answers = DataManager.QuestionResults;
+            PlayerLevel.GainXp(PlayerLevel.dailyTaskXp);
             LoadNextScene();
             return;
         }

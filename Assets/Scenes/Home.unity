@@ -1733,6 +1733,7 @@ GameObject:
   - component: {fileID: 1767197246}
   - component: {fileID: 1767197245}
   - component: {fileID: 1767197248}
+  - component: {fileID: 1767197249}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1804,6 +1805,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startDailyTask: {fileID: 1966177702}
   background: {fileID: 641813607}
+--- !u!114 &1767197249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767197244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ededa298e75ed4197895c3e75402df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1874269865
 PrefabInstance:
   m_ObjectHideFlags: 0
