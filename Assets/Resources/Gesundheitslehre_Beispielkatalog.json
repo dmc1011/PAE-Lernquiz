@@ -1,1 +1,384 @@
-{"id":3,"name":"Gesundheitslehre","currentQuestionId":-1,"totalTimeSpent":0,"sessionCount":0,"errorFreeSessionCount":0,"completedRandomQuizCount":0,"errorFreeRandomQuizCount":0,"questions":[{"id":11,"text":"Die drei Kurzschlüsse des fetalen Kreislaufes heißen:","catalogueId":3,"name":"Drei Kurzschlüsse des fetalen Kreislaufes","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":41,"text":"Ductus arteriosus Botalli, Foramen ovale, Ductus venosus Arantii","questionId":11,"isCorrect":true},{"id":42,"text":"Ductus arteriosus Arantii, Foramen ovale, Ductus venosus Botalli","questionId":11,"isCorrect":false},{"id":43,"text":"Ductus arteriosus Bonelli, Foramen ovale, Ductus venosus Arantii","questionId":11,"isCorrect":false},{"id":44,"text":"Ductus arteriosus Arantii, Foramen rotundum, Ductus venosus Botalli","questionId":11,"isCorrect":false}],"answerHistory":[]},{"id":12,"text":"Arterien führen immer…","catalogueId":3,"name":"Funktion der Arterien","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":45,"text":"vom Herzen weg","questionId":12,"isCorrect":true},{"id":46,"text":"zum Herzen hin","questionId":12,"isCorrect":false},{"id":47,"text":"sauerstoffreiches Blut","questionId":12,"isCorrect":false},{"id":48,"text":"sauerstoffarmes Blut","questionId":12,"isCorrect":false}],"answerHistory":[]},{"id":13,"text":"Die vollständige Erregung der Vorhöfe wird im EKG dargestellt durch:","catalogueId":3,"name":"Darstellung der Vorhofserregung im EKG","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":49,"text":"Die P-Q-Strecke","questionId":13,"isCorrect":true},{"id":50,"text":"Die P-Welle","questionId":13,"isCorrect":false},{"id":51,"text":"QRS-Komplex","questionId":13,"isCorrect":false},{"id":52,"text":"T-Welle","questionId":13,"isCorrect":false}],"answerHistory":[]},{"id":14,"text":"Die pAVK (periphere arterielle Verschlusskrankheit)...","catalogueId":3,"name":"Über pAVK","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":53,"text":"heißt auch Schaufensterkrankheit","questionId":14,"isCorrect":true},{"id":54,"text":"ist meist symptomlos","questionId":14,"isCorrect":false},{"id":55,"text":"geht meist mit Hypotonie einher","questionId":14,"isCorrect":false},{"id":56,"text":"kommt meist im Kindesalter vor","questionId":14,"isCorrect":false}],"answerHistory":[]},{"id":15,"text":"Die Depolarisation im Aktionspotenzial des Arbeitsmyokards wird verursacht durch","catalogueId":3,"name":"Ursache der Depolarisation im Arbeitsmyokard","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":57,"text":"Natrium-Einstrom","questionId":15,"isCorrect":true},{"id":58,"text":"Natrium-Ausstrom","questionId":15,"isCorrect":false},{"id":59,"text":"Kalzium-Ausstrom","questionId":15,"isCorrect":false},{"id":60,"text":"Kalzium-Einstrom","questionId":15,"isCorrect":false}],"answerHistory":[]},{"id":16,"text":"Der mittlere arterielle Blutdruck ist nicht abhängig von","catalogueId":3,"name":"Nicht abhängiger Faktor des mittleren arteriellen Blutdrucks","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":61,"text":"Schuhgröße","questionId":16,"isCorrect":true},{"id":62,"text":"Herzfrequenz","questionId":16,"isCorrect":false},{"id":63,"text":"Flüssigkeitsmenge (Blutvolumen)","questionId":16,"isCorrect":false},{"id":64,"text":"Schlagvolumen","questionId":16,"isCorrect":false}],"answerHistory":[]},{"id":17,"text":"Eine Folge von Arteriosklerose kann sein:","catalogueId":3,"name":"Folge von Arteriosklerose","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":65,"text":"Herzinfarkt","questionId":17,"isCorrect":true},{"id":66,"text":"Übergewicht","questionId":17,"isCorrect":false},{"id":67,"text":"Diabetes mellitus","questionId":17,"isCorrect":false},{"id":68,"text":"Fettstoffwechselstörung","questionId":17,"isCorrect":false}],"answerHistory":[]},{"id":18,"text":"Zu den Blutzellen gehören:","catalogueId":3,"name":"Arten von Blutzellen","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":69,"text":"Erythrozyten","questionId":18,"isCorrect":true},{"id":70,"text":"Plasmazellen","questionId":18,"isCorrect":false},{"id":71,"text":"Lymphozyten","questionId":18,"isCorrect":false},{"id":72,"text":"Megakaryozyten","questionId":18,"isCorrect":false}],"answerHistory":[]},{"id":19,"text":"Zum angeborenen Immunsystem gehören","catalogueId":3,"name":"Teil des angeborenen Immunsystems","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":73,"text":"Makrophagen","questionId":19,"isCorrect":true},{"id":74,"text":"Plasmazellen","questionId":19,"isCorrect":false},{"id":75,"text":"Antikörper","questionId":19,"isCorrect":false},{"id":76,"text":"Zytotoxische T-Zellen","questionId":19,"isCorrect":false}],"answerHistory":[]},{"id":20,"text":"Antikörper werden gebildet von","catalogueId":3,"name":"Bildung von Antikörpern","correctAnsweredCount":0,"enabledForPractice":false,"totalAnsweredCount":0,"answers":[{"id":77,"text":"Plasmazellen","questionId":20,"isCorrect":true},{"id":78,"text":"T-Zellen","questionId":20,"isCorrect":false},{"id":79,"text":"Antizellen","questionId":20,"isCorrect":false},{"id":80,"text":"Granulozyten","questionId":20,"isCorrect":false}],"answerHistory":[]}],"sessionHistories":[]}
+{
+  "id": 1,
+  "name": "Gesundheitslehre",
+  "currentQuestionId": -1,
+  "totalTimeSpent": 0,
+  "sessionCount": 0,
+  "errorFreeSessionCount": 0,
+  "completedRandomQuizCount": 0,
+  "errorFreeRandomQuizCount": 0,
+  "questions": [
+    {
+      "id": 11,
+      "text": "Die drei Kurzschlüsse des fetalen Kreislaufes heißen:",
+      "catalogueId": 3,
+      "name": "Drei Kurzschlüsse des fetalen Kreislaufes",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 41,
+          "text": "Ductus arteriosus Botalli, Foramen ovale, Ductus venosus Arantii",
+          "questionId": 11,
+          "isCorrect": true
+        },
+        {
+          "id": 42,
+          "text": "Ductus arteriosus Arantii, Foramen ovale, Ductus venosus Botalli",
+          "questionId": 11,
+          "isCorrect": false
+        },
+        {
+          "id": 43,
+          "text": "Ductus arteriosus Bonelli, Foramen ovale, Ductus venosus Arantii",
+          "questionId": 11,
+          "isCorrect": false
+        },
+        {
+          "id": 44,
+          "text": "Ductus arteriosus Arantii, Foramen rotundum, Ductus venosus Botalli",
+          "questionId": 11,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 12,
+      "text": "Arterien führen immer…",
+      "catalogueId": 3,
+      "name": "Funktion der Arterien",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 45,
+          "text": "vom Herzen weg",
+          "questionId": 12,
+          "isCorrect": true
+        },
+        {
+          "id": 46,
+          "text": "zum Herzen hin",
+          "questionId": 12,
+          "isCorrect": false
+        },
+        {
+          "id": 47,
+          "text": "sauerstoffreiches Blut",
+          "questionId": 12,
+          "isCorrect": false
+        },
+        {
+          "id": 48,
+          "text": "sauerstoffarmes Blut",
+          "questionId": 12,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 13,
+      "text": "Die vollständige Erregung der Vorhöfe wird im EKG dargestellt durch:",
+      "catalogueId": 3,
+      "name": "Darstellung der Vorhofserregung im EKG",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 49,
+          "text": "Die P-Q-Strecke",
+          "questionId": 13,
+          "isCorrect": true
+        },
+        {
+          "id": 50,
+          "text": "Die P-Welle",
+          "questionId": 13,
+          "isCorrect": false
+        },
+        {
+          "id": 51,
+          "text": "QRS-Komplex",
+          "questionId": 13,
+          "isCorrect": false
+        },
+        {
+          "id": 52,
+          "text": "T-Welle",
+          "questionId": 13,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 14,
+      "text": "Die pAVK (periphere arterielle Verschlusskrankheit)...",
+      "catalogueId": 3,
+      "name": "Über pAVK",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 53,
+          "text": "heißt auch Schaufensterkrankheit",
+          "questionId": 14,
+          "isCorrect": true
+        },
+        {
+          "id": 54,
+          "text": "ist meist symptomlos",
+          "questionId": 14,
+          "isCorrect": false
+        },
+        {
+          "id": 55,
+          "text": "geht meist mit Hypotonie einher",
+          "questionId": 14,
+          "isCorrect": false
+        },
+        {
+          "id": 56,
+          "text": "kommt meist im Kindesalter vor",
+          "questionId": 14,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 15,
+      "text": "Die Depolarisation im Aktionspotenzial des Arbeitsmyokards wird verursacht durch",
+      "catalogueId": 3,
+      "name": "Ursache der Depolarisation im Arbeitsmyokard",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 57,
+          "text": "Natrium-Einstrom",
+          "questionId": 15,
+          "isCorrect": true
+        },
+        {
+          "id": 58,
+          "text": "Natrium-Ausstrom",
+          "questionId": 15,
+          "isCorrect": false
+        },
+        {
+          "id": 59,
+          "text": "Kalzium-Ausstrom",
+          "questionId": 15,
+          "isCorrect": false
+        },
+        {
+          "id": 60,
+          "text": "Kalzium-Einstrom",
+          "questionId": 15,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 16,
+      "text": "Der mittlere arterielle Blutdruck ist nicht abhängig von",
+      "catalogueId": 3,
+      "name": "Nicht abhängiger Faktor des mittleren arteriellen Blutdrucks",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 61,
+          "text": "Schuhgröße",
+          "questionId": 16,
+          "isCorrect": true
+        },
+        {
+          "id": 62,
+          "text": "Herzfrequenz",
+          "questionId": 16,
+          "isCorrect": false
+        },
+        {
+          "id": 63,
+          "text": "Flüssigkeitsmenge (Blutvolumen)",
+          "questionId": 16,
+          "isCorrect": false
+        },
+        {
+          "id": 64,
+          "text": "Schlagvolumen",
+          "questionId": 16,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 17,
+      "text": "Eine Folge von Arteriosklerose kann sein:",
+      "catalogueId": 3,
+      "name": "Folge von Arteriosklerose",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 65,
+          "text": "Herzinfarkt",
+          "questionId": 17,
+          "isCorrect": true
+        },
+        {
+          "id": 66,
+          "text": "Übergewicht",
+          "questionId": 17,
+          "isCorrect": false
+        },
+        {
+          "id": 67,
+          "text": "Diabetes mellitus",
+          "questionId": 17,
+          "isCorrect": false
+        },
+        {
+          "id": 68,
+          "text": "Fettstoffwechselstörung",
+          "questionId": 17,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 18,
+      "text": "Zu den Blutzellen gehören:",
+      "catalogueId": 3,
+      "name": "Arten von Blutzellen",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 69,
+          "text": "Erythrozyten",
+          "questionId": 18,
+          "isCorrect": true
+        },
+        {
+          "id": 70,
+          "text": "Plasmazellen",
+          "questionId": 18,
+          "isCorrect": false
+        },
+        {
+          "id": 71,
+          "text": "Lymphozyten",
+          "questionId": 18,
+          "isCorrect": false
+        },
+        {
+          "id": 72,
+          "text": "Megakaryozyten",
+          "questionId": 18,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 19,
+      "text": "Zum angeborenen Immunsystem gehören",
+      "catalogueId": 3,
+      "name": "Teil des angeborenen Immunsystems",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 73,
+          "text": "Makrophagen",
+          "questionId": 19,
+          "isCorrect": true
+        },
+        {
+          "id": 74,
+          "text": "Plasmazellen",
+          "questionId": 19,
+          "isCorrect": false
+        },
+        {
+          "id": 75,
+          "text": "Antikörper",
+          "questionId": 19,
+          "isCorrect": false
+        },
+        {
+          "id": 76,
+          "text": "Zytotoxische T-Zellen",
+          "questionId": 19,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    },
+    {
+      "id": 20,
+      "text": "Antikörper werden gebildet von",
+      "catalogueId": 3,
+      "name": "Bildung von Antikörpern",
+      "correctAnsweredCount": 0,
+      "enabledForPractice": false,
+      "totalAnsweredCount": 0,
+      "answers": [
+        {
+          "id": 77,
+          "text": "Plasmazellen",
+          "questionId": 20,
+          "isCorrect": true
+        },
+        {
+          "id": 78,
+          "text": "T-Zellen",
+          "questionId": 20,
+          "isCorrect": false
+        },
+        {
+          "id": 79,
+          "text": "Antizellen",
+          "questionId": 20,
+          "isCorrect": false
+        },
+        {
+          "id": 80,
+          "text": "Granulozyten",
+          "questionId": 20,
+          "isCorrect": false
+        }
+      ],
+      "answerHistory": [
+      ]
+    }
+  ],
+  "sessionHistories": [
+  ]
+}
