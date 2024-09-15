@@ -151,6 +151,7 @@ public class EditorManager : MonoBehaviour
             else
             {
                 currentCatalogue.name = currentCatalogue.name + " " + i;
+                i++;
             }
         }
         
