@@ -16,10 +16,10 @@ public class PlayerLevel : MonoBehaviour
 
     public const int correctAnswerXp = 15;
     public const int falseAnswerXp = 5;
-    public const int dailyTaskXp = 30;
-    public const int bronceAchievementXp = 35;
-    public const int silverAchievementXp = 60;
-    public const int goldAchievementXp = 100;
+    public const int dailyTaskXp = 45;
+    public const int bronceAchievementXp = 100;
+    public const int silverAchievementXp = 300;
+    public const int goldAchievementXp = 700;
 
 
 
