@@ -26,11 +26,11 @@ public class PlayerLevel : MonoBehaviour
     // loads level data from player prefs and initializes data if no data exists yet
     public static void FetchData()
     {
-        print("Fetching data from level system");
+        //print("Fetching data from level system");
 
         if (PlayerPrefs.GetInt("PlayerLevel", -1) == -1)
         {
-            print("Setting up Level System");
+            //print("Setting up Level System");
 
             PlayerPrefs.SetInt("PlayerLevel", 1);
             PlayerPrefs.SetInt("TotalXp", 0);
@@ -43,7 +43,7 @@ public class PlayerLevel : MonoBehaviour
         totalXp = PlayerPrefs.GetInt("TotalXp");
         xpForNextLevel = PlayerPrefs.GetInt("XpForNextLevel");
         xpDelta = PlayerPrefs.GetInt("XpDelta");
-        print($"Received Data: Level {playerLevel}, {totalXp} XP, {xpForNextLevel} needed, {xpDelta} delta");
+        //print($"Received Data: Level {playerLevel}, {totalXp} XP, {xpForNextLevel} needed, {xpDelta} delta");
     }
 
 
@@ -51,14 +51,14 @@ public class PlayerLevel : MonoBehaviour
     // call this method after a player exits a game session
     public static void AddPlayerXp(GameObject newLevelPopup = null, TextMeshProUGUI popupMessage = null)
     {
-        print($"Adding {gainedXp} to player");
+        //print($"Adding {gainedXp} to player");
         totalXp += gainedXp;
         bool reachedNewLevel = false;
 
         while (totalXp >= xpForNextLevel )
         {
             playerLevel++;
-            print("New Level: " + playerLevel);
+            //print("New Level: " + playerLevel);
             reachedNewLevel = true;
 
             if (playerLevel > 1 && playerLevel <= 4)
@@ -86,7 +86,7 @@ public class PlayerLevel : MonoBehaviour
         {
             if (newLevelPopup != null)
             {
-                print("Trigger Popup");
+                //print("Trigger Popup");
                 newLevelPopup.gameObject.SetActive(true);
                 if (popupMessage != null)
                 {
@@ -101,14 +101,14 @@ public class PlayerLevel : MonoBehaviour
     // adds up gained xp during a game session
     public static void GainXp(int newXp)
     {
-        print("Gained XP: " + newXp);
+        //print("Gained XP: " + newXp);
         gainedXp += newXp;
     }
 
 
     public static void Save(int playerLevel, int xpForNextLevel, int currentXp, int xpDelta)
     {
-        print($"Saving data: Level {playerLevel}, {currentXp} XP, {xpForNextLevel} needed, {xpDelta} delta");
+        //print($"Saving data: Level {playerLevel}, {currentXp} XP, {xpForNextLevel} needed, {xpDelta} delta");
         PlayerPrefs.SetInt("PlayerLevel", playerLevel);
         PlayerPrefs.SetInt("XpForNextLevel", xpForNextLevel);
         PlayerPrefs.SetInt("TotalXp", currentXp);
