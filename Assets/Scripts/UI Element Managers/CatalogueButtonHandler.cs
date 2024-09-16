@@ -155,14 +155,14 @@ public class CatalogueButtonHandler : MonoBehaviour
         if (catalogueName == "Katalog hinzufügen" && Global.SetTmpCatalogue(null))
         {
             EditorManager.isNewCatalogue = true;
-            LoadScene("Catalogues");
+            LoadScene("Editor");
             return;
         }
 
         if (Global.SetTmpCatalogue(catalogueName))
         {
             EditorManager.isNewCatalogue = false;
-            LoadScene("Catalogues");
+            LoadScene("Editor");
         }
     }
 
