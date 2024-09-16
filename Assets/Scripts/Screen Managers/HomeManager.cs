@@ -109,21 +109,10 @@ public class HomeManager : MonoBehaviour
         StartSceneTransition(false);
     }
 
-    public void LoadAudioScene()
-    {
-        targetScene = "Audio";
-        StartSceneTransition(false);
-    }
 
     public void LoadHelpScene()
     {
         targetScene = "Help";
-        StartSceneTransition(false);
-    }
-
-    public void LoadDataSecurityScene()
-    {
-        targetScene = "DataSecurity";
         StartSceneTransition(false);
     }
 
