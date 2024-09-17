@@ -38,7 +38,7 @@ public class QuizAreaManager : MonoBehaviour
     private bool showResultsOnly = false;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         answerHistoryTable = SQLiteSetup.Instance.answerHistoryTable;
         questionTable = SQLiteSetup.Instance.questionTable;
@@ -190,10 +190,16 @@ public class QuizAreaManager : MonoBehaviour
         {
             question.correctAnsweredCount++;
             dailyTaskHistoryTable.IncrementCorrectAnsweredCount();
+            PlayerLevel.GainXp(PlayerLevel.correctAnswerXp);
         }
-        else if(!isBookmarkSet)
+        else
         {
-            SetBookmarkIcon();
+            if (!isBookmarkSet)
+            {
+                SetBookmarkIcon();
+            }
+
+            PlayerLevel.GainXp(PlayerLevel.falseAnswerXp);
         }
 
         question.totalAnsweredCount++;
@@ -206,8 +212,6 @@ public class QuizAreaManager : MonoBehaviour
             answerHistoryTable.AddAnswerHistory(question.id, wasCorrect, currentSession.id);
         }
 
-        // MS: Ich weiß wirklich nicht ob das "der richtige" weg ist wie man in Unity Callbacks
-        // veranstaltet... Wenn sich hier jemand auskennt kann er/sie diesen Kommentar entfernen und das ändern.
         parentScreenManager.BroadcastMessage("EventButtonPressedCallback", currentlyActiveButton);
         
     }

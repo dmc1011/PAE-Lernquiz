@@ -31,6 +31,19 @@ public class AchievementManager : MonoBehaviour
                     var a = Instantiate(achievementPopup, parentForRendering);
                     a.SetData(grade, achievement.name + " " + grade, achievement.popupText);
                     a.Fire();
+
+                    switch (grade)
+                    {
+                        case AchievementPopup.Grade.Bronze:
+                            PlayerLevel.GainXp(PlayerLevel.bronceAchievementXp);
+                            break;
+                        case AchievementPopup.Grade.Silver:
+                            PlayerLevel.GainXp(PlayerLevel.silverAchievementXp); 
+                            break;
+                        case AchievementPopup.Grade.Gold:
+                            PlayerLevel.GainXp(PlayerLevel.goldAchievementXp);
+                            break;
+                    }
                 }
 
                 break;

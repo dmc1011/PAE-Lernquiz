@@ -4,6 +4,7 @@ using Mono.Data.Sqlite;
 using System.IO;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class SQLiteSetup : MonoBehaviour
 {
@@ -47,10 +48,54 @@ public class SQLiteSetup : MonoBehaviour
             achievementTable = new AchievementTable(dbConnection, dailyTaskHistoryTable, catalogueTable, catalogueSessionHistoryTable);
 
             AddInitialAchievementsIfNeeded();
+            LoadExampleCatalogues();
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void LoadExampleCatalogues()
+    {
+        List <Catalogue> catalogues = catalogueTable.FindAllCatalogues();
+        if (catalogues != null && catalogues.Count != 0)
+            return;
+
+        // create Gesundheitslehre catalogue
+        TextAsset catalogue1 = Resources.Load<TextAsset>("Gesundheitslehre_Beispielkatalog");
+        if(catalogue1 != null)
+        {
+            Catalogue catalogue = JsonConvert.DeserializeObject<Catalogue>(catalogue1.text);
+            CreateNewCatalogue(catalogue);
+        }
+
+        // create Erziehungswissenschaft catalogue
+        TextAsset catalogue2 = Resources.Load<TextAsset>("Erziehungswissenschaft_Beispielkatalog");
+        if (catalogue2 != null)
+        {
+            Catalogue catalogue = JsonConvert.DeserializeObject<Catalogue>(catalogue2.text);
+            CreateNewCatalogue(catalogue);
+        }
+    }
+
+    private void CreateNewCatalogue(Catalogue catalogue)
+    {
+        bool isCatalogueValid = false;
+        int i = 2;
+
+        while (!isCatalogueValid)
+        {
+            if (catalogueTable.FindCatalogueByName(catalogue.name) == null)
+            {
+                isCatalogueValid = true;
+                catalogueTable.AddCatalogue(catalogue);
+            }
+            else
+            {
+                catalogue.name = catalogue.name + " " + i;
+                i++;
+            }
         }
     }
 

@@ -33,12 +33,12 @@ public class HelpManager : MonoBehaviour
         questionList.Add("Wie funktioniert das Übungsbuch und wie verwende ich es am besten?");
         questionList.Add("Wie erreiche ich die „Flawless“ Achievements und was bedeuten sie?");
         questionList.Add("Kann ich sehen, wie viele Punkte mir noch fehlen, um ein höheres Level zu erreichen?");
-        questionList.Add("Was passiert, wenn ich eine Frage aus dem Übungsbuch dreimal richtig beantworte?");
         questionList.Add("Wie wird die Zeit berechnet, die ich in den Katalogen verbracht habe?");
         questionList.Add("Wie funktioniert das Zeitmanagement-Feature und wie kann ich davon profitieren?");
+        questionList.Add("Wie kann ich ein Quiz unterbrechen und später fortsetzen?");
 
 
-        answerList.Add("Der Random Quiz-Modus wählt zufällig sechs Fragen aus einem ausgewählten Fragenkatalog aus. Um diesen Modus zu spielen, wähle im Hauptmenü den 'Random Quiz Modus', wähle deinen gewünschten Fragenkatalog aus und beginne das Quiz. Du musst alle Fragen beantworten, um die Runde abzuschließen.");
+        answerList.Add("Der Random Quiz-Modus wählt zufällig 5 Fragen aus einem ausgewählten Fragenkatalog aus. Um diesen Modus zu spielen, wähle im Hauptmenü den 'Random Quiz', wähle deinen gewünschten Fragenkatalog aus und beginne das Quiz. Du musst alle Fragen beantworten, um die Runde abzuschließen.");
         answerList.Add("Der Evaluation Screen zeigt die Ergebnisse deines gerade abgeschlossenen Quizzes oder Daily Tasks an. Du kannst dort die richtigen und falschen Antworten einsehen, sowie deine Erfolgsquote und die Anzahl der richtigen Antworten vergleichen.");
         answerList.Add("Nach dem Abschluss eines Quizzes oder einer Daily Task gelangst du automatisch zum Evaluation Screen. Dort kannst du die Ergebnisse überprüfen und bei Bedarf einzelne Fragen noch einmal durchsehen.");
         answerList.Add("Das Levelsystem basiert auf den Punkten, die du durch das Beantworten von Fragen und das Abschließen von Aufgaben verdienst. Je mehr Punkte du sammelst, desto höher steigst du im Level auf. Punkte erhältst du durch erfolgreiche Quizzes, Daily Tasks und andere Aktivitäten innerhalb der App.");
@@ -55,9 +55,10 @@ public class HelpManager : MonoBehaviour
         answerList.Add("Das Übungsbuch speichert alle Fragen, die du falsch beantwortet hast oder manuell gespeichert hast, damit du sie später erneut durchgehen kannst. Um das Beste aus dem Übungsbuch herauszuholen, solltest du regelmäßig die dort gespeicherten Fragen üben, bis du sie korrekt beantwortest.");
         answerList.Add("„Flawless“ Achievements werden erreicht, wenn du einen Fragenkatalog oder eine Quiz-Runde ohne Fehler abschließt. Diese Erfolge zeigen, dass du bestimmte Bereiche perfekt beherrschst. Die genauen Anforderungen sind in der Achievements-Liste der App aufgeführt.");
         answerList.Add("Ja, im Level-Bereich der App kannst du sehen, wie viele Punkte dir noch fehlen, um das nächste Level zu erreichen. Dort findest du auch eine Übersicht über die benötigten Punkte für jedes Level.");
-        answerList.Add("Wenn du eine Frage aus dem Übungsbuch dreimal hintereinander richtig beantwortest, wird diese Frage automatisch aus dem Übungsbuch entfernt. Dies zeigt an, dass du die Frage erfolgreich gemeistert hast.");
         answerList.Add("Die Zeit, die du in den Katalogen verbringst, wird durch die Dauer gemessen, in der du aktiv Fragen beantwortest oder durch den Katalog navigierst. Diese Zeit wird in den Statistiken aufgezeichnet und angezeigt.");
         answerList.Add("Das Zeitmanagement-Feature zeigt dir, wie viel Zeit du insgesamt in verschiedenen Katalogen verbracht hast. Du kannst diese Informationen nutzen, um deinen Lernaufwand besser zu planen und gezielt an Bereichen zu arbeiten, in denen du mehr Zeit investieren möchtest.");
+        answerList.Add("Wenn du ein normales Quiz spielst, kannst du es jederzeit über den Button „Beenden“ abbrechen. Beim nächsten Start desselben Katalogs setzt das Quiz dort fort, wo du aufgehört hast. Im Daily Task- und Random Quiz-Modus ist es jedoch nicht möglich, das Quiz zwischendurch zu unterbrechen.");
+
 
         float startY = 1000;
         float yOffset = -200;

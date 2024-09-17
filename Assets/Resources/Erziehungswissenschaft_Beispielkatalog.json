@@ -1,0 +1,553 @@
+{
+    "id": 2,
+    "name": "Erziehungswissenschaft",
+    "currentQuestionId": -1,
+    "totalTimeSpent": 0,
+    "sessionCount": 0,
+    "errorFreeSessionCount": 0,
+    "completedRandomQuizCount": 0,
+    "errorFreeRandomQuizCount": 0,
+    "questions": [
+        {
+            "id": 21,
+            "text": "Wie nennt Montessori die Phase, in der das Kind unbewusst Sinneseindrücke absorbiert?",
+            "catalogueId": 4,
+            "name": "Unbewusste Sinnesabsorption nach Montessori",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 81,
+                    "text": "Schöpferisch-konstruktive Phase",
+                    "questionId": 21,
+                    "isCorrect": true
+                },
+                {
+                    "id": 82,
+                    "text": "Phase des bewussten Arbeitens",
+                    "questionId": 21,
+                    "isCorrect": false
+                },
+                {
+                    "id": 83,
+                    "text": "Phase moralischer Sensibilität",
+                    "questionId": 21,
+                    "isCorrect": false
+                },
+                {
+                    "id": 84,
+                    "text": "Phase sozialer Sensibilität",
+                    "questionId": 21,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 22,
+            "text": "Wie nennt Montessori die Phase, in der das Kind die unbewussten Erfahrungen analysiert und soziale Beziehungen sowie das Gewissen entsteht?",
+            "catalogueId": 4,
+            "name": "Bewusste Analyse und Gewissensbildung nach Montessori",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 85,
+                    "text": "Phase des bewussten Arbeitens",
+                    "questionId": 22,
+                    "isCorrect": false
+                },
+                {
+                    "id": 86,
+                    "text": "Schöpferisch-konstruktive Phase",
+                    "questionId": 22,
+                    "isCorrect": true
+                },
+                {
+                    "id": 87,
+                    "text": "Phase moralischer Sensibilität",
+                    "questionId": 22,
+                    "isCorrect": false
+                },
+                {
+                    "id": 88,
+                    "text": "Phase sozialer Sensibilität",
+                    "questionId": 22,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 23,
+            "text": "Wie nennt Montessori die Phase, in der das Kind ein moralisches Bewusstsein, enge Beziehungen sowie Abstraktionsfähigkeit entwickelt?",
+            "catalogueId": 4,
+            "name": "Phase der sozialen Neugeborenheit nach Montessori",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 89,
+                    "text": "Phase moralischer Sensibilität",
+                    "questionId": 23,
+                    "isCorrect": true
+                },
+                {
+                    "id": 90,
+                    "text": "Schöpferisch-konstruktive Phase",
+                    "questionId": 23,
+                    "isCorrect": false
+                },
+                {
+                    "id": 91,
+                    "text": "Phase des bewussten Arbeitens",
+                    "questionId": 23,
+                    "isCorrect": false
+                },
+                {
+                    "id": 92,
+                    "text": "Phase sozialer Sensibilität",
+                    "questionId": 23,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 24,
+            "text": "Wie nennt Montessori die Phase, in der der junge Mensch einen körperlichen und geistigen Umbruch erlebt?",
+            "catalogueId": 4,
+            "name": "Adoleszenz-Phase nach Montessori",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 93,
+                    "text": "Phase sozialer Sensibilität",
+                    "questionId": 24,
+                    "isCorrect": true
+                },
+                {
+                    "id": 94,
+                    "text": "Schöpferisch-konstruktive Phase",
+                    "questionId": 24,
+                    "isCorrect": false
+                },
+                {
+                    "id": 95,
+                    "text": "Phase des bewussten Arbeitens",
+                    "questionId": 24,
+                    "isCorrect": false
+                },
+                {
+                    "id": 96,
+                    "text": "Phase moralischer Sensibilität",
+                    "questionId": 24,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 25,
+            "text": "Welcher Erziehungsstil spiegelt sich in der Reggio-Pädagogik wider?",
+            "catalogueId": 4,
+            "name": "Erziehungsstil in der Reggio-Pädagogik",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 97,
+                    "text": "demokratischer Stil",
+                    "questionId": 25,
+                    "isCorrect": true
+                },
+                {
+                    "id": 98,
+                    "text": "autoritärere Stil",
+                    "questionId": 25,
+                    "isCorrect": false
+                },
+                {
+                    "id": 99,
+                    "text": "laissez-fairer Stil",
+                    "questionId": 25,
+                    "isCorrect": false
+                },
+                {
+                    "id": 100,
+                    "text": "vernachlässigender Stil",
+                    "questionId": 25,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 26,
+            "text": "Welche Funktion hat der Raum in der Reggio-Pädagogik?",
+            "catalogueId": 4,
+            "name": "Funktion des Raums in der Reggio-Pädagogik",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 101,
+                    "text": "ein Erzieher",
+                    "questionId": 26,
+                    "isCorrect": true
+                },
+                {
+                    "id": 102,
+                    "text": "er ist unwichtig",
+                    "questionId": 26,
+                    "isCorrect": false
+                },
+                {
+                    "id": 103,
+                    "text": "ein Aufenthaltsort",
+                    "questionId": 26,
+                    "isCorrect": false
+                },
+                {
+                    "id": 104,
+                    "text": "Vermittlung von Autorität",
+                    "questionId": 26,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 27,
+            "text": "Kein Bild vom Kind in der Reggio-Pädagogik",
+            "catalogueId": 4,
+            "name": "Dritter Erzieher in der Reggio-Pädagogik",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 105,
+                    "text": "beherrscht eine Sprache",
+                    "questionId": 27,
+                    "isCorrect": true
+                },
+                {
+                    "id": 106,
+                    "text": "ist ein Entdecker",
+                    "questionId": 27,
+                    "isCorrect": false
+                },
+                {
+                    "id": 107,
+                    "text": "soziales Wesen",
+                    "questionId": 27,
+                    "isCorrect": false
+                },
+                {
+                    "id": 108,
+                    "text": "konstruiert sein Wissen",
+                    "questionId": 27,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 28,
+            "text": "Welche Rolle sollte eine Fachkraft in der Reggio-Pädagogik nicht einnehmen?",
+            "catalogueId": 4,
+            "name": "Aspekt, der keine Rolle in der Reggio-Pädagogik spielt",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 109,
+                    "text": "Allwissenheit",
+                    "questionId": 28,
+                    "isCorrect": true
+                },
+                {
+                    "id": 110,
+                    "text": "Dialogpartner",
+                    "questionId": 28,
+                    "isCorrect": false
+                },
+                {
+                    "id": 111,
+                    "text": "Begleiter",
+                    "questionId": 28,
+                    "isCorrect": false
+                },
+                {
+                    "id": 112,
+                    "text": "Neugierde",
+                    "questionId": 28,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 29,
+            "text": "Welches ist keine Entwicklungsaufgabe nach Hurrelmann?",
+            "catalogueId": 4,
+            "name": "Nicht relevante Entwicklungsaufgabe nach Hurrelmann",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 113,
+                    "text": "Medialisierung",
+                    "questionId": 29,
+                    "isCorrect": true
+                },
+                {
+                    "id": 114,
+                    "text": "Konsumieren",
+                    "questionId": 29,
+                    "isCorrect": false
+                },
+                {
+                    "id": 115,
+                    "text": "Partizipieren",
+                    "questionId": 29,
+                    "isCorrect": false
+                },
+                {
+                    "id": 116,
+                    "text": "Binden",
+                    "questionId": 29,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 30,
+            "text": "Welcher ist kein Grundsatz bei Comenius?",
+            "catalogueId": 4,
+            "name": "Kein Grundsatz bei Comenius",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 117,
+                    "text": "Ungleichheit",
+                    "questionId": 30,
+                    "isCorrect": true
+                },
+                {
+                    "id": 118,
+                    "text": "Sicherheit",
+                    "questionId": 30,
+                    "isCorrect": false
+                },
+                {
+                    "id": 119,
+                    "text": "Sittlichkeit",
+                    "questionId": 30,
+                    "isCorrect": false
+                },
+                {
+                    "id": 120,
+                    "text": "Sinnliche Anschauung",
+                    "questionId": 30,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 31,
+            "text": "Was bedeutet der Leitsatz von Comenius „Omnes, omnia, omnino“?",
+            "catalogueId": 4,
+            "name": "Bedeutung von 'Omnes, omnia, omnino",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 121,
+                    "text": "Allen alles lehren",
+                    "questionId": 31,
+                    "isCorrect": true
+                },
+                {
+                    "id": 122,
+                    "text": "Alles selbst erfahren",
+                    "questionId": 31,
+                    "isCorrect": false
+                },
+                {
+                    "id": 123,
+                    "text": "Lerne fleißig",
+                    "questionId": 31,
+                    "isCorrect": false
+                },
+                {
+                    "id": 124,
+                    "text": "Alles glaubend erfahren",
+                    "questionId": 31,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 32,
+            "text": "Was ist die primäre Sozialisationsinstanz?",
+            "catalogueId": 4,
+            "name": "Primäre Sozialisationsinstanz",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 125,
+                    "text": "Familie",
+                    "questionId": 32,
+                    "isCorrect": true
+                },
+                {
+                    "id": 126,
+                    "text": "Medien",
+                    "questionId": 32,
+                    "isCorrect": false
+                },
+                {
+                    "id": 127,
+                    "text": "Kita und Schule",
+                    "questionId": 32,
+                    "isCorrect": false
+                },
+                {
+                    "id": 128,
+                    "text": "Ausbildung und Beruf",
+                    "questionId": 32,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 33,
+            "text": "Was ist die sekundäre Sozialisationsinstanz?",
+            "catalogueId": 4,
+            "name": "Sekundäre Sozialisationsinstanz",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 129,
+                    "text": "Kita und Schule",
+                    "questionId": 33,
+                    "isCorrect": true
+                },
+                {
+                    "id": 130,
+                    "text": "Familie",
+                    "questionId": 33,
+                    "isCorrect": false
+                },
+                {
+                    "id": 131,
+                    "text": "Medien",
+                    "questionId": 33,
+                    "isCorrect": false
+                },
+                {
+                    "id": 132,
+                    "text": "Ausbildung und Beruf",
+                    "questionId": 33,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 34,
+            "text": "Was ist die tertiäre Sozialisationsinstanz?",
+            "catalogueId": 4,
+            "name": "Tertiäre Sozialisationsinstanz",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 133,
+                    "text": "Ausbildung und Beruf",
+                    "questionId": 34,
+                    "isCorrect": true
+                },
+                {
+                    "id": 134,
+                    "text": "Familie",
+                    "questionId": 34,
+                    "isCorrect": false
+                },
+                {
+                    "id": 135,
+                    "text": "Medien",
+                    "questionId": 34,
+                    "isCorrect": false
+                },
+                {
+                    "id": 136,
+                    "text": "Kita und Schule",
+                    "questionId": 34,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        },
+        {
+            "id": 35,
+            "text": "Was ist die „heimliche“ Sozialisationsinstanz?",
+            "catalogueId": 4,
+            "name": "Heimliche Sozialisationsinstanz",
+            "correctAnsweredCount": 0,
+            "enabledForPractice": false,
+            "totalAnsweredCount": 0,
+            "answers": [
+                {
+                    "id": 137,
+                    "text": "Medien",
+                    "questionId": 35,
+                    "isCorrect": true
+                },
+                {
+                    "id": 138,
+                    "text": "Familie",
+                    "questionId": 35,
+                    "isCorrect": false
+                },
+                {
+                    "id": 139,
+                    "text": "Kita und Schule",
+                    "questionId": 35,
+                    "isCorrect": false
+                },
+                {
+                    "id": 140,
+                    "text": "Ausbildung und Beruf",
+                    "questionId": 35,
+                    "isCorrect": false
+                }
+            ],
+            "answerHistory": []
+        }
+    ],
+    "sessionHistories": []
+}
