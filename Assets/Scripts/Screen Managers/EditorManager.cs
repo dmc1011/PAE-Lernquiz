@@ -80,9 +80,9 @@ public class EditorManager : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name != "Catalogues")
+        if (SceneManager.GetActiveScene().name != "Editor")
         {
-            print("ERROR [CataloguesManager.cs:Start()]: Dont use this script in any scene other than \"" + SceneManager.GetActiveScene().name + "\"!");
+            print("ERROR [EditorManager.cs:Start()]: Dont use this script in any other scene than 'Editor'.");
         }
 
         // Get components for questionButton
