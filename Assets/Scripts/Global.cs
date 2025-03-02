@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+// to do: rename GameSession / Session
 public static class Global
 {
     // GameMode is used as context for catalogue selection: selecting a catalogue will trigger specific events and screen transition
@@ -14,7 +15,7 @@ public static class Global
         PracticeBook
     }
 
-    // player prefs keys for daily task
+    // player prefs keys for daily task -> to do: remove
     public const string LastResetDateKey = "LastResetDate";
     public const string IsDailyTaskCompletedKey = "IsDailyTaskCompleted";
 
@@ -22,6 +23,10 @@ public static class Global
     public static bool InsideQuestionRound = false;
     public static DataManager.QuestionRound CurrentQuestionRound;
     public const int RandomQuizSize = 5;
+
+    public static void SetGameMode(GameMode gameMode) {
+        CurrentQuestionRound.gameMode = gameMode;
+    }
 
     // monitoring daily task
     public static DataManager.DailyTask CurrentDailyTask;
