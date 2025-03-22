@@ -41,17 +41,14 @@ public class HomeManager : MonoBehaviour
         // show evaluation if daily task has already been completed
         if (IsDailyTaskCompleted())
         {
-            Global.CurrentQuestionRound.gameMode = Global.GameMode.DailyTask;
-            LoadDailyTaskScene("Evaluation");
+            Global.SetGameMode(Global.GameMode.DailyTask);
+            LoadDailyTaskScene(Strings.Evaluation);
             return;
         }
 
         // load chosen catalogue into global data
         Catalogue randomCatalogue = catalogueTable.FindRandomCatalogue();
-        Global.CurrentDailyTask.catalogueIndex = randomCatalogue.id;
-        Global.CurrentDailyTask.catalogue = randomCatalogue;
-        PlayerPrefs.SetInt("DailyTaskCatalogueId", Global.CurrentDailyTask.catalogueIndex);
-        PlayerPrefs.Save();
+        LoadDailyTaskGlobally(randomCatalogue);
 
         // initialize daily task
         Global.CurrentDailyTask.questions = new();
@@ -65,37 +62,39 @@ public class HomeManager : MonoBehaviour
 
         // start daily task
         Global.InsideQuestionRound = true;
-        LoadDailyTaskScene("DailyTask");
+        LoadDailyTaskScene(Strings.DailyTask);
+    }
+
+    public void LoadDailyTaskGlobally(Catalogue catalogue) {
+        Global.CurrentDailyTask.catalogueIndex = catalogue.id;
+        Global.CurrentDailyTask.catalogue = catalogue;
+        PlayerPrefsManager.SetDailyTaskCatalogueId();
     }
 
 
     private bool IsNewDay()
     {
-        string currentDate = DateTime.Now.ToString("yyy-MM-dd");
-        string lastResetDate = PlayerPrefs.GetString(Global.LastResetDateKey, "");
-        if (currentDate != lastResetDate)
-        {
-            return true;
-        }
-        return false;
+        string lastResetDate = PlayerPrefsManager.GetLastResetDate();
+        return currentDate != lastResetDate;
     }
 
 
     private void ResetDailyTask()
     {
         Global.CurrentDailyTask = new DataManager.DailyTask();
-        PlayerPrefs.SetString(Global.LastResetDateKey, currentDate);
-        PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "false");
+        PlayerPrefsManager.SetLastResetDate(currentDate);
+        PlayerPrefsManager.SetIsDailyTaskCompleted(false);
         PlayerPrefs.Save();
     }
 
 
     private bool IsDailyTaskCompleted()
     {
-        return PlayerPrefs.GetString(Global.IsDailyTaskCompletedKey) == "true"; ;
+        return PlayerPrefsManager.GetIsDailyTaskCompleted();
     }
 
 
+// to do: auslagern in Scene Loader;
     public void LoadDailyTaskScene(string sceneName)
     {
         targetScene = sceneName;
@@ -105,20 +104,20 @@ public class HomeManager : MonoBehaviour
 
     public void LoadProfileScene()
     {
-        targetScene = "Profile";
+        targetScene = Strings.Profile;
         StartSceneTransition(false);
     }
 
 
     public void LoadHelpScene()
     {
-        targetScene = "Help";
+        targetScene = Strings.Help;
         StartSceneTransition(false);
     }
 
     public void LoadLinearGameSelection()
     {
-        targetScene = "NewGame";
+        targetScene = Strings.NewGame;
         Global.CurrentQuestionRound.gameMode = Global.GameMode.LinearQuiz;
         StartSceneTransition();
     }
@@ -126,7 +125,7 @@ public class HomeManager : MonoBehaviour
 
     public void LoadRandomGameSelection()
     {
-        targetScene = "NewGame";
+        targetScene = Strings.NewGame;
         Global.CurrentQuestionRound.gameMode = Global.GameMode.RandomQuiz;
         StartSceneTransition();
     }
@@ -134,7 +133,7 @@ public class HomeManager : MonoBehaviour
 
     public void LoadStatisticsSelection()
     {
-        targetScene = "NewGame";
+        targetScene = Strings.NewGame;
         Global.CurrentQuestionRound.gameMode = Global.GameMode.Statistics;
         StartSceneTransition();
     }
@@ -142,7 +141,7 @@ public class HomeManager : MonoBehaviour
 
     public void LoadEditorSelection()
     {
-        targetScene = "NewGame";
+        targetScene = Strings.NewGame;
         Global.CurrentQuestionRound.gameMode = Global.GameMode.Editor;
         StartSceneTransition(false);
     }
@@ -150,7 +149,7 @@ public class HomeManager : MonoBehaviour
     
     public void LoadPracticeBookSelection()
     {
-        targetScene = "NewGame";
+        targetScene = Strings.NewGame;
         Global.CurrentQuestionRound.gameMode = Global.GameMode.PracticeBook;
         StartSceneTransition();
     }

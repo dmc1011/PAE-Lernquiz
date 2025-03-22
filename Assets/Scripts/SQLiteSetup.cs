@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
 using System.IO;
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -22,12 +23,37 @@ public class SQLiteSetup : MonoBehaviour
     public AchievementTable achievementTable { get; private set; }
     public DailyTaskHistoryTable dailyTaskHistoryTable { get; private set; }
 
+    [DllImport("sqlite3", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int sqlite3_config(int config);
+
+    [DllImport("sqlite3", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int sqlite3_shutdown();
+
+    [DllImport("sqlite3", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int sqlite3_initialize();
+
+    private const int SQLITE_CONFIG_SERIALIZED = 3;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            sqlite3_shutdown();
+
+            int result = sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+            if (result != 0)
+            {
+                Debug.LogError("Fehler beim Setzen des Threading-Modus für SQLite! Result: " + result);
+            }
+            else
+            {
+                Debug.Log("SQLite Threading-Modus erfolgreich auf SERIALIZED gesetzt.");
+            }
+
+            sqlite3_initialize();
 
             dbConnectionString = "URI=file:" + Application.persistentDataPath + "/" + databaseName;
             dbConnection = new SqliteConnection(dbConnectionString);
