@@ -9,12 +9,13 @@ using Newtonsoft.Json;
 
 public class SQLiteSetup : MonoBehaviour
 {
+    // SQLite Database
     private const string databaseName = "Quiz_Database";
     private string dbConnectionString;
     private IDbConnection dbConnection;
-
     public static SQLiteSetup Instance { get; private set; }
 
+    // Tables
     public CatalogueTable catalogueTable { get; private set; }
     public QuestionTable questionTable { get; private set; }
     public AnswerTable answerTable { get; private set; }
@@ -23,6 +24,7 @@ public class SQLiteSetup : MonoBehaviour
     public AchievementTable achievementTable { get; private set; }
     public DailyTaskHistoryTable dailyTaskHistoryTable { get; private set; }
 
+    // SQLite Methods and Config
     [DllImport("sqlite3", CallingConvention = CallingConvention.Cdecl)]
     private static extern int sqlite3_config(int config);
 
@@ -33,6 +35,7 @@ public class SQLiteSetup : MonoBehaviour
     private static extern int sqlite3_initialize();
 
     private const int SQLITE_CONFIG_SERIALIZED = 3;
+
 
     void Awake()
     {
