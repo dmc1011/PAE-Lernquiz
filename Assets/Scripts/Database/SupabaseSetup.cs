@@ -16,7 +16,7 @@ public class SupabaseSetup : MonoBehaviour
     private UserLoginController _controller = new UserLoginController();
 
 
-    private string email = "dmccarroll98@gmail.com";
+    private string email = "dmmccarroll98@gmail.com";
     private string password = "MikeschStevia98";
 
     // Start is called before the first frame update
@@ -24,11 +24,14 @@ public class SupabaseSetup : MonoBehaviour
     {
         _supabase = SupabaseClientProvider.GetClient();
 
-        Task<Session> session = _controller.Login(SUPABASE_URL, SUPABASE_PUBLIC_KEY, _supabase);
+        Session session = await _controller.LogIn(email, password, _supabase);
+        //Task<Session> signIn = _supabase.Auth.SignIn(email, password);
+        //await signIn;
+        //Session session = signIn.Result;
 
-        Debug.Log("Signed In User ID: " + session?.Result?.User?.Id);
-        Debug.Log(session?.Result?.User.Role);
-        Debug.Log( _supabase.Auth.CurrentUser.UserMetadata);
+        Debug.Log("Signed In User ID: " + session?.User?.Id);
+        //Debug.Log(session?.User?.Role);
+        //Debug.Log( _supabase.Auth.CurrentUser.UserMetadata);
     }
 
     public async void HelloWorld()
