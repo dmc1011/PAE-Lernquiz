@@ -6,18 +6,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Client = Supabase.Client;
+using TMPro;
 
 
 public class LoginManager : MonoBehaviour
 {
-    public const string SUPABASE_URL = Strings.SupabaseUrl;
-    public const string SUPABASE_PUBLIC_KEY = Strings.SupabasePublicKey;
-
     private static Client _supabase;
     private UserLoginController _controller = new UserLoginController();
 
-    private string _email = "";
-    private string _password = "";
+    private string _email;
+    private string _password;
+
+    [SerializeField] public TextMeshProUGUI emailInputSignIn;
+    [SerializeField] public TextMeshProUGUI passwordInputSignIn;
+    [SerializeField] public TextMeshProUGUI emailInputSignUp;
+    [SerializeField] public TextMeshProUGUI passwordInputSignUp;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +40,13 @@ public class LoginManager : MonoBehaviour
 
     public async void PerformLogin() {
         // perform login
-        Session session = await _controller.LogIn(SUPABASE_URL, SUPABASE_PUBLIC_KEY, _supabase);
+        _email = emailInputSignIn.text;
+        _password = passwordInputSignIn.text;
+
+        Debug.Log(_email);
+        Debug.Log(_password);
+
+        Session session = await _controller.LogIn(_email, _password, _supabase);
 
         // if login is successful: continue to home menu
         if (session != null)
@@ -51,12 +60,16 @@ public class LoginManager : MonoBehaviour
             // reset pw text field
             // display info
         }
+        Debug.Log(session.ExpiresAt());
     }
 
     public async void PerformSignUp()
     {
         // perform sign up
-        Session session = await _controller.SignUp(SUPABASE_URL, SUPABASE_PUBLIC_KEY, _supabase);
+        _email = emailInputSignUp.text;
+        _password = passwordInputSignUp.text;
+
+        Session session = await _controller.SignUp(_email, _password, _supabase);
 
         // if sign up is successful: continue to home menu
         if (session != null)
