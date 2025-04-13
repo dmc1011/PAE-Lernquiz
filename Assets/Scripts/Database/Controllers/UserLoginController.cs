@@ -39,5 +39,18 @@ namespace Controllers
                 return null;
             }
         }
+
+        // to do: Log Out
+        public async Task SignOut(Client client)
+        {
+            try
+            {
+                await client.Auth.SignOut();
+            }
+            catch (GotrueException e)
+            {
+                Debug.Log(e.Message);
+            }
+        }
     }
 }

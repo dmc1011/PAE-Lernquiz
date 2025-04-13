@@ -28,4 +28,9 @@ public static class Functions
             return Color.Lerp(a, b, t * 2);
     }
 
+    public static string CleanInput(string input)
+    {
+        return input.Replace("\u200B", "").Trim();
+    }
+
 }
