@@ -1,7 +1,6 @@
 using Supabase.Gotrue;
 using Supabase.Gotrue.Exceptions;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using Client = Supabase.Client;
@@ -17,30 +16,60 @@ namespace Controllers
             try
             {
                 var session = await client.Auth.SignIn(email, password);
+
+                if (session?.User == null)
+                {
+                    throw new SignInException("Anmeldung fehlgeschlagen.\nÜberprüfe deine Login-Daten.");
+                }
+
                 return session;
             }
             catch (GotrueException e)
             {
-                Debug.LogError("LogIn-Fehler: " + e.Message);
-                return null;
+                throw new SignInException("Anmeldung fehlgeschlagen: " + e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new SignInException("Unerwarteter Fehler: " + e.Message);
             }
         }
 
-        public async Task<Session> SignUp(string email, string password, Client client)
+        public async Task<Models.Profile> SignUp(string email, string password, string name, string surname, Client client)
+
         {
             try
             {
                 var session = await client.Auth.SignUp(email, password);
-                return session;
+
+                if (session == null || session.User == null)
+                {
+                    throw new RegistrationException("Registrierung fehlgeschlagen.");
+                }
+
+                // to do: update client (client.Auth.CurrentUser == null)
+
+                var profile = new Models.Profile
+                {
+                    UserId = Guid.Parse(session.User.Id),
+                    Name = name,
+                    Surname = surname,
+                    Role = UserRole.Student,
+                };
+
+                var insert = await client.From<Models.Profile>().Insert(profile);
+
+                return insert.Model;
             }
             catch (GotrueException e)
             {
-                Debug.LogError("SignUp-Fehler: " + e.Message);
-                return null;
+                throw new RegistrationException("Registrierung fehlgeschlagen: " + e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new RegistrationException("Unerwarteter Fehler: " + e.Message); 
             }
         }
 
-        // to do: Log Out
         public async Task SignOut(Client client)
         {
             try
@@ -48,6 +77,10 @@ namespace Controllers
                 await client.Auth.SignOut();
             }
             catch (GotrueException e)
+            {
+                Debug.Log(e.Message);
+            }
+            catch (Exception e)
             {
                 Debug.Log(e.Message);
             }

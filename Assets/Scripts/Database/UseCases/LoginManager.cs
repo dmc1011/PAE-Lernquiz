@@ -1,15 +1,10 @@
 using Controllers;
 using Services;
 using Supabase.Gotrue;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Client = Supabase.Client;
 using TMPro;
-using UnityEngine.SceneManagement;
-
-
+using System;
 
 public class LoginManager : MonoBehaviour
 {
@@ -18,13 +13,19 @@ public class LoginManager : MonoBehaviour
 
     private string _email;
     private string _password;
+    private string _name;
+    private string _surname;
 
     [SerializeField] private SceneLoader sceneLoader;
-    [SerializeField] private TextMeshProUGUI emailInputSignIn;
-    [SerializeField] private TextMeshProUGUI passwordInputSignIn;
-    [SerializeField] private TextMeshProUGUI emailInputSignUp;
-    [SerializeField] private TextMeshProUGUI passwordInputSignUp;
+
+    [SerializeField] private TMP_InputField emailInputSignIn;
+    [SerializeField] private TMP_InputField passwordInputSignIn;
     [SerializeField] private TextMeshProUGUI signInErrorMessage;
+
+    [SerializeField] private TMP_InputField emailInputSignUp;
+    [SerializeField] private TMP_InputField passwordInputSignUp;
+    [SerializeField] private TMP_InputField firstName;
+    [SerializeField] private TMP_InputField lastName;
     [SerializeField] private TextMeshProUGUI signUpErrorMessage;
 
 
@@ -32,6 +33,7 @@ public class LoginManager : MonoBehaviour
     void Start()
     {
         _supabase = SupabaseClientProvider.GetClient();
+        Debug.Log("Current User: " + _supabase.Auth.CurrentSession?.User?.Id);
 
         // to do: check if user has logged in before
         // to do: refresh session
@@ -39,48 +41,49 @@ public class LoginManager : MonoBehaviour
 
     public async void PerformLogin() {
         signInErrorMessage.text = "";
+
         _email = Functions.CleanInput(emailInputSignIn.text);
         _password = Functions.CleanInput(passwordInputSignIn.text);
 
-        Session session = await _controller.LogIn(_email, _password, _supabase);
-
-        if (session?.User != null)
+        try
         {
-            Debug.Log("Signed In User ID: " + session.User?.Id);
+            Session session = await _controller.LogIn(_email, _password, _supabase);
 
             sceneLoader.LoadScene(Scene.Home);
             // to do: save access tokens
         }
-        else
+        catch (Exception e)
         {
-            Debug.Log("Sign in failed");
-
-            signInErrorMessage.text = "Anmeldung fehlgeschlagen.\nÜberprüfe deine Login-Daten.";
-            passwordInputSignIn.text = "";
+            signInErrorMessage.text = e.Message;
         }
     }
 
     public async void PerformSignUp()
     {
         signInErrorMessage.text = "";
+
         _email = Functions.CleanInput(emailInputSignUp.text);
         _password = Functions.CleanInput(passwordInputSignUp.text);
 
-        Session session = await _controller.SignUp(_email, _password, _supabase);
+        _name = Functions.CleanInput(firstName.text);
+        _surname = Functions.CleanInput(lastName.text);
 
-        if (session?.User != null)
+        if (_name == Strings.Empty || _name == null || _surname == Strings.Empty || _surname == null)
         {
-            Debug.Log("Signed Up User ID: " + session.User?.Id);
+            signUpErrorMessage.text = "Bitte gib einen Vor- und Nachnamen ein.";
+            return;
+        }
+
+        try
+        {
+            Models.Profile profile = await _controller.SignUp(_email, _password, _name, _surname, _supabase);
 
             sceneLoader.LoadScene(Scene.Home);
             // to do: save access tokens
         }
-        else
+        catch (Exception e)
         {
-            Debug.Log("Sign up failed");
-
-            signUpErrorMessage.text = "Registrierung fehlgeschlagen.";
-            passwordInputSignIn.text = "";
+            signUpErrorMessage.text = e.Message;
         }
     }
 }
