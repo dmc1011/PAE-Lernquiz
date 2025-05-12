@@ -20,7 +20,7 @@ public class EvaluationManager : MonoBehaviour
     private List<EvaluationButton> evaluationButtons = new();
     private List<DataManager.QuestionResult> questionResults = new();
     //private string evaluationFor;
-    private Global.GameMode gameMode;
+    private GameMode gameMode;
     private DailyTaskHistoryTable dailyTaskHistoryTable;
 
     void Start()
@@ -31,7 +31,7 @@ public class EvaluationManager : MonoBehaviour
         dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
 
         switch (gameMode) {
-            case Global.GameMode.DailyTask:
+            case GameMode.DailyTask:
                 NewGameButton.SetActive(false);
                 dailyTaskHistoryTable.SetTodaysTaskToCompleted();
                 PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
@@ -41,7 +41,7 @@ public class EvaluationManager : MonoBehaviour
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
                 break;
-            case Global.GameMode.LinearQuiz:
+            case GameMode.LinearQuiz:
                 LoadResults(DataManager.QuestionResults);
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fleiﬂig");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fokus", Global.CurrentQuestionRound.catalogue);
@@ -52,8 +52,8 @@ public class EvaluationManager : MonoBehaviour
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
                 break;
-            case Global.GameMode.RandomQuiz:
-            case Global.GameMode.PracticeBook:
+            case GameMode.RandomQuiz:
+            case GameMode.PracticeBook:
                 LoadResults(DataManager.QuestionResults);
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Randomat");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Random Flawless");
@@ -65,7 +65,7 @@ public class EvaluationManager : MonoBehaviour
                 break;
         }
 
-        if (gameMode == Global.GameMode.DailyTask && PlayerLevel.gainedXp == 0)
+        if (gameMode == GameMode.DailyTask && PlayerLevel.gainedXp == 0)
         {
             xpInfo.text = "";
         } 

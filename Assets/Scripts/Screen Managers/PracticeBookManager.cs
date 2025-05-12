@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Entities;
 
 public class PracticeBookManager : MonoBehaviour
 {
@@ -139,7 +140,7 @@ public class PracticeBookManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        nextButtonNavigation.LoadScene("Evaluation");
+        nextButtonNavigation.LoadScene(Scene.Evaluation);
     }
 
     public void LoadCatalogueSelection()

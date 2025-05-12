@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static DataManager;
 using static Global;
+using Entities;
 
 public class DailyTaskManager : MonoBehaviour
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Entities;
 
 public class HomeManager : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class HomeManager : MonoBehaviour
         // show evaluation if daily task has already been completed
         if (IsDailyTaskCompleted())
         {
-            Global.SetGameMode(Global.GameMode.DailyTask);
+            Global.SetGameMode(GameMode.DailyTask);
             LoadDailyTaskScene(Strings.Evaluation);
             return;
         }
@@ -98,7 +99,7 @@ public class HomeManager : MonoBehaviour
     public void LoadDailyTaskScene(string sceneName)
     {
         targetScene = sceneName;
-        Global.CurrentQuestionRound.gameMode = Global.GameMode.DailyTask;
+        Global.CurrentQuestionRound.gameMode = GameMode.DailyTask;
         StartSceneTransition();
     }
 
@@ -118,7 +119,7 @@ public class HomeManager : MonoBehaviour
     public void LoadLinearGameSelection()
     {
         targetScene = Strings.NewGame;
-        Global.CurrentQuestionRound.gameMode = Global.GameMode.LinearQuiz;
+        Global.CurrentQuestionRound.gameMode = GameMode.LinearQuiz;
         StartSceneTransition();
     }
 
@@ -126,7 +127,7 @@ public class HomeManager : MonoBehaviour
     public void LoadRandomGameSelection()
     {
         targetScene = Strings.NewGame;
-        Global.CurrentQuestionRound.gameMode = Global.GameMode.RandomQuiz;
+        Global.CurrentQuestionRound.gameMode = GameMode.RandomQuiz;
         StartSceneTransition();
     }
 
@@ -134,7 +135,7 @@ public class HomeManager : MonoBehaviour
     public void LoadStatisticsSelection()
     {
         targetScene = Strings.NewGame;
-        Global.CurrentQuestionRound.gameMode = Global.GameMode.Statistics;
+        Global.CurrentQuestionRound.gameMode = GameMode.Statistics;
         StartSceneTransition();
     }
 
@@ -142,7 +143,7 @@ public class HomeManager : MonoBehaviour
     public void LoadEditorSelection()
     {
         targetScene = Strings.NewGame;
-        Global.CurrentQuestionRound.gameMode = Global.GameMode.Editor;
+        Global.CurrentQuestionRound.gameMode = GameMode.Editor;
         StartSceneTransition(false);
     }
     
@@ -150,7 +151,7 @@ public class HomeManager : MonoBehaviour
     public void LoadPracticeBookSelection()
     {
         targetScene = Strings.NewGame;
-        Global.CurrentQuestionRound.gameMode = Global.GameMode.PracticeBook;
+        Global.CurrentQuestionRound.gameMode = GameMode.PracticeBook;
         StartSceneTransition();
     }
 
