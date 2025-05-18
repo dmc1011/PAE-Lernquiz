@@ -9,6 +9,7 @@ using Repositories;
 using UseCases;
 using Client = Supabase.Client;
 using Services;
+using System;
 
 public class CatalogueButtonHandler : MonoBehaviour
 {
@@ -65,23 +66,25 @@ public class CatalogueButtonHandler : MonoBehaviour
     private void StartLinearRoundClickedEvent()
     {
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
-
-        /*
-        // invalid catalogue name
-        if (!NewGameManager.catalogues.Any(catalogue => catalogue.name == catalogueName))
-        {
-            print($"ERROR [NewGameManager.cs.StartLinearRoundClickedEvent()]: There is no catalogue called '{catalogueName}'");
-            return;
-        }
-        */
+        CatalogueDTO catalogue = ContentSelectionHandler.catalogues.Find(c => c.name == catalogueName);
 
         try
         {
-            _catalogueController.GetCatalogue
+            if (catalogue == null)
+            {
+                throw new FetchDataException("Fehler beim Starten des Quiz: Der ausgewählte Katalog existiert nicht im ContentHandler");
+            }
+
+            var catalogueResult = _catalogueController.GetCatalogueById(catalogue.id);
+
+            Global.CurrentQuestionRound.catalogue = catalogueResult.Result;
+            Global.InsideQuestionRound = true;
+            LoadScene("LinearQuiz");
         }
-        Global.CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
-        Global.InsideQuestionRound = true;
-        LoadScene("LinearQuiz");
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 
 

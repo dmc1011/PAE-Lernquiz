@@ -23,6 +23,16 @@ namespace DataConversion
             return new CatalogueDTO(model.Id, model.Name, model.TopicName, model.IsPrivate, model.CreatedBy);
         }
 
+        public static Entities.Question ToEntity(this Models.Question q, UserQuestionProgress uqp, List<Answer> answers, List<AnswerHistory> aHistories)
+        {
+            return new Entities.Question(q.Id, q.Text, q.DisplayName, uqp.CorrectAnswerCount, uqp.AnswerCount, q.CatalogueId, uqp.InPractice, answers, aHistories);
+        }
+
+        public static Answer ToEntity(this Models.Answer answer)
+        {
+            return new Answer(answer.Id, answer.Text, answer.QuestionId, answer.IsCorrect);
+        }
+
         /*
         public static Entities.Catalogue FromJson(JsonElement json)
         {

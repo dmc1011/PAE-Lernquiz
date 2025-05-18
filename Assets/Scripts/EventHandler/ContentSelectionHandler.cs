@@ -22,6 +22,7 @@ public class ContentSelectionHandler : MonoBehaviour
 
     private static GameMode _gameMode;
     private static Client _supabase;
+    public static List<CatalogueDTO> catalogues;
 
     private ITopicRepository _topicRepo;
     private ICatalogueRepository _catalogueRepo;
@@ -104,7 +105,7 @@ public class ContentSelectionHandler : MonoBehaviour
         {
             topicScrollView.SetActive(false);
 
-            List<CatalogueDTO> catalogues = await _catalogueController.GetCataloguesByTopic(topicName);
+            catalogues = await _catalogueController.GetCataloguesByTopic(topicName);
 
             foreach (var catalogue in catalogues)
             {
@@ -126,6 +127,7 @@ public class ContentSelectionHandler : MonoBehaviour
         }
         catch (Exception e)
         {
+            catalogues = null;
             Debug.LogException(e);
             topicScrollView.SetActive(true);
         }

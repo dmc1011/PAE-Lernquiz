@@ -10,6 +10,9 @@ using System.Linq;
 using DataConversion;
 using System;
 using System.Text.Json;
+using Models;
+using System.Runtime.InteropServices;
+using static DataManager;
 
 public class SupabaseCatalogueRepository : ICatalogueRepository
 {
@@ -24,7 +27,12 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
     {
         try
         {
-            var result = await _client.From<Models.Catalogue>().Where(c => c.TopicName == topic).Where(c => c.IsPrivate == false).Get();
+            var result = await _client
+                .From<Models.Catalogue>()
+                .Where(c => c.TopicName == topic)
+                .Where(c => c.IsPrivate == false)
+                .Order(c => c.Id, Constants.Ordering.Ascending)
+                .Get();
 
             List<Models.Catalogue> models = result.Models;
             List<CatalogueDTO> catalogues = models.Select(model => model.ToDTO()).ToList();
@@ -37,23 +45,85 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
         }
     }
 
-    public async Task<Catalogue> GetCatalogueById(int catalogueId)
+    public async Task<Entities.Catalogue> GetCatalogueById(int catalogueId)
 
     {
         try
         {
-            var currentUser = _client.Auth.CurrentUser?.Id;
+            var currentUser = _client.Auth.CurrentUser;
 
             if (currentUser == null)
             {
-                throw new FetchDataException("No current user exists while trying to fetch catalogue data");
+                throw new FetchDataException("Kein Nutzer vorhanden, um den Katalog zu laden.");
             }
 
-            var result = await _client.Rpc("get_full_catalogue", new { p_user_id = currentUser, p_catalogue_id = catalogueId});
+            Guid userId = Guid.Parse(currentUser.Id);
 
-            Catalogue c = JsonSerializer.Deserialize<Catalogue>(result.Content);
+            // get models
+            var catalogueResult = await _client
+                .From<Models.Catalogue>()
+                .Where(c => c.Id == catalogueId)
+                .Single();
 
-            return c;
+            var ucpResult = await _client
+                .From<Models.UserCatalogueProgress>()
+                .Where(u => u.UserId == userId)
+                .Where(u => u.CatalogueId == catalogueId)
+                .Single();
+
+            var questionsResult = await _client
+                .From<Models.Question>()
+                .Where(q => q.CatalogueId == catalogueId)
+                .Order(q => q.Id, Constants.Ordering.Ascending)
+                .Get();
+
+            var questionIds = questionsResult.Models.Select(q => q.Id).ToList();
+
+            var uqpResult = await _client
+                .From<Models.UserQuestionProgress>()
+                .Where(u => u.UserId == userId)
+                .Filter(u => u.QuestionId, Constants.Operator.In, questionIds)
+                .Get();
+
+            var answers = await _client
+                .From<Models.Answer>()
+                .Filter(a => a.QuestionId, Constants.Operator.In, questionIds)
+                .Order(a => a.Id, Constants.Ordering.Ascending)
+                .Get();
+
+            // convert models
+            List<Entities.Question> questionLst = new List<Entities.Question>();
+
+            foreach (var q in questionsResult.Models)
+            {
+                UserQuestionProgress qProgress = uqpResult.Models.Find(u => u.QuestionId == q.Id);
+                
+                List<Models.Answer> answerModels = answers.Models.FindAll(a => a.QuestionId == q.Id).OrderBy(a => a.IsCorrect).ToList();
+                List<Answer> answerEntities = answerModels.Select(model => model.ToEntity()).ToList();
+
+                Entities.Question questions = q.ToEntity(qProgress, answerEntities, new List<AnswerHistory>());
+
+                questionLst.Add(questions);
+            }
+
+            int currentQId = ucpResult.CurrentQuestionId ?? 0;
+
+            Entities.Catalogue catalogue = new Entities.Catalogue(
+                catalogueId,
+                catalogueResult.Name,
+                currentQId,
+                ucpResult.TimeSpent,
+                ucpResult.Level,
+                ucpResult.ErrorFreeRuns,
+                ucpResult.RandomQuizCount,
+                ucpResult.ErrorFreeRandomQuizCount,
+                questionLst,
+                new List<CatalogueSessionHistory>(),
+                isPrivate: catalogueResult.IsPrivate,
+                createdBy: catalogueResult.CreatedBy
+            );
+
+            return catalogue;
         }
         catch (Exception e)
         {

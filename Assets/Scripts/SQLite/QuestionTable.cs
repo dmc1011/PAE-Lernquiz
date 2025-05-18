@@ -2,6 +2,7 @@ using Mono.Data.Sqlite;
 using System.Collections.Generic;
 using System;
 using System.Data;
+using Entities;
 
 public class QuestionTable
 {

@@ -8,6 +8,7 @@ public class PlayerPrefsManager : MonoBehaviour
     private const string LastResetDateKey = "LastResetDate";
     private const string IsDailyTaskCompletedKey = "IsDailyTaskCompleted";
     private const string DailyTaskCatalogueIdKey = "DailyTaskCatalogueId";
+    private const string EvaluationTypeKey = "evaluationFor";
 
 
     public static void SetDailyTaskCatalogueId() {
@@ -21,6 +22,7 @@ public class PlayerPrefsManager : MonoBehaviour
 
     public static void SetLastResetDate(string date) {
         PlayerPrefs.SetString(LastResetDateKey, date);
+        PlayerPrefs.Save();
     }
 
     public static bool GetIsDailyTaskCompleted() {
@@ -29,5 +31,12 @@ public class PlayerPrefsManager : MonoBehaviour
 
     public static void SetIsDailyTaskCompleted(bool isCompleted) {
         PlayerPrefs.SetString(IsDailyTaskCompletedKey, isCompleted ? Strings.True : Strings.False);
+        PlayerPrefs.Save();
+    }
+
+    public static void SetEvaluationType(string evaluationType)
+    {
+        PlayerPrefs.SetString(EvaluationTypeKey, evaluationType);
+        PlayerPrefs.Save();
     }
 }

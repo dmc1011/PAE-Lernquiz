@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Entities;
 
 public class QuizAreaManager : MonoBehaviour
 {
@@ -132,6 +133,13 @@ public class QuizAreaManager : MonoBehaviour
         for (int i = 0; i < answerButtons.Length; i++)
             answerButtons[i].interactable = false;
         questionButton.interactable = false;
+    }
+
+    public void DisplayNextQuestion(Question q)
+    {
+        ResetContents();
+        RandomizePositions();
+        SetContents(q);
     }
 
     // Reset the contents of all buttons

@@ -26,8 +26,7 @@ public class LinearQuizManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerPrefs.SetString("evaluationFor", "LinearQuiz");
-        PlayerPrefs.Save();
+        PlayerPrefsManager.SetEvaluationType("LinearQuiz");
 
         DataManager.ClearResults();
         catalogueTable = SQLiteSetup.Instance.catalogueTable;

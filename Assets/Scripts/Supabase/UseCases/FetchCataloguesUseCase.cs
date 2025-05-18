@@ -20,5 +20,10 @@ namespace UseCases
         {
             return await _repo.GetCataloguesByTopic(topicName);
         }
+
+        public async Task<Catalogue> GetCatalogueById(int id)
+        {
+            return await _repo.GetCatalogueById(id);
+        }
     }
 }
