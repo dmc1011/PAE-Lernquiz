@@ -1,5 +1,7 @@
+using Entities;
 using Postgrest.Attributes;
 using Postgrest.Models;
+using Supabase.Gotrue;
 using System;
 
 namespace Models
@@ -21,5 +23,17 @@ namespace Models
 
         [Column("in_practice")]
         public bool InPractice { get; set; }
+
+        public UserQuestionProgress() { }
+
+        public UserQuestionProgress(Guid userId, int questionId)
+        {
+            QuestionId = questionId;
+            UserId = userId;
+            AnswerCount = 0;
+            CorrectAnswerCount = 0;
+            InPractice = false;
+        }
     }
+
 }

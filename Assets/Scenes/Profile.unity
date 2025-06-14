@@ -1021,6 +1021,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AchievementsButton
       objectReference: {fileID: 0}
+    - target: {fileID: 990465694013008213, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
       value: Achievements

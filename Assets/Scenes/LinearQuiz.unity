@@ -214,6 +214,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &235106477
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 235106478}
+  - component: {fileID: 235106479}
+  m_Layer: 5
+  m_Name: QuizManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &235106478
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235106477}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.0052083335, y: 0.0052083335, z: 0.0052083335}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &235106479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235106477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6a5a1870aa992d449cfb58c39a6d30e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Fragenummer: {fileID: 1902997509}
+  quizAreaManager: {fileID: 0}
+  nextButton: {fileID: 6352228236930832554}
+  nextButtonNavigation: {fileID: 6352228236930832555}
 --- !u!1001 &958687752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -249,15 +301,15 @@ PrefabInstance:
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1530717992}
+      objectReference: {fileID: 1530718001}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 7999739912567383914}
+      objectReference: {fileID: 235106479}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 7999739912567383914}
+      objectReference: {fileID: 235106479}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -284,11 +336,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: LinearQuizManager, Assembly-CSharp
+      value: QuizHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: LinearQuizManager, Assembly-CSharp
+      value: QuizHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -524,14 +576,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4248788030867941255}
     m_Modifications:
+    - target: {fileID: 973239646502845472, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530718001}
+    - target: {fileID: 2134035523026212310, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530718001}
+    - target: {fileID: 3516528909610564497, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530718001}
     - target: {fileID: 3762821271658637301, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
       propertyPath: parentScreenManager
       value: 
       objectReference: {fileID: 7999739912567383913}
+    - target: {fileID: 4304211736678096700, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530718001}
     - target: {fileID: 4486158702640733660, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
       propertyPath: m_Name
       value: QuizArea
       objectReference: {fileID: 0}
+    - target: {fileID: 5862360503146705739, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530718001}
     - target: {fileID: 5885501388265647442, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -612,27 +684,111 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530718001}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4486158702640733660, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1530718001}
   m_SourcePrefab: {fileID: 100100000, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
---- !u!114 &1530717992 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3762821271658637301, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
-  m_PrefabInstance: {fileID: 1530717991}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f711ce43e0ef1dd43beeda814e472e51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1530717993 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5885501388265647442, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
   m_PrefabInstance: {fileID: 1530717991}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1530717994 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6207590251648092157, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+  m_PrefabInstance: {fileID: 1530717991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1530717995 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3516528909610564497, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+  m_PrefabInstance: {fileID: 1530717991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1530717996 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4304211736678096700, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+  m_PrefabInstance: {fileID: 1530717991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1530717997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2134035523026212310, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+  m_PrefabInstance: {fileID: 1530717991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1530717998 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 973239646502845472, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+  m_PrefabInstance: {fileID: 1530717991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1530717999 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5862360503146705739, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+  m_PrefabInstance: {fileID: 1530717991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1530718000 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4486158702640733660, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+  m_PrefabInstance: {fileID: 1530717991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1530718001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530718000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d3e1c989d9b114f9242351f796eb6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questionButton: {fileID: 1530717999}
+  answerButtons:
+  - {fileID: 1530717998}
+  - {fileID: 1530717997}
+  - {fileID: 1530717996}
+  - {fileID: 1530717995}
+  correct: {r: 0.31764707, g: 1, b: 0.31764707, a: 0}
+  wrong: {r: 1, g: 0.1764706, b: 0.1764706, a: 1}
+  bookmarkIcon: {fileID: 1530717994}
+  bookmarkActiveColor: {r: 1, g: 0.87058824, b: 0.023529412, a: 255}
+  parentScreenManager: {fileID: 7999739912567383913}
 --- !u!1001 &1902997507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1035,11 +1191,11 @@ PrefabInstance:
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1530717992}
+      objectReference: {fileID: 1530718001}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 7999739912567383914}
+      objectReference: {fileID: 235106479}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -1058,7 +1214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: LinearQuizManager, Assembly-CSharp
+      value: QuizHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -1229,13 +1385,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5871773091748519298}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f0e75a9de17a774fa0be745d763407d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Fragenummer: {fileID: 1902997509}
-  quizAreaManager: {fileID: 1530717992}
+  quizAreaManager: {fileID: 0}
   nextButton: {fileID: 6352228236930832554}
   nextButtonNavigation: {fileID: 6352228236930832555}
 --- !u!1660057539 &9223372036854775807
@@ -1245,4 +1401,5 @@ SceneRoots:
   - {fileID: 234166355}
   - {fileID: 7241644770604150380}
   - {fileID: 1522426421}
+  - {fileID: 235106478}
   - {fileID: 5261087373233034237}

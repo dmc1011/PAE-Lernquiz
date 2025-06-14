@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Entities;
 
-public class QuizAreaManager : MonoBehaviour
+public class LegacyQuizAreaManager : MonoBehaviour
 {
 
     [SerializeField] private Button questionButton;

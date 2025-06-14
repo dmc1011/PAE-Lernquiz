@@ -23,6 +23,11 @@ namespace DataConversion
             return new CatalogueDTO(model.Id, model.Name, model.TopicName, model.IsPrivate, model.CreatedBy);
         }
 
+        public static CatalogueSessionHistory ToEntity(this Models.UserCatalogueHistory model)
+        {
+            return new CatalogueSessionHistory(model.Id, model.CatalogueId, model.SessionDate, model.TimeSpent, model.IsComplete, model.IsErrorFree);
+        }
+
         public static Entities.Question ToEntity(this Models.Question q, UserQuestionProgress uqp, List<Answer> answers, List<AnswerHistory> aHistories)
         {
             return new Entities.Question(q.Id, q.Text, q.DisplayName, uqp.CorrectAnswerCount, uqp.AnswerCount, q.CatalogueId, uqp.InPractice, answers, aHistories);
@@ -31,6 +36,44 @@ namespace DataConversion
         public static Answer ToEntity(this Models.Answer answer)
         {
             return new Answer(answer.Id, answer.Text, answer.QuestionId, answer.IsCorrect);
+        }
+
+        public static Models.Catalogue ToModel(this Entities.Catalogue catalogue)
+        {
+            // to do
+            return new Models.Catalogue();
+        }
+
+        public static Models.UserCatalogueProgress ToModel(this Entities.Catalogue catalogue, Guid userId)
+        {
+            UserCatalogueProgress ucp = new UserCatalogueProgress
+            {
+                CatalogueId = catalogue.id,
+                UserId = userId,
+                CurrentQuestionId = catalogue.currentQuestionId,
+                TimeSpent = catalogue.totalTimeSpent,
+                Level = catalogue.sessionCount,
+                ErrorFreeRuns = catalogue.errorFreeSessionCount,
+                ErrorFreeRandomQuizCount = catalogue.errorFreeRandomQuizCount
+            };
+
+            return ucp;
+        }
+
+        public static Models.UserCatalogueHistory ToModel(this CatalogueSessionHistory sessionHistory, Guid userId)
+        {
+            UserCatalogueHistory uch = new UserCatalogueHistory
+            {
+                Id = sessionHistory.id,
+                UserId = userId,
+                CatalogueId = sessionHistory.catalogueId,
+                SessionDate = sessionHistory.sessionDate,
+                TimeSpent = sessionHistory.timeSpent,
+                IsComplete = sessionHistory.isCompleted,
+                IsErrorFree = sessionHistory.isErrorFree
+            };
+
+            return uch;
         }
 
         /*

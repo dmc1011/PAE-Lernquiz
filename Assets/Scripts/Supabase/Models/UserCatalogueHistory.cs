@@ -7,13 +7,13 @@ namespace Models
     [Table("user_catalogue_history")]
     public class UserCatalogueHistory : BaseModel
     {
-        [PrimaryKey("id", true)]
+        [PrimaryKey("id", false)]
         public int Id { get; set; }
 
-        [Column("user_id")]
+        [PrimaryKey("user_id", false)]
         public Guid UserId { get; set; }
 
-        [Column("catalogue_id")]
+        [PrimaryKey("catalogue_id", false)]
         public int CatalogueId { get; set; }
 
         [Column("session_date")]

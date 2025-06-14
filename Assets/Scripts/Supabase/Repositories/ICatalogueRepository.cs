@@ -15,7 +15,8 @@ namespace Repositories
         //Task<Catalogue> GetRandomCatalogue();
 
         //Task AddCatalogue(Models.Catalogue catalogue, List<Models.Question> questions);
-        //Task UpdateCatalogue(Models.Catalogue catalogue);
+        Task UpdateCatalogue(Entities.Catalogue catalogue);
+        Task UpdateCatalogueUserData(Catalogue catalogue);
         //Task DeleteCatalogue(int catalogueId);
     }
 }

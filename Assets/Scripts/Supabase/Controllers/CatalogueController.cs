@@ -10,10 +10,12 @@ namespace Controllers
     public class CatalogueController
     {
         private FetchCataloguesUseCase _fetchCataloguesUseCase;
+        private SupabaseRequestUseCase _supabaseRequestUseCase;
 
-        public CatalogueController(FetchCataloguesUseCase fetchCataloguesUseCase)
+        public CatalogueController(FetchCataloguesUseCase fetchCataloguesUseCase, SupabaseRequestUseCase supabaseRequestUseCase)
         {
             _fetchCataloguesUseCase = fetchCataloguesUseCase;
+            _supabaseRequestUseCase = supabaseRequestUseCase;
         }
 
         public async Task<List<CatalogueDTO>> GetCataloguesByTopic(string topic)
@@ -24,6 +26,11 @@ namespace Controllers
         public async Task<Catalogue> GetCatalogueById(int id)
         {
             return await _fetchCataloguesUseCase.GetCatalogueById(id);
+        }
+
+        public async Task UpdateCatalogueUserData(Catalogue catalogue)
+        {
+            await _supabaseRequestUseCase.UpdateCatalogueUserData(catalogue);
         }
     }
 }

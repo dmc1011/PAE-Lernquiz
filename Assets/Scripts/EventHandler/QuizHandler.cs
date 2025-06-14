@@ -5,6 +5,7 @@ using UnityEngine;
 using Entities;
 using TMPro;
 using UnityEngine.UI;
+using System.Linq;
 
 public class QuizHandler : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class QuizHandler : MonoBehaviour
 
     private DateTime startTime;
     private int nextQuestionIndex = 0;
+    private bool sessionIsErrorFree;
+    private int currentSessionId;
 
 
 
@@ -33,11 +36,38 @@ public class QuizHandler : MonoBehaviour
         nextButton.interactable = false;
         startTime = DateTime.Now;
 
-        // to do: Global.InitializeUserSessionHistory() -> new list with 1 empty session
-
         SetEntryPoint();
 
         DisplayNextQuestion();
+    }
+
+    private void SetEntryPoint()
+    {
+
+        int currentQuestionIndex = questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
+        if (currentQuestionIndex != -1)
+        {
+            nextQuestionIndex = currentQuestionIndex;
+        }
+
+        CatalogueSessionHistory currentSession = Global.GetCatalogue().sessionHistories.Last();
+
+        // if no session exists or current session is completed start new session
+        if (nextQuestionIndex == 0 && (currentSession == null || currentSession.isCompleted))
+        {
+            currentSessionId = currentSession == null ? 0 : currentSession.id + 1;
+            sessionIsErrorFree = true;
+            currentSession = new CatalogueSessionHistory(currentSessionId, currentCatalogue.id, DateTime.Now, 0, false, sessionIsErrorFree);
+            currentCatalogue.sessionHistories.Add(currentSession);
+            currentCatalogue.sessionCount++;
+        }
+        else
+        {
+            currentSessionId = currentSession.id;
+            sessionIsErrorFree = currentSession.isErrorFree;
+        }
+
+        Global.SetCatalogue(currentCatalogue);   
     }
 
     public void DisplayNextQuestion()
@@ -51,47 +81,17 @@ public class QuizHandler : MonoBehaviour
         nextQuestionIndex += 1;
     }
 
-    private void SetEntryPoint()
-    {
-
-        int currentQuestionIndex = questions.FindIndex(q => q.id == currentCatalogue.currentQuestionId);
-        if (currentQuestionIndex != -1)
-        {
-            nextQuestionIndex = currentQuestionIndex;
-        }
-
-        /* to do: only track new data, handle merge in evaluation
-
-        CatalogueSessionHistory currentSession = catalogueSessionHistoryTable.FindLatestCatalogueSessionHistoryByCatalogueId(currentCatalogue.id);
-        if (nextQuestionIndex == 0)
-        {
-            // This avoids the creation of a new session for the case that the user stops at question 0 and then starts again
-            currentSessionId = (currentSession == null || currentSession.isCompleted) ? catalogueSessionHistoryTable.AddCatalogueSessionHistory(currentCatalogue.id, 0, false) : currentSession.id;
-            sessionIsErrorFree = (currentSession == null || currentSession.isCompleted) ? true : currentSession.isErrorFree;
-        }
-        else
-        {
-            currentSessionId = currentSession.id;
-            sessionIsErrorFree = currentSession.isErrorFree;
-        }
-        */
-    }
-
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
     {
         switch (button)
         {
             case QuizAreaManager.ButtonID.Q:
-                {
-                    // MS: There is currently no logic involved in pressing the question button.
-                    // But the event is forwarded for potential later use.
-                }
                 break;
 
-            case QuizAreaManager.ButtonID.A: // MS: I wanted to write it "exactly this way" to support
-            case QuizAreaManager.ButtonID.B: // the case where we have different logic for different buttons.
-            case QuizAreaManager.ButtonID.C: // Currently it's all the same. I know.
-            case QuizAreaManager.ButtonID.D: // This also filters any unwanted values of "button" if we add something in the future.
+            case QuizAreaManager.ButtonID.A:
+            case QuizAreaManager.ButtonID.B:
+            case QuizAreaManager.ButtonID.C:
+            case QuizAreaManager.ButtonID.D:
                 {
                     int questionIndex = nextQuestionIndex - 1;
 
@@ -99,17 +99,73 @@ public class QuizHandler : MonoBehaviour
                     {
                         Question nextQuestion = questions[nextQuestionIndex];
                         currentCatalogue.currentQuestionId = nextQuestion.id;
+                        Global.SetCatalogue(currentCatalogue);
                     }
 
                     DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
 
-                    // to do: sessionIsErrorFree = sessionIsErrorFree && (int)button == 0;
+                    sessionIsErrorFree = sessionIsErrorFree && (int)button == 0;
 
-                    if (nextQuestionIndex != questions.Count)
+                    if (nextQuestionIndex <= questions.Count)
                         nextButton.interactable = true;
                 }
                 break;
         }
 
+    }
+
+    public void LoadNextScene()
+    {
+        nextButtonNavigation.LoadScene(Scene.Evaluation);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveTimeSpent();
+    }
+
+    public void SaveTimeSpent()
+    {
+        TimeSpan duration = DateTime.Now - startTime;
+        int secondsSpent = (int)duration.TotalSeconds;
+
+        currentCatalogue.totalTimeSpent += secondsSpent;
+        Global.SetCatalogue(currentCatalogue);
+
+        UpdateSessionHistory(secondsSpent);
+    }
+
+    private void UpdateSessionHistory(int timeSpent)
+    {
+        Catalogue catalogue = Global.GetCatalogue();
+        CatalogueSessionHistory currentSessionHistory = catalogue.sessionHistories.Last();
+        List<AnswerHistory> answerHistoriesForSession = Global.GetAnswerHistories();
+
+        bool sessionCompleted = answerHistoriesForSession.Count >= currentCatalogue.questions.Count;
+
+        // to do: compare with .UpdateCatalogue, replace .UpdateCatalogueHistory
+        if (sessionCompleted)
+        {
+            currentCatalogue.sessionCount++;
+
+            // invalid question id -> field is set to null in db
+            currentCatalogue.currentQuestionId = -1;
+            if (sessionIsErrorFree)
+                currentCatalogue.errorFreeSessionCount++;
+        }
+
+        currentSessionHistory.timeSpent += timeSpent;
+        currentSessionHistory.isCompleted = sessionCompleted;
+        currentSessionHistory.isErrorFree = sessionIsErrorFree;
+
+        int index = catalogue.sessionHistories.FindIndex(session => session.id == currentSessionId);
+
+        if (index != -1)
+        {
+            currentCatalogue.sessionHistories[index] = currentSessionHistory;
+        }
+
+        Global.SetCatalogue(currentCatalogue);
+        Global.UpdateCatalogueUserData();
     }
 }

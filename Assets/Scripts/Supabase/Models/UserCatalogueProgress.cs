@@ -30,6 +30,21 @@ namespace Models
 
         [Column("error_free_random_quiz_count")]
         public int ErrorFreeRandomQuizCount { get; set; }
+        
+        public UserCatalogueProgress() { }
+
+        public UserCatalogueProgress(Guid userId, int catalogueId)
+        {
+            CatalogueId = catalogueId;
+            UserId = userId;
+            CurrentQuestionId = 0;
+            TimeSpent = 0;
+            Level = 0;
+            ErrorFreeRuns = 0;
+            RandomQuizCount = 0;
+            ErrorFreeRandomQuizCount = 0;
+        }
     }
+
 }
 

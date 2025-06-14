@@ -71,6 +71,25 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
                 .Where(u => u.CatalogueId == catalogueId)
                 .Single();
 
+            if (ucpResult == null)
+            {
+                ucpResult = new UserCatalogueProgress(userId, catalogueId);
+            }
+
+            var uchResult = await _client
+                .From<Models.UserCatalogueHistory>()
+                .Order(uch => uch.SessionDate, Constants.Ordering.Descending)
+                .Limit(1)
+                .Get();
+
+            var latestUch = uchResult.Models.FirstOrDefault();
+            var uchLst = new List<CatalogueSessionHistory>();
+
+            if (latestUch != null)
+            {
+                uchLst.Add(latestUch.ToEntity());
+            }
+
             var questionsResult = await _client
                 .From<Models.Question>()
                 .Where(q => q.CatalogueId == catalogueId)
@@ -93,20 +112,22 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
 
             // convert models
             List<Entities.Question> questionLst = new List<Entities.Question>();
-
+        
             foreach (var q in questionsResult.Models)
             {
-                UserQuestionProgress qProgress = uqpResult.Models.Find(u => u.QuestionId == q.Id);
-                
+                UserQuestionProgress qProgress = uqpResult.Models.Find(u => u.QuestionId == q.Id) ?? new UserQuestionProgress(userId, q.Id);
+
                 List<Models.Answer> answerModels = answers.Models.FindAll(a => a.QuestionId == q.Id).OrderBy(a => a.IsCorrect).ToList();
                 List<Answer> answerEntities = answerModels.Select(model => model.ToEntity()).ToList();
 
-                Entities.Question questions = q.ToEntity(qProgress, answerEntities, new List<AnswerHistory>());
+                Entities.Question question = q.ToEntity(qProgress, answerEntities, new List<AnswerHistory>());
 
-                questionLst.Add(questions);
+                questionLst.Add(question);
             }
 
-            int currentQId = ucpResult.CurrentQuestionId ?? 0;
+            Debug.Log(questionLst.Count);
+
+            int currentQId = ucpResult?.CurrentQuestionId ?? 0;
 
             Entities.Catalogue catalogue = new Entities.Catalogue(
                 catalogueId,
@@ -118,7 +139,7 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
                 ucpResult.RandomQuizCount,
                 ucpResult.ErrorFreeRandomQuizCount,
                 questionLst,
-                new List<CatalogueSessionHistory>(),
+                uchLst,
                 isPrivate: catalogueResult.IsPrivate,
                 createdBy: catalogueResult.CreatedBy
             );
@@ -128,6 +149,31 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
         catch (Exception e)
         {
             throw new FetchDataException("Fehler beim Laden von Katalog " + catalogueId + ": " + e.Message);
+        }
+    }
+
+    public async Task UpdateCatalogue(Entities.Catalogue catalogue)
+    {
+        // to do
+    }
+
+    public async Task UpdateCatalogueUserData(Entities.Catalogue catalogue)
+    {
+        Guid userId = Guid.Parse(_client.Auth.CurrentUser.Id);
+
+        Models.UserCatalogueProgress progress = catalogue.ToModel(userId);
+
+        List<Models.UserCatalogueHistory> uchList = catalogue.sessionHistories.Select(session => session.ToModel(userId)).ToList();
+        
+        try
+        {
+            await _client.From<Models.UserCatalogueProgress>().Upsert(progress);
+
+            await _client.From<UserCatalogueHistory>().Upsert(uchList);
+        }
+        catch (Exception e)
+        {
+            throw new SupabaseRequestException("Fehler bei Supbase Request: " + e.Message);
         }
     }
 }

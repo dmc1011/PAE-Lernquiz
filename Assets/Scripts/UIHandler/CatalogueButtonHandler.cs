@@ -41,6 +41,8 @@ public class CatalogueButtonHandler : MonoBehaviour
 
     public void OnClick()
     {
+        Debug.Log(Global.CurrentQuestionRound.gameMode);
+
         switch (Global.CurrentQuestionRound.gameMode)
         {
             case GameMode.LinearQuiz:
@@ -63,10 +65,11 @@ public class CatalogueButtonHandler : MonoBehaviour
         }
     }
 
-    private void StartLinearRoundClickedEvent()
+    private async void StartLinearRoundClickedEvent()
     {
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
         CatalogueDTO catalogue = ContentSelectionHandler.catalogues.Find(c => c.name == catalogueName);
+        Debug.Log(catalogue?.id);
 
         try
         {
@@ -75,10 +78,18 @@ public class CatalogueButtonHandler : MonoBehaviour
                 throw new FetchDataException("Fehler beim Starten des Quiz: Der ausgewählte Katalog existiert nicht im ContentHandler");
             }
 
-            var catalogueResult = _catalogueController.GetCatalogueById(catalogue.id);
+            var catalogueResult = await _catalogueController.GetCatalogueById(catalogue.id);
 
-            Global.CurrentQuestionRound.catalogue = catalogueResult.Result;
-            Global.InsideQuestionRound = true;
+            if (catalogueResult == null)
+            {
+                throw new FetchDataException("Der ausgewählte Katalog wurde nicht gefunden");
+            }
+
+            // to do: replace with single method "InitializeQuestionRound"
+            SetCatalogue(catalogueResult);
+            SetInsideQuestionRound(true);
+            ClearAnswerHistories();
+
             LoadScene("LinearQuiz");
         }
         catch (Exception e)
