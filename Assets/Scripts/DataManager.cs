@@ -23,8 +23,6 @@ public static class DataManager
         public string questionText;
         public List<string> answerTexts;
         public string selectedAnswerText;
-        // TODO: add questionImage
-        // TODO: add answerImage
         public bool isCorrect;
         public int questionId;
 

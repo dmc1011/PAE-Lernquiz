@@ -17,7 +17,7 @@ public class PlayerPrefsManager : MonoBehaviour
     }
 
     public static string GetLastResetDate() {
-        return PlayerPrefs.GetString(Global.LastResetDateKey, Strings.Empty);
+        return PlayerPrefs.GetString(LastResetDateKey, Strings.Empty);
     }
 
     public static void SetLastResetDate(string date) {

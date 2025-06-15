@@ -34,23 +34,22 @@ public class EvaluationManager : MonoBehaviour
             case GameMode.DailyTask:
                 NewGameButton.SetActive(false);
                 dailyTaskHistoryTable.SetTodaysTaskToCompleted();
-                PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
-                PlayerPrefs.Save();
+                PlayerPrefsManager.SetIsDailyTaskCompleted(true);
                 LoadResults(GetDailyTaskResults());
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Daylies");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn?ckig");
                 break;
             case GameMode.LinearQuiz:
                 LoadResults(DataManager.QuestionResults);
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fleiﬂig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Flei?ig");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fokus", Global.CurrentQuestionRound.catalogue);
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Zeitmanagement");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Intensiv");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Flawless", Global.CurrentQuestionRound.catalogue);
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Multitalent");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn?ckig");
                 break;
             case GameMode.RandomQuiz:
             case GameMode.PracticeBook:
@@ -58,7 +57,7 @@ public class EvaluationManager : MonoBehaviour
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Randomat");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Random Flawless");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn?ckig");
                 break;
             default:
                 print("ERROR: EvaluationManager - Invalid Game Mode for evaluation.");
