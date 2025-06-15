@@ -546,6 +546,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f711ce43e0ef1dd43beeda814e472e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &383504292
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 57140292090530006, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_Name
+      value: SceneLoader
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.3794044
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.07047851
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 583.3891
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528610077502388168, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+--- !u!114 &383504293 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7772417096437507134, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+  m_PrefabInstance: {fileID: 383504292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383504294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08d225edb5305c4891d50351189fea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &383504294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 57140292090530006, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+  m_PrefabInstance: {fileID: 383504292}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,6 +870,14 @@ PrefabInstance:
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
       value: Home
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 383504294}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -1183,12 +1264,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1420540449}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -1206,6 +1295,14 @@ PrefabInstance:
       propertyPath: background
       value: 
       objectReference: {fileID: 1005179873}
+    - target: {fileID: 3308907602844814365, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: sceneLoader
+      value: 
+      objectReference: {fileID: 383504293}
+    - target: {fileID: 3308907602844814365, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: useAnimation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9118554949605893179, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1500,7 +1597,7 @@ MonoBehaviour:
   evaluationStatistics: {fileID: 2013586110}
   scrollTransform: {fileID: 1507544111}
   sideMenu: {fileID: 32766211}
-  quizAreaManager: {fileID: 101788039}
+  quizAreaManager: {fileID: 0}
   achievementManager: {fileID: 1767197249}
   newLevelPopup: {fileID: 2051867075}
   popupMessage: {fileID: 2051867076}
@@ -2004,4 +2101,5 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1767197247}
   - {fileID: 1005179872}
+  - {fileID: 383504292}
   - {fileID: 1574602046}

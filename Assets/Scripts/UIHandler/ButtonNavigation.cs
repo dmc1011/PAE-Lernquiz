@@ -17,4 +17,16 @@ public class ButtonNavigation : MonoBehaviour
                 break;
         }
     }
+
+    public void LoadHomeFromEvaluation()
+    {
+        Global.ClearSession();
+        sceneLoader.LoadSceneWithGameMode(Scene.Home, GameMode.None, useAnimation: useAnimation);
+    }
+
+    public void LoadNewGameFromEvaluation()
+    {
+        Global.ClearSession();
+        sceneLoader.LoadScene(Scene.ContentSelection, useAnimation: useAnimation);
+    }
 }

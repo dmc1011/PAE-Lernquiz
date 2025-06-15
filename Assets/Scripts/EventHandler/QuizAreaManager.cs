@@ -193,8 +193,11 @@ public class QuizAreaManager : MonoBehaviour
         if (currentScene.Equals("LinearQuiz"))
         {
             CatalogueSessionHistory currentSession = Global.GetCatalogue().sessionHistories.Last();
-            
-            Global.AddAnswerHistory(question.id, wasCorrect, currentSession.id);
+
+            // to do:
+            int newAnswerId = question.answerHistory.Count;
+
+            question.answerHistory.Add(new AnswerHistory(newAnswerId, question.id, DateTime.Now, wasCorrect, currentSession.id));
         }
 
         Global.UpdateQuestion(question);

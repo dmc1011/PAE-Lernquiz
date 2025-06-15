@@ -56,6 +56,7 @@ public static class Global
         return AnswerHistories;
     }
 
+    // to do:
     public static void AddAnswerHistory(int questionId, bool wasCorrect, int sessionId)
     {
         int id = AnswerHistories.Count;
@@ -79,6 +80,13 @@ public static class Global
         CatalogueController catalogueController = new CatalogueController(cataloguesUseCase, supabaseRequestUseCase);
 
         await catalogueController.UpdateCatalogueUserData(CurrentQuestionRound.catalogue);
+    }
+
+    public static void ClearSession()
+    {
+        CurrentQuestionRound = new DataManager.QuestionRound();
+        InsideQuestionRound = false;
+        AnswerHistories = new List<AnswerHistory>();
     }
 
 

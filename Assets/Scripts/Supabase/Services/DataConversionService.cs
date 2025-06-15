@@ -3,6 +3,7 @@ using Entities;
 using System.Collections.Generic;
 using System.Text.Json;
 using System;
+using System.Linq;
 
 namespace DataConversion
 {
@@ -74,6 +75,34 @@ namespace DataConversion
             };
 
             return uch;
+        }
+
+        public static Models.UserQuestionProgress ToQuestionProgressModel(this Entities.Question question, Guid userId)
+        {
+            UserQuestionProgress uqp = new UserQuestionProgress
+            {
+                QuestionId = question.id,
+                UserId = userId,
+                AnswerCount = question.totalAnsweredCount,
+                CorrectAnswerCount = question.correctAnsweredCount,
+                InPractice = question.enabledForPractice
+            };
+
+            return uqp;
+        }
+
+        public static List<Models.UserQuestionHistory> ToQuestionHistoryModels(this Entities.Question question, Guid userId)
+        {
+            List<UserQuestionHistory> uqhList = new List<UserQuestionHistory>();
+
+            foreach (var answer in question.answerHistory)
+            {
+                UserQuestionHistory uqh = new UserQuestionHistory
+                {
+                    Id = answer.id,
+
+                }
+            }
         }
 
         /*

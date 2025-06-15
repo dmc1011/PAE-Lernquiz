@@ -164,6 +164,10 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
         Models.UserCatalogueProgress progress = catalogue.ToModel(userId);
 
         List<Models.UserCatalogueHistory> uchList = catalogue.sessionHistories.Select(session => session.ToModel(userId)).ToList();
+
+        List<Models.UserQuestionProgress> uqpList = catalogue.questions.Select(q => q.ToQuestionProgressModel(userId)).ToList();
+
+        List<Models.UserQuestionHistory> uqhList = catalogue.questions.Select(q => q.ToAnswerHistoryModels(userId)).ToList();
         
         try
         {

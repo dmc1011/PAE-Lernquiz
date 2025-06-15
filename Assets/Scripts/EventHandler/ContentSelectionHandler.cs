@@ -29,6 +29,7 @@ public class ContentSelectionHandler : MonoBehaviour
 
     private FetchTopicsUseCase _topicsUseCase;
     private FetchCataloguesUseCase _cataloguesUseCase;
+    private SupabaseRequestUseCase _supabaseRequestUseCase;
 
     private TopicController _topicController;
     private CatalogueController _catalogueController;
@@ -45,7 +46,8 @@ public class ContentSelectionHandler : MonoBehaviour
 
         _catalogueRepo = new SupabaseCatalogueRepository(_supabase);
         _cataloguesUseCase = new FetchCataloguesUseCase(_catalogueRepo);
-        _catalogueController = new CatalogueController(_cataloguesUseCase);
+        _supabaseRequestUseCase = new SupabaseRequestUseCase(_catalogueRepo);
+        _catalogueController = new CatalogueController(_cataloguesUseCase, _supabaseRequestUseCase);
 
         _gameMode = Global.GetGameMode();
 

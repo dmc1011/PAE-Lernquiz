@@ -28,6 +28,7 @@ public class CatalogueButtonHandler : MonoBehaviour
     private ICatalogueRepository _catalogueRepo;
 
     private FetchCataloguesUseCase _cataloguesUseCase;
+    private SupabaseRequestUseCase _supabaseRequestUseCase;
 
     private CatalogueController _catalogueController;
 
@@ -36,7 +37,8 @@ public class CatalogueButtonHandler : MonoBehaviour
         _supabase = SupabaseClientProvider.GetClient();
         _catalogueRepo = new SupabaseCatalogueRepository(_supabase);
         _cataloguesUseCase = new FetchCataloguesUseCase(_catalogueRepo);
-        _catalogueController = new CatalogueController(_cataloguesUseCase);
+        _supabaseRequestUseCase = new SupabaseRequestUseCase(_catalogueRepo);
+        _catalogueController = new CatalogueController(_cataloguesUseCase, _supabaseRequestUseCase);
     }
 
     public void OnClick()

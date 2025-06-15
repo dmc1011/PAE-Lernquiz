@@ -114,7 +114,7 @@ public class QuizHandler : MonoBehaviour
 
     }
 
-    public void LoadNextScene()
+    public void LoadEvaluation()
     {
         nextButtonNavigation.LoadScene(Scene.Evaluation);
     }
