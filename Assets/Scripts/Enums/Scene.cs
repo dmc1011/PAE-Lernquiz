@@ -9,6 +9,7 @@ public enum Scene
     ContentSelection,
     DailyTask,
     Editor,
+    EditorMenu,
     Evaluation,
     Help,
     Home,

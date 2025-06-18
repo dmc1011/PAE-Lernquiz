@@ -29,4 +29,10 @@ public class ButtonNavigation : MonoBehaviour
         Global.ClearSession();
         sceneLoader.LoadScene(Scene.ContentSelection, useAnimation: useAnimation);
     }
+
+    public void LoadHome()
+    {
+        Global.ClearSession();
+        sceneLoader.LoadSceneWithGameMode(Scene.Home, GameMode.None, useAnimation: useAnimation);
+    }
 }

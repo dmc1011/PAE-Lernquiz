@@ -19,6 +19,8 @@ public static class Global
     public static List<AnswerHistory> AnswerHistories = new();
     public const int RandomQuizSize = 5;
 
+    public static SceneLoader.EditorType EditorType;
+
 
     public static GameMode GetGameMode()
     {
@@ -87,6 +89,14 @@ public static class Global
         CurrentQuestionRound = new DataManager.QuestionRound();
         InsideQuestionRound = false;
         AnswerHistories = new List<AnswerHistory>();
+    }
+
+
+    // Editor
+
+    public static void SetEditorType(SceneLoader.EditorType editorType)
+    {
+        EditorType = editorType;
     }
 
 

@@ -100,6 +100,39 @@ public class CatalogueButtonHandler : MonoBehaviour
         }
     }
 
+    // start practice book
+    private async void StartPracticeBookClickedEvent()
+    {
+        string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        CatalogueDTO catalogue = ContentSelectionHandler.catalogues.Find(c => c.name == catalogueName);
+        Debug.Log(catalogue?.id);
+
+        try
+        {
+            if (catalogue == null)
+            {
+                throw new FetchDataException("Fehler beim Starten des Quiz: Der ausgewählte Katalog existiert nicht im ContentHandler");
+            }
+
+            var catalogueResult = await _catalogueController.GetCatalogueById(catalogue.id);
+
+            if (catalogueResult == null)
+            {
+                throw new FetchDataException("Der ausgewählte Katalog wurde nicht gefunden");
+            }
+
+            SetCatalogue(catalogueResult);
+            SetInsideQuestionRound(true);
+            ClearAnswerHistories();
+
+            LoadScene("PractiseBook");
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
 
     // start random quiz
     private void StartRandomRoundClickedEvent()
@@ -177,24 +210,6 @@ public class CatalogueButtonHandler : MonoBehaviour
         }
     }
 
-    // start practice book
-    private void StartPracticeBookClickedEvent()
-    {
-        string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
-
-        // invalid catalogue name
-        if (!NewGameManager.catalogues.Any(catalogue => catalogue.name == catalogueName))
-        {
-            print($"ERROR [NewGameManager.cs.StartPracticeBookClickedEvent()]: There is no catalogue called '{catalogueName}'");
-            return;
-        }
-
-        // start quiz round
-        Global.CurrentQuestionRound.catalogue = NewGameManager.catalogueTable.FindCatalogueByName(catalogueName);
-        Global.InsideQuestionRound = true;
-        LoadScene("PractiseBook");
-    }
-
     public void LoadScene(string sceneName)
     {
         targetScene = sceneName;
@@ -208,7 +223,6 @@ public class CatalogueButtonHandler : MonoBehaviour
             LoadSceneInternal();
         }
     }
-
 
     private void LoadSceneInternal()
     {

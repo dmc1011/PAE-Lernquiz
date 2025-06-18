@@ -7,13 +7,13 @@ namespace Models
     [Table("user_question_history")]
     public class UserQuestionHistory : BaseModel
     {
-        [PrimaryKey("id", true)]
+        [PrimaryKey("id", false)]
         public int Id { get; set; }
 
-        [Column("user_id")]
+        [PrimaryKey("user_id", false)]
         public Guid UserId { get; set; }
 
-        [Column("question_id")]
+        [PrimaryKey("question_id", false)]
         public int QuestionId { get; set; }
 
         [Column("date")]

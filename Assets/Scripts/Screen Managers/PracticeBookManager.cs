@@ -35,8 +35,8 @@ public class PracticeBookManager : MonoBehaviour
         DataManager.ClearResults();
 
         // Get current catalogue and flagged questions
-        catalogueTable = SQLiteSetup.Instance.catalogueTable;
-        currentCatalogue = Global.CurrentQuestionRound.catalogue;
+        // catalogueTable = SQLiteSetup.Instance.catalogueTable;
+        currentCatalogue = Global.GetCatalogue();
         allQuestions = currentCatalogue.questions;
         questions = allQuestions.Where(q => q.enabledForPractice).ToList();
 
@@ -44,47 +44,6 @@ public class PracticeBookManager : MonoBehaviour
         quizAreaManager = quizAreaContainer.GetComponentInChildren<QuizAreaManager>();
 
         DisplayQuestionSelection();
-    }
-
-
-    // display question and answer text on the screen
-    public void DisplayNextQuestion()
-    {
-        Question nextQuestion = questions[nextQuestionIndex];
-        quizAreaManager.ResetContents();
-        quizAreaManager.RandomizePositions();
-        quizAreaManager.SetContents(nextQuestion);
-
-        Fragenummer.text = $"{currentCatalogue.name}\nFrage {allQuestions.FindIndex(q => q == nextQuestion) + 1}";
-        nextButton.interactable = false;
-        nextQuestionIndex += 1;
-    }
-
-    public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
-    {
-        switch (button)
-        {
-            case QuizAreaManager.ButtonID.Q:
-                {
-                    // MS: There is currently no logic involved in pressing the question button.
-                    // But the event is forwarded for potential later use.
-                }
-                break;
-
-            case QuizAreaManager.ButtonID.A: // MS: I wanted to write it "exactly this way" to support
-            case QuizAreaManager.ButtonID.B: // the case where we have different logic for different buttons.
-            case QuizAreaManager.ButtonID.C: // Currently it's all the same. I know.
-            case QuizAreaManager.ButtonID.D: // This also filters any unwanted values of "button" if we add something in the future.
-                {
-                    int questionIndex = allQuestions.FindIndex(q => q == questions[nextQuestionIndex - 1]);
-                    DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
-
-                    if (nextQuestionIndex != questions.Count)
-                        nextButton.interactable = true;
-                }
-                break;
-        }
-
     }
 
     private void DisplayQuestionSelection()
@@ -107,13 +66,49 @@ public class PracticeBookManager : MonoBehaviour
             buttonLabel.text = questions[i].name;
             if (buttonLabel.text == "" || buttonLabel.text == null)
             {
-                buttonLabel.text = "Diese Frage hat noch keinen Namen. Das Quiz startet automatisch bei Frage 1";
+                buttonLabel.text = "Frage " + allQuestions.FindIndex(q => q == questions[i]) + 1;
             }
         }
 
         questionSelectionScrollView.gameObject.SetActive(true);
     }
 
+
+    // display question and answer text on the screen
+    public void DisplayNextQuestion()
+    {
+        Question nextQuestion = questions[nextQuestionIndex];
+
+        quizAreaManager.DisplayNextQuestion(nextQuestion);
+
+        Fragenummer.text = $"{currentCatalogue.name}\nFrage {allQuestions.FindIndex(q => q == nextQuestion) + 1}";
+        nextButton.interactable = false;
+        nextQuestionIndex += 1;
+    }
+
+    public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
+    {
+        switch (button)
+        {
+            case QuizAreaManager.ButtonID.Q:
+                break;
+
+            case QuizAreaManager.ButtonID.A:
+            case QuizAreaManager.ButtonID.B:
+            case QuizAreaManager.ButtonID.C:
+            case QuizAreaManager.ButtonID.D:
+                {
+                    int questionIndex = allQuestions.FindIndex(q => q == questions[nextQuestionIndex - 1]);
+
+                    DataManager.AddAnswer(questionIndex, (int)button, currentCatalogue);
+
+                    if (nextQuestionIndex <= questions.Count)
+                        nextButton.interactable = true;
+                }
+                break;
+        }
+
+    }
 
     // Ensures that QuizAreaManagers Start() method is fully executed before calling any other methods
     private IEnumerator WaitAndDisplayFirstQuestion(TextMeshProUGUI questionButtonLabel)
@@ -122,7 +117,7 @@ public class PracticeBookManager : MonoBehaviour
         questionSelectionScrollView.SetActive(false);
         quizAreaContainer.SetActive(true);
 
-        Question selectedQuestion = currentCatalogue.questions.Find(question => question.name == questionButtonLabel.text);
+        Question selectedQuestion = currentCatalogue.questions.Find(question => question.name == questionButtonLabel.text); // to do: requires every question to have a unique name
         if (selectedQuestion != null)
         {
             nextQuestionIndex = questions.FindIndex(q => q == selectedQuestion);
@@ -159,7 +154,7 @@ public class PracticeBookManager : MonoBehaviour
 
     private void LoadSceneInternal()
     {
-        SceneManager.LoadScene("NewGame");
+        SceneManager.LoadScene("ContentSelection");
     }
 }
 

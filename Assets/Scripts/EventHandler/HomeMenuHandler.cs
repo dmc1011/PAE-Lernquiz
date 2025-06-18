@@ -35,7 +35,7 @@ public class HomeMenuHandler : MonoBehaviour
 
     public void LoadEditorSelection()
     {
-        sceneLoader.LoadSceneWithGameMode(Scene.ContentSelection, GameMode.Editor);
+        sceneLoader.LoadSceneWithGameMode(Scene.EditorMenu, GameMode.Editor);
     }
 
     public void LoadPracticeBookSelection()

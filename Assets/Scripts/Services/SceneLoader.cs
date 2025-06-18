@@ -4,6 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    public enum EditorType {
+        Topic,
+        Catalogue
+    }
+
     [SerializeField] private HexagonBackground background;
 
     private Scene _targetScene;
@@ -20,6 +25,20 @@ public class SceneLoader : MonoBehaviour
         Global.SetGameMode(gameMode);
         Global.SetInsideQuestionRound(insideQuestionRound);
         StartSceneTransition(useAnimation);
+    }
+
+    public void LoadTopicEditor()
+    {
+        _targetScene = Scene.ContentSelection;
+        Global.SetEditorType(EditorType.Topic);
+        StartSceneTransition();
+    }
+
+    public void LoadCatalogueEditor()
+    {
+        _targetScene = Scene.ContentSelection;
+        Global.SetEditorType(EditorType.Catalogue);
+        StartSceneTransition();
     }
 
     private void StartSceneTransition(bool useAnimation = true)

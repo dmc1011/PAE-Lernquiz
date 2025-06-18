@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Editor.unity
     guid: cb881e5dca93e1b4480c9bdc646d6424
   - enabled: 1
+    path: Assets/Scenes/EditorMenu.unity
+    guid: 4e622477a77404349b2733f07af5fb50
+  - enabled: 1
     path: Assets/Scenes/Evaluation.unity
     guid: b13ddd4540322d641a36693a36940c82
   - enabled: 1

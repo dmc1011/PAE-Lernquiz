@@ -167,17 +167,26 @@ public class SupabaseCatalogueRepository : ICatalogueRepository
 
         List<Models.UserQuestionProgress> uqpList = catalogue.questions.Select(q => q.ToQuestionProgressModel(userId)).ToList();
 
-        List<Models.UserQuestionHistory> uqhList = catalogue.questions.Select(q => q.ToAnswerHistoryModels(userId)).ToList();
+        List<Models.UserQuestionHistory> uqhList = new List<Models.UserQuestionHistory>();
+
+        foreach (var question in catalogue.questions)
+        {
+            uqhList.AddRange(question.ToQuestionHistoryModels(userId));
+        }
         
         try
         {
             await _client.From<Models.UserCatalogueProgress>().Upsert(progress);
 
             await _client.From<UserCatalogueHistory>().Upsert(uchList);
+
+            await _client.From<Models.UserQuestionProgress>().Upsert(uqpList);
+
+            await _client.From<UserQuestionHistory>().Insert(uqhList);
         }
         catch (Exception e)
         {
-            throw new SupabaseRequestException("Fehler bei Supbase Request: " + e.Message);
+            throw new SupabaseRequestException("Fehler beim Ausführen eines Supabase Requests: " + e.Message);
         }
     }
 }

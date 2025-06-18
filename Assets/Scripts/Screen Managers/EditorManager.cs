@@ -73,7 +73,7 @@ public class EditorManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI customAlertMessage;
 
     // Scene transition
-    private string targetScene = "NewGame";
+    private string targetScene = "ContentSelection";
 
     
 

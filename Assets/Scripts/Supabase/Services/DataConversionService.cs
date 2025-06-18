@@ -93,16 +93,24 @@ namespace DataConversion
 
         public static List<Models.UserQuestionHistory> ToQuestionHistoryModels(this Entities.Question question, Guid userId)
         {
-            List<UserQuestionHistory> uqhList = new List<UserQuestionHistory>();
+            List<UserQuestionHistory> uqhModels = new List<UserQuestionHistory>();
 
             foreach (var answer in question.answerHistory)
             {
                 UserQuestionHistory uqh = new UserQuestionHistory
                 {
                     Id = answer.id,
+                    UserId = userId,
+                    QuestionId = question.id,
+                    Date = answer.answerDate,
+                    WasCorrect = answer.wasCorrect,
+                    SessionId = answer.sessionId,
+                };
 
-                }
+                uqhModels.Add(uqh);
             }
+
+            return uqhModels;
         }
 
         /*

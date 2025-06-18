@@ -17,6 +17,8 @@ public class ContentSelectionHandler : MonoBehaviour
     [SerializeField] private GameObject topicButtonPrefab;
     [SerializeField] private Transform topicContainer;
     [SerializeField] private GameObject catalogueButtonPrefab;
+    [SerializeField] private GameObject addButton;
+    [SerializeField] private TextMeshProUGUI addButtonText;
     [SerializeField] private Transform catalogueContainer;
     [SerializeField] private HexagonBackground bg = null;
 
@@ -68,9 +70,10 @@ public class ContentSelectionHandler : MonoBehaviour
         {
             // to do
         }
-        else if (_gameMode == GameMode.Editor)
+        else if (_gameMode == GameMode.Editor && Global.EditorType == SceneLoader.EditorType.Topic)
         {
-            // to do   
+            addButtonText.text = "Oberthema hinzufügen";
+            addButton.gameObject.SetActive(true);
         }
 
         foreach (var topic in topics)
@@ -79,7 +82,7 @@ public class ContentSelectionHandler : MonoBehaviour
 
             if (_gameMode == GameMode.PracticeBook)
             {
-                // to do
+                // to do: only show topics that have catalogues with questions marked for practive
             }
 
             GameObject topicButton = Instantiate(topicButtonPrefab, topicContainer);
@@ -87,6 +90,11 @@ public class ContentSelectionHandler : MonoBehaviour
 
             topicButton.GetComponent<Button>().onClick.AddListener(() =>
             {
+                if (_gameMode == GameMode.Editor && Global.EditorType == SceneLoader.EditorType.Topic)
+                {
+                    // to do: load scene for topic editor
+                    return;
+                }
                 DisplayCatalogues(topicName);
             });
         }
@@ -100,7 +108,8 @@ public class ContentSelectionHandler : MonoBehaviour
         }
         else if (_gameMode == GameMode.Editor)
         {
-            // to do   
+            addButtonText.text = "Katalog hinzufügen";
+            addButton.gameObject.SetActive(true);
         }
 
         try
@@ -113,7 +122,7 @@ public class ContentSelectionHandler : MonoBehaviour
             {
                 if (_gameMode == GameMode.PracticeBook)
                 {
-                    // to do
+                    // to do: only show catalogues that have questions marked for practice
                 }
 
                 GameObject cButton = Instantiate(catalogueButtonPrefab, catalogueContainer);
