@@ -19,53 +19,58 @@ public class EvaluationManager : MonoBehaviour
 
     private List<EvaluationButton> evaluationButtons = new();
     private List<DataManager.QuestionResult> questionResults = new();
-    //private string evaluationFor;
-    private Global.GameMode gameMode;
-    private DailyTaskHistoryTable dailyTaskHistoryTable;
+    private GameMode gameMode;
+
+    //private DailyTaskHistoryTable dailyTaskHistoryTable;
 
     void Start()
     {
-        //evaluationFor = PlayerPrefs.GetString("evaluationFor");
         gameMode = Global.CurrentQuestionRound.gameMode;
         Debug.Log(gameMode);
-        dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
+
+        //dailyTaskHistoryTable = SQLiteSetup.Instance.dailyTaskHistoryTable;
 
         switch (gameMode) {
-            case Global.GameMode.DailyTask:
+            /*
+            case GameMode.DailyTask:
                 NewGameButton.SetActive(false);
                 dailyTaskHistoryTable.SetTodaysTaskToCompleted();
-                PlayerPrefs.SetString(Global.IsDailyTaskCompletedKey, "true");
-                PlayerPrefs.Save();
+                PlayerPrefsManager.SetIsDailyTaskCompleted(true);
                 LoadResults(GetDailyTaskResults());
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Daylies");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn?ckig");
                 break;
-            case Global.GameMode.LinearQuiz:
+            */
+            case GameMode.LinearQuiz:
                 LoadResults(DataManager.QuestionResults);
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fleiﬂig");
+                /*
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Flei?ig");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Fokus", Global.CurrentQuestionRound.catalogue);
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Zeitmanagement");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Intensiv");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Flawless", Global.CurrentQuestionRound.catalogue);
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Multitalent");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn?ckig");
+                */
                 break;
-            case Global.GameMode.RandomQuiz:
-            case Global.GameMode.PracticeBook:
+            case GameMode.RandomQuiz:
+            case GameMode.PracticeBook:
                 LoadResults(DataManager.QuestionResults);
+                /*
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Randomat");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Random Flawless");
                 achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Besserwisser");
-                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn‰ckig");
+                achievementManager.CheckNextAchievementLevelAndSetAchievedStatus("Hartn?ckig");
+                */
                 break;
             default:
                 print("ERROR: EvaluationManager - Invalid Game Mode for evaluation.");
                 break;
         }
 
-        if (gameMode == Global.GameMode.DailyTask && PlayerLevel.gainedXp == 0)
+        if (gameMode == GameMode.DailyTask && PlayerLevel.gainedXp == 0)
         {
             xpInfo.text = "";
         } 
@@ -80,6 +85,7 @@ public class EvaluationManager : MonoBehaviour
     private List<DataManager.QuestionResult> GetDailyTaskResults()
     {
         List<DataManager.QuestionResult> results = new();
+        /*
         for (int count = 1; count <= Global.DailyTaskSize; count++)
         {
             List<string> allAnswerTexts = new() {
@@ -98,6 +104,7 @@ public class EvaluationManager : MonoBehaviour
             };
             results.Add(result);
         }
+        */
         return results;
     }
 

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Entities;
 
 public class NewGameManager : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class NewGameManager : MonoBehaviour
     [HideInInspector] public static CatalogueTable catalogueTable;
     [HideInInspector] public static int catalogueCount;
     [HideInInspector] public static List<Catalogue> catalogues;
-    [HideInInspector] public static Global.GameMode gameMode;
+    [HideInInspector] public static GameMode gameMode;
 
     private CatalogueSessionHistoryTable catalogueSessionHistoryTable;
     private AnswerHistoryTable answerHistoryTable;
@@ -43,7 +44,7 @@ public class NewGameManager : MonoBehaviour
     // renders a catalogue button for each existing catalogue on the scroll view element
     private void SetCatalogueButtons()
     {
-        if (Global.CurrentQuestionRound.gameMode == Global.GameMode.Statistics)
+        if (Global.CurrentQuestionRound.gameMode == GameMode.Statistics)
         {
             GameObject catalogueButton = Instantiate(dailyTaskButtonPrefab, buttonContainer);
 
@@ -55,14 +56,14 @@ public class NewGameManager : MonoBehaviour
             buttonLabel.text = "Daily Task";
         }
 
-        if (Global.CurrentQuestionRound.gameMode == Global.GameMode.Editor)
+        if (Global.CurrentQuestionRound.gameMode == GameMode.Editor)
         {
             addButton.gameObject.SetActive(true);
         }
 
         for (int i = 0; i < catalogueCount; i++)
         {
-            if (Global.CurrentQuestionRound.gameMode == Global.GameMode.PracticeBook)
+            if (Global.CurrentQuestionRound.gameMode == GameMode.PracticeBook)
             {
                 List<Question> questions = catalogues[i].questions;
                 bool catalogueContainsPracticeQuestions = questions.Any(questions => questions.enabledForPractice);

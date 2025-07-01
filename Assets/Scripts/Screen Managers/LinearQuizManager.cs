@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Entities;
 
 public class LinearQuizManager : MonoBehaviour
 {
@@ -25,8 +26,7 @@ public class LinearQuizManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerPrefs.SetString("evaluationFor", "LinearQuiz");
-        PlayerPrefs.Save();
+        PlayerPrefsManager.SetEvaluationType("LinearQuiz");
 
         DataManager.ClearResults();
         catalogueTable = SQLiteSetup.Instance.catalogueTable;
@@ -98,7 +98,7 @@ public class LinearQuizManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        nextButtonNavigation.LoadScene("Evaluation");
+        nextButtonNavigation.LoadScene(Scene.Evaluation);
     }
 
     private void OnApplicationQuit()

@@ -1438,7 +1438,7 @@ GameObject:
   - component: {fileID: 1586559176}
   - component: {fileID: 1586559177}
   m_Layer: 0
-  m_Name: SupabaseLoginManager
+  m_Name: SupabaseLoginHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3129,7 +3129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: LoginManager, Assembly-CSharp
+      value: LoginHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName

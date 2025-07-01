@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Global;
+using Entities;
 
 
 public class RandomQuizManager : MonoBehaviour
@@ -92,7 +93,7 @@ public class RandomQuizManager : MonoBehaviour
     public void LoadNextScene()
     {
         UpdateRandomQuizCountsForCatalogue();
-        nextButtonNavigation.LoadScene("Evaluation");
+        nextButtonNavigation.LoadScene(Scene.Evaluation);
     }
 
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)

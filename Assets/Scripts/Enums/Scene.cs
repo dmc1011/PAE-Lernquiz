@@ -4,15 +4,16 @@ using UnityEngine;
 
 public enum Scene
 {
-    Achievements = 0,
-    Authentication,
+    Authentication = 0,
+    Achievements,
+    ContentSelection,
     DailyTask,
     Editor,
+    EditorMenu,
     Evaluation,
     Help,
     Home,
     LinearQuiz,
-    NewGame,
     PractiseBook,
     Profile,
     RandomQuiz,
