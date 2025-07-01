@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Linq;
+using Models;
 
 public class SQLiteSetup : MonoBehaviour
 {
@@ -85,9 +87,35 @@ public class SQLiteSetup : MonoBehaviour
         }
     }
 
+
+    public void InjectSupabase()
+    {
+        /*// create Gesundheitslehre catalogue
+        TextAsset catalogue1 = Resources.Load<TextAsset>("Gesundheitslehre_Beispielkatalog");
+        if (catalogue1 != null)
+        {
+            Debug.Log("Start Cat1");
+            Catalogue catalogue = JsonConvert.DeserializeObject<Catalogue>(catalogue1.text);
+            DataInjectionService.InjectQuestions(1, catalogue);
+            Debug.Log("Done Cat1");
+        }
+        
+        TextAsset catalogue2 = Resources.Load<TextAsset>("Erziehungswissenschaft_Beispielkatalog");
+        if (catalogue2 != null)
+        {
+            Debug.Log("Start Cat2");
+            Catalogue catalogue = JsonConvert.DeserializeObject<Catalogue>(catalogue2.text);
+            DataInjectionService.InjectQuestions(0, catalogue);
+            Debug.Log("Done Cat2");
+        }
+        */
+
+        //DataInjectionService.InjectAchievements();
+    }
+
     private void LoadExampleCatalogues()
     {
-        List <Catalogue> catalogues = catalogueTable.FindAllCatalogues();
+        List<Catalogue> catalogues = catalogueTable.FindAllCatalogues();
         if (catalogues != null && catalogues.Count != 0)
             return;
 
