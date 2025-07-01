@@ -16,7 +16,7 @@ public class EditorMenuHandler : MonoBehaviour
 
     public void LoadCatalogueSelection()
     {
-        Global.SetEditorType(SceneLoader.EditorType.Topic);
+        Global.SetEditorType(SceneLoader.EditorType.Catalogue);
         sceneLoader.LoadSceneWithGameMode(Scene.ContentSelection, GameMode.Editor);
     }
 }

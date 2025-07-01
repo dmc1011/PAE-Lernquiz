@@ -35,6 +35,8 @@ public class QuizAreaManager : MonoBehaviour
     private void Awake()
     {
         questionButtonLabel = questionButton.GetComponentInChildren<TextMeshProUGUI>();
+        
+        Debug.Log("AnswerButton Count: " + answerButtons.Length);
 
         foreach (Button button in answerButtons)
         {
@@ -70,11 +72,17 @@ public class QuizAreaManager : MonoBehaviour
     {
         questionButtonLabel.text = q.text;
         question = q;
+        
         for (int i = 0; i < answerButtons.Length; i++)
+        {
             answerButtonLabels[i].text = q.answers[i].text;
+
+        }
 
 
         isBookmarkSet = q.enabledForPractice;
+        Debug.Log("IsBookmarkSet: " + isBookmarkSet);
+
         SetInitialBookmarkIcon();
     }
 
@@ -116,6 +124,8 @@ public class QuizAreaManager : MonoBehaviour
     // Reset the contents of all buttons
     public void ResetContents()
     {
+        Debug.Log("AnswerButtonLabels COunt: " + answerButtonLabels.Count);
+
         for (int i = 0; i < answerButtons.Length; i++)
         {
             answerButtonLabels[i].text = "";
@@ -164,9 +174,14 @@ public class QuizAreaManager : MonoBehaviour
             currentlyActiveButton = (ButtonID)Array.IndexOf(answerButtons, button);
         }
 
+        Debug.Log(currentlyActiveButton);
+
         SetColorsAndDisable(currentlyActiveButton);
 
         bool wasCorrect = currentlyActiveButton == ButtonID.A;
+
+        Debug.Log("Was correct: " + wasCorrect);
+
         if (wasCorrect)
         {
             question.correctAnsweredCount++;
@@ -243,8 +258,7 @@ public class QuizAreaManager : MonoBehaviour
 
     public void SetContents(DataManager.QuestionResult result)
     {
-    /* to do: evaluation
-        question = catalogueTable.FindQuestionById(result.questionId);
+        question = Global.GetCatalogue().questions.Find(q => q.id == result.questionId);
         if (question != null)
             isBookmarkSet = question.enabledForPractice;
         else
@@ -264,6 +278,5 @@ public class QuizAreaManager : MonoBehaviour
             }
         }
         SetColorsAndDisable((ButtonID)selectedAnswer);
-    */
     }
 }

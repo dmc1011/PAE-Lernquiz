@@ -16,7 +16,7 @@ public class LogoutHandler : MonoBehaviour
     private SignOutUseCase _signOutUseCase;
     private CheckSessionUseCase _checkSessionUseCase;
 
-    private UserLoginController _signInController;
+    private UserLoginController _authController;
 
     [SerializeField] private SceneLoader sceneLoader;
 
@@ -30,14 +30,14 @@ public class LogoutHandler : MonoBehaviour
         _signOutUseCase = new SignOutUseCase(_userRepo);
         _checkSessionUseCase = new CheckSessionUseCase(_userRepo);
 
-        _signInController = new UserLoginController(_signInUseCase, _signUpUseCase, _signOutUseCase, _checkSessionUseCase);
+        _authController = new UserLoginController(_signInUseCase, _signUpUseCase, _signOutUseCase, _checkSessionUseCase);
     }
 
     public async void PerformSignOut()
     {
         try
         {
-            await _signInController.SignOut();
+            await _authController.SignOut();
         }
         catch (Exception e)
         {
@@ -45,5 +45,18 @@ public class LogoutHandler : MonoBehaviour
         }
 
         sceneLoader.LoadScene(Scene.Authentication);
+    }
+
+    public async void DeleteAccount()
+    {
+        try
+        {
+            await _authController.DeleteAccount();
+            sceneLoader.LoadScene(Scene.Authentication);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
     }
 }

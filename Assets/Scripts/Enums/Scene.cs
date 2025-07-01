@@ -4,8 +4,8 @@ using UnityEngine;
 
 public enum Scene
 {
-    Achievements = 0,
-    Authentication,
+    Authentication = 0,
+    Achievements,
     ContentSelection,
     DailyTask,
     Editor,

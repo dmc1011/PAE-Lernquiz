@@ -92,6 +92,20 @@ namespace Repositories
             }
         }
 
+        public async Task DeleteAccount()
+        {
+            Guid currentUserId = Guid.Parse(_client.Auth.CurrentUser.Id);
+
+            try
+            {
+                await _client.From<Models.Profile>().Where(p => p.UserId == currentUserId).Delete();
+            }
+            catch (Exception e)
+            {
+                throw new SignOutException("Löschen des Nutzers fehlgeschlagen: " + e.Message);
+            }
+        }
+
         public bool IsSignedIn()
         {
             return _client.Auth.CurrentUser != null;

@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fragenummer: {fileID: 1902997509}
-  quizAreaManager: {fileID: 0}
+  quizAreaManager: {fileID: 1530718001}
   nextButton: {fileID: 6352228236930832554}
   nextButtonNavigation: {fileID: 6352228236930832555}
 --- !u!1001 &660404628
@@ -318,6 +318,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7772417096437507134, guid: 06a7bf586e75ca54f95b9aca8626917d, type: 3}
+      propertyPath: background
+      value: 
+      objectReference: {fileID: 1522426422}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -761,10 +765,39 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1530718001}
-    m_RemovedComponents: []
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1530718001}
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SaveBookmark
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: QuizAreaManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275356089817910418, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3762821271658637301, guid: b821af483b7771649a6ee9aed9320c52, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -864,7 +897,7 @@ MonoBehaviour:
   wrong: {r: 1, g: 0.1764706, b: 0.1764706, a: 1}
   bookmarkIcon: {fileID: 1530717994}
   bookmarkActiveColor: {r: 1, g: 0.87058824, b: 0.023529412, a: 255}
-  parentScreenManager: {fileID: 7999739912567383913}
+  parentScreenManager: {fileID: 235106479}
 --- !u!1001 &1902997507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1228,7 +1261,6 @@ GameObject:
   - component: {fileID: 7241644770604150380}
   - component: {fileID: 7999739912567383913}
   - component: {fileID: 2445287731398205941}
-  - component: {fileID: 7999739912567383914}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1312,6 +1344,10 @@ PrefabInstance:
       propertyPath: background
       value: 
       objectReference: {fileID: 1522426422}
+    - target: {fileID: 3308907602844814365, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: sceneLoader
+      value: 
+      objectReference: {fileID: 660404629}
     - target: {fileID: 9118554949605893179, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1454,22 +1490,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!114 &7999739912567383914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5871773091748519298}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f0e75a9de17a774fa0be745d763407d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Fragenummer: {fileID: 1902997509}
-  quizAreaManager: {fileID: 0}
-  nextButton: {fileID: 6352228236930832554}
-  nextButtonNavigation: {fileID: 6352228236930832555}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

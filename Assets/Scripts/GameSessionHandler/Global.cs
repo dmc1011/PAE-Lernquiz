@@ -1,5 +1,6 @@
 using Controllers;
 using Entities;
+using Microsoft.IdentityModel.Tokens;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,9 @@ public static class Global
     public static List<AnswerHistory> AnswerHistories = new();
     public const int RandomQuizSize = 5;
 
+    // Editor
     public static SceneLoader.EditorType EditorType;
+    public static Topic tmpTopic;
 
 
     public static GameMode GetGameMode()
@@ -107,17 +110,37 @@ public static class Global
 
 
     // returns true if tmpCatalogue != null
-    public static bool SetTmpCatalogue (string catalogueName)
+    public static bool SetTmpCatalogue (Catalogue catalogue)
     {
-        if (catalogueName == null)
+        if (catalogue == null)
         {
-            tmpCatalogue = new Catalogue(0, "Neuer Fragenkatalog", 0, 0, 0, 0, 0, 0, new List<Question>(), new List<CatalogueSessionHistory>());
+            string topicName = Global.tmpTopic.name;
+            Supabase.Client client = SupabaseClientProvider.GetClient();
+            bool isPrivate = true;
+
+            tmpCatalogue = new Catalogue(-1, "Neuer Fragenkatalog", 0, 0, 0, 0, 0, 0, new List<Question>(), new List<CatalogueSessionHistory>(), topicName, isPrivate, Guid.Parse(client.Auth.CurrentUser.Id));
             return true;
         }
 
+        /*
         CatalogueTable catalogueTable = SQLiteSetup.Instance.catalogueTable;
         tmpCatalogue = catalogueTable.FindCatalogueByName(catalogueName);
+        */
+
+        tmpCatalogue = catalogue;
         return tmpCatalogue != null;
+    }
+
+    public static void SetTmpTopic (Topic topic)
+    {
+        if (topic == null)
+        {
+            tmpTopic = new Topic("Neues Oberthema");
+        }
+        else
+        {
+            tmpTopic = topic;
+        }
     }
 }
 

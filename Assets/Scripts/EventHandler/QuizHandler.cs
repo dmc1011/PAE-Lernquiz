@@ -21,6 +21,7 @@ public class QuizHandler : MonoBehaviour
     private int nextQuestionIndex = 0;
     private bool sessionIsErrorFree;
     private int currentSessionId;
+    private bool questionHasBeenAnswered;
 
 
 
@@ -50,7 +51,7 @@ public class QuizHandler : MonoBehaviour
             nextQuestionIndex = currentQuestionIndex;
         }
 
-        CatalogueSessionHistory currentSession = Global.GetCatalogue().sessionHistories.Last();
+        CatalogueSessionHistory currentSession = Global.GetCatalogue().sessionHistories.Count > 0 ? Global.GetCatalogue().sessionHistories.Last() : null;
 
         // if no session exists or current session is completed start new session
         if (nextQuestionIndex == 0 && (currentSession == null || currentSession.isCompleted))
@@ -72,7 +73,18 @@ public class QuizHandler : MonoBehaviour
 
     public void DisplayNextQuestion()
     {
+        questionHasBeenAnswered = false;
+
         Question nextQuestion = questions[nextQuestionIndex];
+
+        if (questions[nextQuestionIndex].id == questions.Last().id)
+        {
+            nextButton.gameObject.SetActive(false);
+        }
+        else 
+        {
+            nextButton.gameObject.SetActive(true);
+        }
 
         quizAreaManager.DisplayNextQuestion(nextQuestion);
 
@@ -83,6 +95,8 @@ public class QuizHandler : MonoBehaviour
 
     public void EventButtonPressedCallback(QuizAreaManager.ButtonID button)
     {
+        questionHasBeenAnswered = true;
+
         switch (button)
         {
             case QuizAreaManager.ButtonID.Q:
@@ -141,15 +155,13 @@ public class QuizHandler : MonoBehaviour
         CatalogueSessionHistory currentSessionHistory = catalogue.sessionHistories.Last();
         List<AnswerHistory> answerHistoriesForSession = Global.GetAnswerHistories();
 
-        bool sessionCompleted = answerHistoriesForSession.Count >= currentCatalogue.questions.Count;
+        bool sessionCompleted = currentCatalogue.currentQuestionId == questions.Last().id && questionHasBeenAnswered;
 
         // to do: compare with .UpdateCatalogue, replace .UpdateCatalogueHistory
         if (sessionCompleted)
         {
-            currentCatalogue.sessionCount++;
-
             // invalid question id -> field is set to null in db
-            currentCatalogue.currentQuestionId = -1;
+            currentCatalogue.currentQuestionId = questions.First().id;
             if (sessionIsErrorFree)
                 currentCatalogue.errorFreeSessionCount++;
         }

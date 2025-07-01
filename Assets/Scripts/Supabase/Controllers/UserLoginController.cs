@@ -43,5 +43,10 @@ namespace Controllers
         {
             await _signOutUseCase.Execute();
         }
+
+        public async Task DeleteAccount()
+        {
+            await _signOutUseCase.DeleteAccount();
+        }
     }
 }

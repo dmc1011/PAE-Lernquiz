@@ -10,6 +10,7 @@ using UseCases;
 using Client = Supabase.Client;
 using Services;
 using System;
+using Entities;
 
 public class CatalogueButtonHandler : MonoBehaviour
 {
@@ -57,7 +58,14 @@ public class CatalogueButtonHandler : MonoBehaviour
                 ShowStatistics();
                 break;
             case GameMode.Editor:
-                StartEditor();
+                if (Global.EditorType == SceneLoader.EditorType.Catalogue)
+                {
+                    StartCatalogueEditor();
+                }
+                else
+                {
+                    Debug.Log("Unsupported editor mode on CatalogueButtonHandler click.");
+                }
                 break;
             case GameMode.PracticeBook:
                 StartPracticeBookClickedEvent();
@@ -70,8 +78,10 @@ public class CatalogueButtonHandler : MonoBehaviour
     private async void StartLinearRoundClickedEvent()
     {
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
+
         CatalogueDTO catalogue = ContentSelectionHandler.catalogues.Find(c => c.name == catalogueName);
-        Debug.Log(catalogue?.id);
+        Debug.Log("Cat ID: " + catalogue?.id);
+        Debug.Log("Catalogues count: " + ContentSelectionHandler.catalogues.Count);
 
         try
         {
@@ -81,6 +91,10 @@ public class CatalogueButtonHandler : MonoBehaviour
             }
 
             var catalogueResult = await _catalogueController.GetCatalogueById(catalogue.id);
+
+            Debug.Log("Catalogue Details:");
+            Debug.Log(catalogueResult.name);
+            Debug.Log("Question count: " + catalogueResult.questions?.Count);
 
             if (catalogueResult == null)
             {
@@ -106,7 +120,8 @@ public class CatalogueButtonHandler : MonoBehaviour
         string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
 
         CatalogueDTO catalogue = ContentSelectionHandler.catalogues.Find(c => c.name == catalogueName);
-        Debug.Log(catalogue?.id);
+        Debug.Log("Cat ID: " + catalogue?.id);
+        Debug.Log("Catalogues count: " + ContentSelectionHandler.catalogues.Count);
 
         try
         {
@@ -133,6 +148,83 @@ public class CatalogueButtonHandler : MonoBehaviour
             Debug.LogException(e);
         }
     }
+
+    // start editor
+    private async void StartCatalogueEditor()
+    {
+        string catalogueName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
+        //string catalogueName = this.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        if (catalogueName == "Neuen Katalog hinzufügen" && Global.SetTmpCatalogue(null))
+        {
+            EditorManager.isNewCatalogue = true;
+            LoadScene("Editor");
+            return;
+        }
+
+        CatalogueDTO catalogue = ContentSelectionHandler.catalogues.Find(c => c.name == catalogueName);
+        Debug.Log(catalogue?.id);
+
+        try
+        {
+            if (catalogue == null)
+            {
+                throw new FetchDataException("Fehler beim Starten des Editors: Der ausgewählte Katalog existiert nicht im ContentHandler");
+            }
+
+            var catalogueResult = await _catalogueController.GetCatalogueById(catalogue.id);
+
+            if (catalogueResult == null)
+            {
+                throw new FetchDataException("Der ausgewählte Katalog wurde nicht gefunden");
+            }
+
+            // to do: replace with single method "InitializeQuestionRound"
+            SetCatalogue(catalogueResult);
+            SetInsideQuestionRound(false);
+            ClearAnswerHistories();
+
+            if (Global.SetTmpCatalogue(catalogueResult))
+            {
+                EditorManager.isNewCatalogue = false;
+                LoadScene("Editor");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+
+    /*
+    private async void StartTopicEditor()
+    {
+        string topicName = catalogueButton.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        if (topicName == "Neues Thema hinzufügen")
+        {
+            EditorManager.isNewTopic = true;
+            SetTmpTopic(null);
+
+            LoadScene("Editor");
+            return;
+        }
+
+        Topic topic = ContentSelectionHandler.topics.Find(t => t.name == topicName);
+
+        EditorManager.isNewTopic = false;
+        SetTmpTopic(topic);
+        Debug.Log(topic?.name);
+        LoadScene("Editor");
+    }
+    */
+
+
+
+
+
+    // to do: rework from here
+
 
     // start random quiz
     private void StartRandomRoundClickedEvent()
@@ -190,25 +282,6 @@ public class CatalogueButtonHandler : MonoBehaviour
         LoadScene("Statistics");
     }
     
-
-    // start editor
-    private void StartEditor()
-    {
-        string catalogueName = this.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
-
-        if (catalogueName == "Katalog hinzufügen" && Global.SetTmpCatalogue(null))
-        {
-            EditorManager.isNewCatalogue = true;
-            LoadScene("Editor");
-            return;
-        }
-
-        if (Global.SetTmpCatalogue(catalogueName))
-        {
-            EditorManager.isNewCatalogue = false;
-            LoadScene("Editor");
-        }
-    }
 
     public void LoadScene(string sceneName)
     {

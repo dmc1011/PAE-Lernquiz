@@ -561,7 +561,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4360385653273891455, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -300
+      value: -120
       objectReference: {fileID: 0}
     - target: {fileID: 4360385653273891455, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -605,7 +605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7331863974921688887, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_text
-      value: Fragen bearbeiten
+      value: Kataloge bearbeiten
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -810,7 +810,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4360385653273891455, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 4360385653273891455, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

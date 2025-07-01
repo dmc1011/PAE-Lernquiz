@@ -18,5 +18,10 @@ namespace Repositories
         Task UpdateCatalogue(Entities.Catalogue catalogue);
         Task UpdateCatalogueUserData(Catalogue catalogue);
         //Task DeleteCatalogue(int catalogueId);
+        Task StoreTopic(Models.Topic topic);
+        Task DeleteCatalogue(int catalogueId);
+        Task DeleteQuestion(int questionId);
+        Task UpdateTopic(Models.Topic newTopic, string oldTopicName);
+        Task DeleteTopic(string topicName);
     }
 }

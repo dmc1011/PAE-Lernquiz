@@ -19,13 +19,13 @@ public class PracticeBookManager : MonoBehaviour
     [SerializeField] private GameObject questionButtonPrefab;      // used for dynamically rendering question buttons
     [SerializeField] private Transform buttonContainer;            // 'content' element of scroll view
     [SerializeField] private HexagonBackground background;
+    [SerializeField] private QuizAreaManager quizAreaManager;
 
     private Catalogue currentCatalogue;
     private List<Question> questions;
     private List<Question> allQuestions;
     private int nextQuestionIndex = 0;
     private CatalogueTable catalogueTable;
-    private QuizAreaManager quizAreaManager;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +41,6 @@ public class PracticeBookManager : MonoBehaviour
         questions = allQuestions.Where(q => q.enabledForPractice).ToList();
 
         quizAreaContainer.SetActive(false);
-        quizAreaManager = quizAreaContainer.GetComponentInChildren<QuizAreaManager>();
 
         DisplayQuestionSelection();
     }
@@ -78,6 +77,15 @@ public class PracticeBookManager : MonoBehaviour
     public void DisplayNextQuestion()
     {
         Question nextQuestion = questions[nextQuestionIndex];
+
+        if (questions[nextQuestionIndex].id == questions.Last().id)
+        {
+            nextButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            nextButton.gameObject.SetActive(true);
+        }
 
         quizAreaManager.DisplayNextQuestion(nextQuestion);
 
@@ -135,7 +143,7 @@ public class PracticeBookManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        nextButtonNavigation.LoadScene(Scene.Evaluation);
+        SceneManager.LoadScene("Evaluation");
     }
 
     public void LoadCatalogueSelection()

@@ -19,5 +19,10 @@ namespace UseCases
         {
             await _repo.SignOut();
         }
+
+        public async Task DeleteAccount()
+        {
+            await _repo.DeleteAccount();
+        }
     }
 }

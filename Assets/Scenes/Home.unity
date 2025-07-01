@@ -617,7 +617,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
-      value: Random Quiz
+      value: Zufallsquiz
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_Interactable
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -1240,7 +1244,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3851187380353056595, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_Name
-      value: LogOutButton (1)
+      value: DeleteAccountButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 3851187380353056595, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4360385653273891455, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_Pivot.x
@@ -1323,8 +1331,56 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      propertyPath: m_Colors.m_NormalColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_NormalColor.b
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_NormalColor.g
+      value: 0.4509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.20881324
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.3372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.33636326
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -1368,7 +1424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PerformSignOut
+      value: DeleteAccount
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
@@ -1380,7 +1436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: LogoutManager, Assembly-CSharp
+      value: LogoutHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6848579249736784840, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
@@ -1423,15 +1479,23 @@ PrefabInstance:
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 7666123595686246290, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7666123595686246290, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7666123595686246290, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_Color.g
-      value: 0.45290935
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7666123595686246290, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
       propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7666123595686246290, guid: 6178123c51525ce47947cecf8bc74277, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1864,6 +1928,10 @@ PrefabInstance:
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
       value: Statistik
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
+      propertyPath: m_Interactable
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -2331,7 +2399,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1570406504984184041, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_text
-      value: Profil
+      value: Mein Profil
       objectReference: {fileID: 0}
     - target: {fileID: 1720814763186886518, guid: 0a690cef7fc4b45438a5c3949918b0a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode

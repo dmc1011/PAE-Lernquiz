@@ -13,6 +13,7 @@ public class ButtonNavigation : MonoBehaviour
                 sceneLoader.LoadSceneWithGameMode(scene, GameMode.None, useAnimation: useAnimation);
                 break;
             default:
+                Debug.Log(scene);
                 sceneLoader.LoadScene(scene);
                 break;
         }

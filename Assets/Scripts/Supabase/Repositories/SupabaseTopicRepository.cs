@@ -29,6 +29,7 @@ namespace Repositories
                 List<Models.Topic> models = result.Models;
                 List<Topic> topics = models.Select(model => model.ToEntity()).ToList();
 
+                Debug.Log("Anzahl Topics: " + topics.Count);
                 return topics;
             }
             catch (Exception e)
