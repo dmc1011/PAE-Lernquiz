@@ -1,0 +1,10 @@
+<linker>
+  <assembly fullname="Supabase.Gotrue">
+    <type fullname="Supabase.Gotrue.Session" preserve="all"/>
+    <type fullname="Supabase.Gotrue.User" preserve="all"/>
+    <type fullname="Supabase.Gotrue.UserIdentity" preserve="all"/>
+  </assembly>
+  <assembly fullname="Supabase">
+    <type fullname="Supabase.Client" preserve="all"/>
+  </assembly>
+</linker>

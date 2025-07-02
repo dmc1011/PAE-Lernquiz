@@ -76,6 +76,7 @@ public class LoginHandler : MonoBehaviour
         }
         catch (Exception e) 
         {
+            Debug.Log(e.Message);
             SetSignInErrorMessage(e.Message);
         }
     }
@@ -105,6 +106,7 @@ public class LoginHandler : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             SetSignUpErrorMessage(e.Message);
         }
     }
